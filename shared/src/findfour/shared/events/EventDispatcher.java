@@ -12,16 +12,30 @@ import java.util.Map;
 import findfour.shared.ArgumentException;
 import findfour.shared.ArgumentNullException;
 
+/**
+ * Defines a class on which events and event handlers can be registered/raised.
+ * @author ciske
+ * 
+ */
 public class EventDispatcher {
     private final Map<Integer, Event> events;
     private final Map<Integer, List<MethodHandle>> eventHandlers;
     private Object targetClass;
 
+    /**
+     * Creates a new <code>EventDispatcher</code> instance with no registered events and/or event
+     * handlers.
+     */
     public EventDispatcher() {
         this.events = new HashMap<Integer, Event>();
         this.eventHandlers = new HashMap<Integer, List<MethodHandle>>();
     }
 
+    /**
+     * Registers a new event in the event dispatcher.
+     * @param event The event to register. This cannot be <code>null</code> and the event's unique
+     * identifier cannot already be registered.
+     */
     public void registerEvent(Event event) {
         if (event == null) {
             throw new ArgumentNullException("event");
@@ -100,6 +114,11 @@ public class EventDispatcher {
         return true;
     }
 
+    /**
+     * Raises a new event which is send to all registered handlers.
+     * @param eventId The event identifier which must be registered.
+     * @param args The arguments of the event.
+     */
     public void raiseEvent(int eventId, Object... args) {
         if (!events.containsKey(eventId)) {
             throw new ArgumentException("eventId", "Unknown event id %d", eventId);

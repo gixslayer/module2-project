@@ -3,7 +3,17 @@ package findfour.shared.events;
 import findfour.shared.ArgumentException;
 import findfour.shared.ArgumentNullException;
 
+/**
+ * Utility class for certain class related operations.
+ * @author ciske
+ * 
+ */
 public class ClassUtils {
+    /**
+     * Returns the wrapped type of a primitive type.
+     * @param primitiveClass The primitive class type.
+     * @return the wrapped type of the primitive type.
+     */
     public static Class<?> getWrapperClass(Class<?> primitiveClass) {
         if (primitiveClass == null) {
             throw new ArgumentNullException("primitiveClass");
