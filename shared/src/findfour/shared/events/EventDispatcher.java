@@ -49,7 +49,7 @@ public class EventDispatcher {
             // is no point in registering an event handler for an event that will never be raised.
             if (!events.containsKey(handler.eventId())) {
                 // Unknown event, throw exception.
-                throw new InvalidEventHandlerException();
+                throw new InvalidEventHandlerException("Unknown event id %d.", handler.eventId());
             }
 
             Event event = events.get(handler.eventId());
@@ -58,7 +58,8 @@ public class EventDispatcher {
             // the event. This is to prevent causing all kinds of invalid type cast exceptions when
             // trying to invoke the handler method once the event is raised.
             if (!validateArgTypes(method, event)) {
-                throw new InvalidEventHandlerException();
+                throw new InvalidEventHandlerException(
+                        "Handler parameters do not match the defined event parameters.");
             }
 
             // Suppress access checking on the handler method. Besides reducing VM overhead it also
@@ -71,7 +72,8 @@ public class EventDispatcher {
 
                 eventHandlers.get(event.getEventId()).add(handle);
             } catch (IllegalAccessException e) {
-                throw new InvalidEventHandlerException();
+                throw new InvalidEventHandlerException("Failed to access method: %s.",
+                        e.getMessage());
             }
         }
     }
