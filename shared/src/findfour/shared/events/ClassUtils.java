@@ -1,25 +1,20 @@
 package findfour.shared.events;
 
-import findfour.shared.ArgumentException;
-import findfour.shared.ArgumentNullException;
 
 /**
  * Utility class for certain class related operations.
  * @author ciske
  * 
  */
-public class ClassUtils {
+class ClassUtils {
     /**
      * Returns the wrapped type of a primitive type.
      * @param primitiveClass The primitive class type.
      * @return the wrapped type of the primitive type.
      */
     public static Class<?> getWrapperClass(Class<?> primitiveClass) {
-        if (primitiveClass == null) {
-            throw new ArgumentNullException("primitiveClass");
-        } else if (!primitiveClass.isPrimitive()) {
-            throw new ArgumentException("primitiveClass", "Not a primitive");
-        }
+        assert primitiveClass != null;
+        assert primitiveClass.isPrimitive();
 
         if (primitiveClass.equals(byte.class)) {
             return Byte.class;
@@ -39,7 +34,7 @@ public class ClassUtils {
             return Double.class;
         }
 
-        // Should never be reached.
+        // Should never be reached unless another primitive type is added to Java.
         return null;
     }
 }

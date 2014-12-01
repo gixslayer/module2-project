@@ -7,7 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * Defines an annotation which can be applied on methods to indicate they should be called when the
- * corresponding event is raised. An event handler should never throw an exception.
+ * corresponding event is raised. An event handler should never throw an exception. Note that the
+ * method will always be called from the same thread that raised the event.
  * @author ciske
  *
  */

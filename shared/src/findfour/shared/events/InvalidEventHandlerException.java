@@ -5,7 +5,7 @@ package findfour.shared.events;
  * @author ciske
  * 
  */
-public class InvalidEventHandlerException extends Exception {
+public class InvalidEventHandlerException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**
