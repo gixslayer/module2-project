@@ -8,40 +8,56 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 
+import findfour.shared.events.EventDispatcher;
+
 public class TcpClient implements Runnable {
     public static final int BUFFER_SIZE = 4096;
+    public static final int EVENT_CONNECTED = 0;
+    public static final int EVENT_CONNECT_FAILED = 1;
+    public static final int EVENT_DISCONNECTED = 2;
+    public static final int EVENT_PACKET_RECEIVED = 3;
 
-    private final SocketAddress address;
-    private final TcpClientEventHandler handler;
+    private final EventDispatcher dispatcher;
     private final byte[] buffer;
+    private final PacketBuffer packetBuffer;
     private Socket socket;
+    private SocketAddress address;
     private InputStream input;
     private OutputStream output;
     private Thread receiveThread;
     private volatile boolean connected;
 
-    public TcpClient(String host, int port, TcpClientEventHandler argHandler) {
-        this.address = new InetSocketAddress(host, port);
-        this.handler = argHandler;
+    public TcpClient() {
+        this.dispatcher = new EventDispatcher();
         this.buffer = new byte[BUFFER_SIZE];
+        this.packetBuffer = new PacketBuffer();
         this.connected = false;
+
+        dispatcher.registerEvent(EVENT_CONNECTED);
+        dispatcher.registerEvent(EVENT_CONNECT_FAILED, String.class);
+        dispatcher.registerEvent(EVENT_DISCONNECTED);
+        dispatcher.registerEvent(EVENT_PACKET_RECEIVED, Packet.class);
     }
 
-    public void connect(int timeout) {
+    public void connect(String host, int port, int timeout) {
         try {
+            address = new InetSocketAddress(host, port);
             socket = new Socket();
             socket.connect(address, timeout);
             input = socket.getInputStream();
             output = socket.getOutputStream();
             connected = true;
-            receiveThread = new Thread(this);
-            receiveThread.start();
+            receiveThread = new Thread(this, "TcpClient-receive");
 
-            handler.connected();
+            // Raise the connected event before starting to receive to ensure that the connected
+            // event is handled before a packet received event might be raised.
+            dispatcher.raiseEvent(EVENT_CONNECTED);
+
+            receiveThread.start();
         } catch (SocketTimeoutException e) {
-            handler.connectFailed("Connection attempt timed out.");
+            dispatcher.raiseEvent(EVENT_CONNECT_FAILED, "Connection attempt timed out.");
         } catch (IOException e) {
-            handler.connectFailed(e.getMessage());
+            dispatcher.raiseEvent(EVENT_CONNECT_FAILED, e.getMessage());
         }
     }
 
@@ -53,9 +69,10 @@ public class TcpClient implements Runnable {
             output = null;
             connected = false;
 
-            handler.disconnected();
+            dispatcher.raiseEvent(EVENT_DISCONNECTED);
         } catch (IOException e) {
-            handler.disconnectFailed(e.getMessage());
+            // TODO: Log?
+            e.getMessage();
         }
     }
 
@@ -64,30 +81,40 @@ public class TcpClient implements Runnable {
 
         try {
             output.write(data);
-
-            handler.packetSend(packet, data.length);
         } catch (IOException e) {
-            handler.packetSendFailed(packet, e.getMessage());
+            e.getMessage();
         }
+    }
+
+    public void registerEventHandlers(Object handlerClass) {
+        dispatcher.registerEventHandlers(handlerClass);
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     @Override
     public void run() {
+        int bytesReceived;
+
         while (connected) {
             try {
-                int bytesReceived = input.read(buffer);
-
-                if (bytesReceived == 0) {
-                    disconnect();
-                } else {
-                    Packet packet = Packet.deserialize(buffer);
-
-                    handler.packetReceived(packet, bytesReceived);
-                }
+                bytesReceived = input.read(buffer);
             } catch (IOException e) {
                 disconnect();
-            } catch (PacketDeserializationException e) {
-                handler.packetReceivedFailed(e.getMessage());
+                break;
+            }
+
+            if (bytesReceived < 1) {
+                disconnect();
+            } else {
+                packetBuffer.addData(buffer, 0, bytesReceived);
+
+                while (packetBuffer.hasPacket()) {
+                    Packet packet = packetBuffer.nextPacket();
+                    dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, packet);
+                }
             }
         }
     }

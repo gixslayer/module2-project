@@ -5,7 +5,7 @@ import java.io.UnsupportedEncodingException;
 import findfour.shared.ArgumentNullException;
 import findfour.shared.ArgumentOutOfRangeException;
 
-public class PacketWriter {
+class PacketWriter {
     private byte[] buffer;
     private int offset;
 
@@ -72,10 +72,10 @@ public class PacketWriter {
     public void writeInt(int value) {
         ensureAvailable(4);
 
-        buffer[offset++] = (byte) (value & 0xff);
-        buffer[offset++] = (byte) ((value >> 8) & 0xff);
-        buffer[offset++] = (byte) ((value >> 16) & 0xff);
         buffer[offset++] = (byte) ((value >> 24) & 0xff);
+        buffer[offset++] = (byte) ((value >> 16) & 0xff);
+        buffer[offset++] = (byte) ((value >> 8) & 0xff);
+        buffer[offset++] = (byte) (value & 0xff);
     }
 
     public void writeFloat(float value) {

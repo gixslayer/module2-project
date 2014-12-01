@@ -14,6 +14,12 @@ public enum PacketType {
     }
 
     public static PacketType fromValue(byte argValue) {
-        return null;
+        switch (argValue) {
+            case 0:
+                return Test;
+
+            default:
+                return null;
+        }
     }
 }

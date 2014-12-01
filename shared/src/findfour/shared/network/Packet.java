@@ -7,31 +7,37 @@ public abstract class Packet {
         this.type = argType;
     }
 
-    protected abstract int getDataSize();
+    protected abstract int getContentSize();
 
-    protected abstract void serializeData(PacketWriter writer);
+    protected abstract void serializeContent(PacketWriter writer);
 
-    protected abstract void deserializeData(PacketReader reader);
+    protected abstract void deserializeContent(PacketReader reader);
 
-    public byte[] serialize() {
-        PacketWriter writer = new PacketWriter(getDataSize() + 1);
+    byte[] serialize() {
+        int contentSize = getContentSize();
+        PacketWriter writer = new PacketWriter(contentSize + 5);
 
         writer.writeByte(type.getValue());
+        writer.writeInt(contentSize);
 
-        serializeData(writer);
+        serializeContent(writer);
 
         return writer.getBuffer();
     }
 
-    public static Packet deserialize(byte[] buffer) throws PacketDeserializationException {
-        PacketReader reader = new PacketReader(buffer, 0);
+    public PacketType getType() {
+        return type;
+    }
+
+    static Packet deserialize(byte packetTypeByte, byte[] contentBuffer)
+            throws PacketDeserializationException {
 
         try {
-            byte packetTypeByte = reader.readByte();
             PacketType packetType = PacketType.fromValue(packetTypeByte);
             Packet packet = Packet.fromType(packetType);
+            PacketReader reader = new PacketReader(contentBuffer, 0, contentBuffer.length);
 
-            packet.deserializeData(reader);
+            packet.deserializeContent(reader);
 
             return packet;
         } catch (PacketReaderException e) {
@@ -39,7 +45,13 @@ public abstract class Packet {
         }
     }
 
-    public static Packet fromType(PacketType type) {
-        return null;
+    static Packet fromType(PacketType type) {
+        switch (type) {
+            case Test:
+                return new PacketTest();
+
+            default:
+                return null;
+        }
     }
 }
