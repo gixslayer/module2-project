@@ -18,7 +18,7 @@ public class PacketTest extends Packet {
     }
 
     @Override
-    protected void deserializeContent(PacketReader reader) throws PacketReaderException {
+    protected void deserializeContent(PacketReader reader) {
         data = reader.readString();
     }
 

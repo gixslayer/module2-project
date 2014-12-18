@@ -8,16 +8,15 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 
-import findfour.shared.events.EventDispatcher;
+import findfour.shared.events.EventRaiser;
 
-public class TcpClient implements Runnable {
+public class TcpClient extends EventRaiser implements Runnable {
     public static final int BUFFER_SIZE = 4096;
     public static final int EVENT_CONNECTED = 0;
     public static final int EVENT_CONNECT_FAILED = 1;
     public static final int EVENT_DISCONNECTED = 2;
     public static final int EVENT_PACKET_RECEIVED = 3;
 
-    private final EventDispatcher dispatcher;
     private final byte[] buffer;
     private final PacketBuffer packetBuffer;
     private Socket socket;
@@ -28,7 +27,6 @@ public class TcpClient implements Runnable {
     private volatile boolean connected;
 
     public TcpClient() {
-        this.dispatcher = new EventDispatcher();
         this.buffer = new byte[BUFFER_SIZE];
         this.packetBuffer = new PacketBuffer();
         this.connected = false;
@@ -84,10 +82,6 @@ public class TcpClient implements Runnable {
         } catch (IOException e) {
             e.getMessage();
         }
-    }
-
-    public void registerEventHandlers(Object handlerClass) {
-        dispatcher.registerEventHandlers(handlerClass);
     }
 
     public boolean isConnected() {

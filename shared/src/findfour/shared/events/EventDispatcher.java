@@ -1,6 +1,7 @@
 package findfour.shared.events;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,18 +40,46 @@ public class EventDispatcher {
     }
 
     /**
-     * Registers all event handlers found in the specified class instance to this
+     * Registers all instance event handlers found in the specified class instance to this
      * <code>EventDispatcher</code> instance.
-     * @param argClass The instance of the class. This cannot be <code>null</code>.
+     * @param instance The instance of the class. This cannot be <code>null</code>.
      */
-    public void registerEventHandlers(Object argClass) {
-        Class<?> classType = argClass.getClass();
+    public void registerEventHandlers(Object instance) {
+        if (instance == null) {
+            throw new ArgumentNullException("instance");
+        }
 
-        for (Method method : classType.getDeclaredMethods()) {
+        registerEventHandlers(instance, instance.getClass());
+    }
+
+    /**
+     * Register all static event handlers found in the specified class to this
+     * <code>EventDispatcher</code> instance.
+     * @param type The type of the class. This cannot be <code>null</code>.
+     */
+    public void registerStaticEventHandlers(Class<?> type) {
+        if (type == null) {
+            throw new ArgumentNullException("type");
+        }
+
+        registerEventHandlers(null, type);
+    }
+
+    private void registerEventHandlers(Object instance, Class<?> type) {
+        boolean isStatic = instance == null;
+
+        for (Method method : type.getDeclaredMethods()) {
+            // Skip methods that don't have the EventHandler annotation.
             if (!method.isAnnotationPresent(EventHandler.class)) {
                 continue;
             }
+            // Skip non static methods on a static registration pass / static methods on a non
+            // static registration pass.
+            if (Modifier.isStatic(method.getModifiers()) != isStatic) {
+                continue;
+            }
 
+            // Get the event id from the method's annotation.
             EventHandler handler = method.getAnnotation(EventHandler.class);
             int eventId = handler.eventId();
 
@@ -64,32 +93,38 @@ public class EventDispatcher {
             Event event = events.get(eventId);
 
             // Ensure that the handler's arguments are compatible with the arguments described by
-            // the event. This is to prevent causing all kinds of invalid type cast exceptions when
-            // trying to invoke the handler method once the event is raised.
-            if (!validateArgTypes(method, event)) {
-                throw new InvalidEventHandlerException(
-                        "Handler arguments do not match the defined event arguments.");
+            // the event and that the return type is void. This is to prevent causing all kinds of
+            // invalid type cast exceptions when trying to invoke the handler method once the event
+            // is raised.
+            if (!validateMethod(method, event)) {
+                throw new InvalidEventHandlerException("Invalid handler method signature.");
             }
 
             // Get a direct reference to the handler method and register it on the event.
-            MethodReference methodReference = new MethodReference(argClass, method);
+            MethodReference methodReference = new MethodReference(instance, method);
             event.addHandler(methodReference);
         }
     }
 
     /**
-     * Validates that the parameters of a method are compatible with the arguments of an event.
+     * Validates that the parameters of a method are compatible with the arguments of an event and
+     * that the event has a void return type.
      * @param method The method. This cannot be <code>null</code>.
      * @param event The event. This cannot be <code>null</code>.
      * @return <code>true</code> if the method and event are compatible, otherwise
      * <code>false</code> is returned
      */
-    private boolean validateArgTypes(Method method, Event event) {
+    private boolean validateMethod(Method method, Event event) {
         assert method != null;
         assert event != null;
 
         Class<?>[] eventTypes = event.getArgTypes();
         Class<?>[] methodTypes = method.getParameterTypes();
+
+        // Ensure the handler method has a void return type.
+        if (method.getReturnType() != void.class) {
+            return false;
+        }
 
         // Ensure the handler method and the event have the same number of parameters.
         if (methodTypes.length != eventTypes.length) {

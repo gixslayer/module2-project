@@ -7,20 +7,20 @@ import java.lang.reflect.Method;
 /**
  * Provides a direct access to an event handler method.
  * @author ciske
- *
+ * 
  */
 class MethodReference {
     private final Object classInstance;
     private final MethodHandle methodHandle;
+    private final boolean staticReference;
 
     /**
      * Constructs a new reference to an event handler method.
-     * @param argClassInstance The class instance of the handler method. This cannot be
-     * <code>null</code>.
+     * @param argClassInstance The class instance of the handler method or <code>null</code> if the
+     * handler method is static.
      * @param method The handler method. This cannot be <code>null</code>.
      */
     public MethodReference(Object argClassInstance, Method method) {
-        assert argClassInstance != null;
         assert method != null;
 
         // Suppress access checking on the handler method. Besides reducing VM overhead it also
@@ -30,6 +30,7 @@ class MethodReference {
         try {
             this.classInstance = argClassInstance;
             this.methodHandle = MethodHandles.lookup().unreflect(method);
+            this.staticReference = argClassInstance == null;
         } catch (IllegalAccessException e) {
             throw new InvalidEventHandlerException("Failed access checking on handler method: %s.",
                     e.getMessage());
@@ -41,31 +42,42 @@ class MethodReference {
      * @param args The arguments to pass onto the method.
      */
     public void invoke(Object... args) {
-        // The first argument of the invokeArguments array is the class instance on which to invoke
-        // the method, any arguments given as a parameter will follow after. This method will
-        // effectively do this: classInstance.methodHandle(args[0], args[1], ..., args[n]);
-        Object[] invokeArguments = new Object[args.length + 1];
-
-        invokeArguments[0] = classInstance;
-        System.arraycopy(args, 0, invokeArguments, 1, args.length);
-
         try {
-            methodHandle.invokeWithArguments(invokeArguments);
+            // Get the proper invocation arguments from the arguments supplied by the caller.
+            Object[] invokeArgs = getInvokeArguments(args);
+
+            // Invoke the method handle with the invocation arguments. This is essentially doing
+            // this: methodHandle(invokeArgs[0], invokeArgs[1], ..., invokeArgs[n]);
+            MethodHandles.spreadInvoker(methodHandle.type(), 0).invoke(methodHandle, invokeArgs);
         } catch (Throwable e) {
             // Anything thrown by the handler will end up here. Event handlers should never
             // throw any exceptions, but there is no way to guarantee that. There is no way to
-            // avoid catching as broad as 'Throwable' as the method invokeWithArguments is
-            // defined as throws Throwable, which means we either catch it here and break a
-            // Checkstyle rule or define this method as throws Throwable, which besides being
-            // messy (as the Throwable instance can be a checked or unchecked exception) would 
-            // just propagate the issue to the caller. We'll just have to live with this one
-            // Checkstyle violation and hope it won't turn out to be a big deal. There is nothing
-            // to do as to handling the exception. We'll just print the stack trace to the stderr
-            // so that programmer hopefully notices he screwed up somewhere instead of blowing the
-            // whole application up (even though that might not even be a bad decision as things
-            // are bound to go horribly wrong).
-            System.err.println("Exception while invoking method handler");
-            e.printStackTrace();
+            // avoid catching as broad as 'Throwable' as the method invoke is defined as throws 
+            // Throwable, which means we either catch it here and break a Checkstyle rule or define
+            // this method as throws Throwable, which besides being messy (as the Throwable 
+            // instance can be a checked or unchecked exception) would  just propagate the issue to
+            // the caller. We'll just have to live with this one Checkstyle violation.
+            // Throw a new unchecked exception so that the program blows up and the programmer/user
+            // is informed something went wrong when it shouldn't have.
+            throw new RuntimeException("Exception during event handler invocation: "
+                    + e.getMessage(), e.getCause());
+        }
+    }
+
+    private Object[] getInvokeArguments(Object[] args) {
+        if (staticReference) {
+            // If this is a static reference then the args array doesn't need any modifications.
+            return args;
+        } else {
+            // An instanced reference will need some modifications however. The first argument of 
+            // the InvokeArgs array is the class instance on which to invoke the method, any 
+            // arguments given as a parameter will follow after.
+            Object[] invokeArgs = new Object[args.length + 1];
+
+            invokeArgs[0] = classInstance;
+            System.arraycopy(args, 0, invokeArgs, 1, args.length);
+
+            return invokeArgs;
         }
     }
 }

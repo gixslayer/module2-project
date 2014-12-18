@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import findfour.shared.ArgumentException;
-import findfour.shared.events.EventDispatcher;
 import findfour.shared.events.EventHandler;
+import findfour.shared.events.EventRaiser;
 
-public class TcpServer implements Runnable {
+public class TcpServer extends EventRaiser implements Runnable {
     public static final int EVENT_STARTED = 0;
     public static final int EVENT_START_FAILED = 1;
     public static final int EVENT_STOPPED = 2;
@@ -21,7 +21,6 @@ public class TcpServer implements Runnable {
     public static final int EVENT_CLIENT_DISCONNECTED = 4;
     public static final int EVENT_PACKET_RECEIVED = 5;
 
-    private final EventDispatcher dispatcher;
     private final Map<Integer, Client> connectedClients;
     private final Object syncRoot;
     private ServerSocket serverSocket;
@@ -31,7 +30,6 @@ public class TcpServer implements Runnable {
 
     public TcpServer() {
         this.syncRoot = new Object();
-        this.dispatcher = new EventDispatcher();
         this.connectedClients = new HashMap<Integer, Client>();
         this.lastClientId = -1;
 
@@ -84,10 +82,6 @@ public class TcpServer implements Runnable {
         return connectedClients.containsKey(clientId);
     }
 
-    public void registerEventHandlers(Object handlerClass) {
-        dispatcher.registerEventHandlers(handlerClass);
-    }
-
     public boolean isRunning() {
         return keepListening;
     }
@@ -131,7 +125,7 @@ public class TcpServer implements Runnable {
     }
 
     private void registerClient(Client client) {
-        client.registerHandler(this);
+        client.registerEventHandlers(this);
         client.startReceiving();
 
         synchronized (syncRoot) {
@@ -157,12 +151,11 @@ public class TcpServer implements Runnable {
         dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet);
     }
 
-    private class Client implements Runnable {
+    private class Client extends EventRaiser implements Runnable {
         public static final int BUFFER_SIZE = 4096;
         public static final int EVENT_DISCONNECTED = 0;
         public static final int EVENT_PACKET_RECEIVED = 1;
 
-        private final EventDispatcher dispatcher;
         private final int clientId;
         private final Socket socket;
         private final InputStream inputStream;
@@ -172,7 +165,6 @@ public class TcpServer implements Runnable {
         private volatile boolean connected;
 
         public Client(int argClientId, Socket argSocket) throws IOException {
-            this.dispatcher = new EventDispatcher();
             this.clientId = argClientId;
             this.socket = argSocket;
             this.inputStream = argSocket.getInputStream();
@@ -183,10 +175,6 @@ public class TcpServer implements Runnable {
 
             dispatcher.registerEvent(EVENT_DISCONNECTED, int.class);
             dispatcher.registerEvent(EVENT_PACKET_RECEIVED, int.class, Packet.class);
-        }
-
-        public void registerHandler(Object handlerClass) {
-            dispatcher.registerEventHandlers(handlerClass);
         }
 
         public void startReceiving() {
@@ -232,8 +220,7 @@ public class TcpServer implements Runnable {
 
                     while (packetBuffer.hasPacket()) {
                         Packet packet = packetBuffer.nextPacket();
-                        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet,
-                                bytesReceived);
+                        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet);
                     }
                 }
             }
