@@ -11,7 +11,8 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         client.registerEventHandlers(new Main());
-        client.connect("127.0.0.1", 666, 1000);
+        client.registerStaticEventHandlers(Main.class);
+        client.connect("127.0.0.1", 6666, 1000);
 
         while (client.isConnected()) {
             Thread.sleep(100);
@@ -28,10 +29,14 @@ public class Main {
         System.out.println("Disconnected");
     }
 
+    @EventHandler(eventId = TcpClient.EVENT_CONNECTED)
+    private static void staticTest() {
+        System.out.println("Static event");
+    }
+
     @EventHandler(eventId = TcpClient.EVENT_PACKET_RECEIVED)
-    private void packetReceived(Packet packet, int packetSize) {
+    private void packetReceived(Packet packet) {
         System.out.println("Received packet");
-        System.out.printf("Size: %d\n", packetSize);
         PacketTest packetTest = (PacketTest) packet;
 
         System.out.println("Message: " + packetTest.getData());

@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         server.registerEventHandlers(new Main());
-        server.start(666);
+        server.start(6666);
 
         while (server.isRunning()) {
             Thread.sleep(100);
@@ -43,8 +43,8 @@ public class Main {
     }
 
     @EventHandler(eventId = TcpServer.EVENT_PACKET_RECEIVED)
-    private void packetReceived(int clientId, Packet packet, int packetSize) {
-        System.out.printf("Packet from %d (%d bytes)\n", clientId, packetSize);
+    private void packetReceived(int clientId, Packet packet) {
+        System.out.printf("Packet from %d\n", clientId);
 
         PacketTest packetTest = (PacketTest) packet;
 
