@@ -1,7 +1,6 @@
 package findfour.shared.game;
 
 import findfour.shared.ArgumentException;
-import findfour.shared.ArgumentNullException;
 import findfour.shared.ArgumentOutOfRangeException;
 
 public class Board {
@@ -12,6 +11,12 @@ public class Board {
 
     public Board() {
         this.grid = new Disc[COLUMNS * ROWS];
+    }
+
+    public void syncTo(Board board) {
+        for (int i = 0; i < board.grid.length; i++) {
+            this.grid[i] = board.grid[i];
+        }
     }
 
     public void clear() {
@@ -29,12 +34,6 @@ public class Board {
         }
 
         return grid[row * COLUMNS + column];
-    }
-
-    public void setFrom(Disc[] newGrid) {
-        if (newGrid == null) {
-            throw new ArgumentNullException("newGrid");
-        }
     }
 
     public boolean isMoveValid(int column, Disc disc) {
@@ -69,6 +68,167 @@ public class Board {
         }
 
         return ROWS - 1;
+    }
+
+    public boolean hasWinner() {
+        return isWinner(Disc.Yellow) || isWinner(Disc.Red);
+    }
+
+    public Disc getWinner() {
+        if (!hasWinner()) {
+            return Disc.None;
+        }
+
+        return isWinner(Disc.Yellow) ? Disc.Yellow : Disc.Red;
+    }
+
+    private boolean isWinner(Disc disc) {
+        return hasHorizontalWin(disc) || hasVerticalWin(disc) || hasDiagonalWin(disc);
+    }
+
+    private boolean hasHorizontalWin(Disc disc) {
+        for (int row = 0; row < ROWS; row++) {
+            int connectedCount = 0;
+
+            for (int column = 0; column < COLUMNS; column++) {
+                if (getSlot(column, row) == disc) {
+                    connectedCount++;
+
+                    if (connectedCount == 4) {
+                        return true;
+                    }
+                } else {
+                    connectedCount = 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasVerticalWin(Disc disc) {
+        for (int column = 0; column < COLUMNS; column++) {
+            int connectedCount = 0;
+
+            for (int row = 0; row < ROWS; row++) {
+                if (getSlot(column, row) == disc) {
+                    connectedCount++;
+
+                    if (connectedCount == 4) {
+                        return true;
+                    }
+                } else {
+                    connectedCount = 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasDiagonalWin(Disc disc) {
+        return checkDiagonalLeftToRight(disc) || checkDiagonalRightToLeft(disc);
+    }
+
+    /*
+     * 3456XXX
+     * 23456XX
+     * 123456X
+     * X123456
+     * XX12345
+     * XXX1234
+     */
+    private boolean checkDiagonalLeftToRight(Disc disc) {
+        int scanLines = ROWS - 3 + COLUMNS - 4;
+
+        for (int i = 0; i < scanLines; i++) {
+            int column = 0;
+            int row = ROWS - 4 - i;
+
+            if (row < 0) {
+                column = -row;
+                row = 0;
+            }
+
+            if (checkDiagonalLeftToRight(disc, column, row)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkDiagonalLeftToRight(Disc disc, int startColumn, int startRow) {
+        int connectedCount = 0;
+        int column = startColumn;
+        int row = startRow;
+
+        while (column < COLUMNS && row < ROWS) {
+            if (getSlot(column, row) == disc) {
+                connectedCount++;
+
+                if (connectedCount == 4) {
+                    return true;
+                }
+            } else {
+                connectedCount = 0;
+            }
+
+            column++;
+            row++;
+        }
+
+        return false;
+    }
+
+    /*
+     * XXX6543
+     * XX65432
+     * X654321
+     * 654321X
+     * 54321XX
+     * 4321XXX
+     */
+    private boolean checkDiagonalRightToLeft(Disc disc) {
+        int scanLines = ROWS - 3 + COLUMNS - 4;
+
+        for (int i = 0; i < scanLines; i++) {
+            int column = COLUMNS - 1;
+            int row = ROWS - 3 - i;
+
+            if (row < 0) {
+                column = COLUMNS - 1 + row;
+                row = 0;
+            }
+
+            if (checkDiagonalRightToLeft(disc, column, row)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkDiagonalRightToLeft(Disc disc, int startColumn, int startRow) {
+        int connectedCount = 0;
+        int column = startColumn;
+        int row = startRow;
+
+        while (column >= 0 && row < ROWS) {
+            if (getSlot(column, row) == disc) {
+                connectedCount++;
+
+                if (connectedCount == 4) {
+                    return true;
+                }
+            } else {
+                connectedCount = 0;
+            }
+
+            column--;
+            row++;
+        }
+
+        return false;
     }
 
     private void setSlot(int column, int row, Disc disc) {
