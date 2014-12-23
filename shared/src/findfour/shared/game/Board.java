@@ -13,49 +13,6 @@ public class Board {
         this.grid = new Disc[COLUMNS * ROWS];
     }
 
-    public void syncTo(Board board) {
-        for (int i = 0; i < board.grid.length; i++) {
-            this.grid[i] = board.grid[i];
-        }
-    }
-
-    public void clear() {
-        for (int i = 0; i < grid.length; i++) {
-            grid[i] = Disc.None;
-        }
-    }
-
-    public Disc getSlot(int column, int row) {
-        if (column < 0 || column >= COLUMNS) {
-            throw new ArgumentOutOfRangeException("column", 0, COLUMNS);
-        }
-        if (row < 0 || row >= ROWS) {
-            throw new ArgumentOutOfRangeException("row", 0, ROWS);
-        }
-
-        return grid[row * COLUMNS + column];
-    }
-
-    public boolean isMoveValid(int column, Disc disc) {
-        if (column < 0 || column >= COLUMNS) {
-            return false;
-        } else if (disc == Disc.None) {
-            return false;
-        } else if (!hasFreeSlot(column)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public void makeMove(int column, Disc disc) {
-        if (!isMoveValid(column, disc)) {
-            throw new ArgumentException("column", "invalid move");
-        }
-
-        setSlot(column, getNextFreeSlot(column), disc);
-    }
-
     public int getNextFreeSlot(int column) {
         if (column < 0 || column >= COLUMNS) {
             throw new ArgumentOutOfRangeException("column", 0, COLUMNS);
@@ -70,16 +27,73 @@ public class Board {
         return ROWS - 1;
     }
 
-    public boolean hasWinner() {
+    public boolean isMoveValid(int column, Disc disc) {
+        if (column < 0 || column >= COLUMNS) {
+            return false;
+        } else if (disc == Disc.None) {
+            return false;
+        } else if (!hasFreeSlot(column)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public Disc getSlot(int column, int row) {
+        if (column < 0 || column >= COLUMNS) {
+            throw new ArgumentOutOfRangeException("column", 0, COLUMNS);
+        }
+        if (row < 0 || row >= ROWS) {
+            throw new ArgumentOutOfRangeException("row", 0, ROWS);
+        }
+
+        return grid[row * COLUMNS + column];
+    }
+
+    void syncTo(Board board) {
+        for (int i = 0; i < board.grid.length; i++) {
+            this.grid[i] = board.grid[i];
+        }
+    }
+
+    void clear() {
+        for (int i = 0; i < grid.length; i++) {
+            grid[i] = Disc.None;
+        }
+    }
+
+    void makeMove(int column, Disc disc) {
+        if (!isMoveValid(column, disc)) {
+            throw new ArgumentException("column", "invalid move");
+        }
+
+        setSlot(column, getNextFreeSlot(column), disc);
+    }
+
+    boolean isGameOver() {
+        return isFull() || hasWinner();
+    }
+
+    boolean hasWinner() {
         return isWinner(Disc.Yellow) || isWinner(Disc.Red);
     }
 
-    public Disc getWinner() {
+    Disc getWinner() {
         if (!hasWinner()) {
             return Disc.None;
         }
 
         return isWinner(Disc.Yellow) ? Disc.Yellow : Disc.Red;
+    }
+
+    private boolean isFull() {
+        for (int i = 0; i < grid.length; i++) {
+            if (grid[i] == Disc.None) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private boolean isWinner(Disc disc) {
