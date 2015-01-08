@@ -20,6 +20,8 @@ public class TcpServer extends EventRaiser implements Runnable {
     public static final int EVENT_CLIENT_CONNECTED = 3;
     public static final int EVENT_CLIENT_DISCONNECTED = 4;
     public static final int EVENT_PACKET_RECEIVED = 5;
+    public static final int EVENT_SEND_FAILED = 6;
+    public static final int EVENT_RECEIVE_FAILED = 7;
 
     private final Map<Integer, Client> connectedClients;
     private final Object syncRoot;
@@ -39,6 +41,8 @@ public class TcpServer extends EventRaiser implements Runnable {
         dispatcher.registerEvent(EVENT_CLIENT_CONNECTED, int.class, String.class);
         dispatcher.registerEvent(EVENT_CLIENT_DISCONNECTED, int.class);
         dispatcher.registerEvent(EVENT_PACKET_RECEIVED, int.class, Packet.class);
+        dispatcher.registerEvent(EVENT_SEND_FAILED, int.class, String.class);
+        dispatcher.registerEvent(EVENT_RECEIVE_FAILED, int.class, String.class);
     }
 
     public void start(int port) {
@@ -151,10 +155,22 @@ public class TcpServer extends EventRaiser implements Runnable {
         dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet);
     }
 
+    @EventHandler(eventId = Client.EVENT_SEND_FAILED)
+    private void clientSendFailed(int clientId, String reason) {
+        dispatcher.raiseEvent(EVENT_SEND_FAILED, clientId, reason);
+    }
+
+    @EventHandler(eventId = Client.EVENT_RECEIVE_FAILED)
+    private void clientReceiveFailed(int clientId, String reason) {
+        dispatcher.raiseEvent(EVENT_RECEIVE_FAILED, clientId, reason);
+    }
+
     private class Client extends EventRaiser implements Runnable {
         public static final int BUFFER_SIZE = 4096;
         public static final int EVENT_DISCONNECTED = 0;
         public static final int EVENT_PACKET_RECEIVED = 1;
+        public static final int EVENT_SEND_FAILED = 2;
+        public static final int EVENT_RECEIVE_FAILED = 3;
 
         private final int clientId;
         private final Socket socket;
@@ -175,6 +191,8 @@ public class TcpServer extends EventRaiser implements Runnable {
 
             dispatcher.registerEvent(EVENT_DISCONNECTED, int.class);
             dispatcher.registerEvent(EVENT_PACKET_RECEIVED, int.class, Packet.class);
+            dispatcher.registerEvent(EVENT_RECEIVE_FAILED, int.class, String.class);
+            dispatcher.registerEvent(EVENT_SEND_FAILED, int.class, String.class);
         }
 
         public void startReceiving() {
@@ -197,7 +215,10 @@ public class TcpServer extends EventRaiser implements Runnable {
             try {
                 outputStream.write(data);
             } catch (IOException e) {
-                e.getMessage();
+                dispatcher.raiseEvent(EVENT_SEND_FAILED, clientId, e.getMessage());
+
+                // Drop the client if data cannot be send for whatever reason.
+                disconnect();
             }
         }
 
@@ -216,26 +237,37 @@ public class TcpServer extends EventRaiser implements Runnable {
                 if (bytesReceived < 1) {
                     disconnect();
                 } else {
-                    packetBuffer.addData(buffer, 0, bytesReceived);
+                    try {
+                        packetBuffer.handleData(buffer, 0, bytesReceived);
 
-                    while (packetBuffer.hasPacket()) {
-                        Packet packet = packetBuffer.nextPacket();
-                        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet);
+                        while (packetBuffer.hasPacket()) {
+                            Packet packet = packetBuffer.nextPacket();
+                            dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet);
+                        }
+                    } catch (PacketBufferException e) {
+                        dispatcher.raiseEvent(EVENT_RECEIVE_FAILED, clientId, e.getMessage());
+
+                        // When a packet could not be deserialized properly it is unlikely following
+                        // packets will be properly deserialized so drop the connection.
+                        disconnect();
                     }
+
                 }
             }
         }
 
         private void disconnect() {
             try {
-                connected = false;
                 socket.close();
             } catch (IOException e) {
-                // TODO: Log?
-                e.printStackTrace();
-            }
+                // There is no sensible thing to do when the socket, for whatever reason, fails to
+                // close. Do something (even though it's useless) to prevent a Checkstyle warning.
+                e.getMessage();
+            } finally {
+                connected = false;
 
-            dispatcher.raiseEvent(EVENT_DISCONNECTED, clientId);
+                dispatcher.raiseEvent(EVENT_DISCONNECTED, clientId);
+            }
         }
     }
 }

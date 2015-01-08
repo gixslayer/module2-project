@@ -1,6 +1,11 @@
 package findfour.shared.network;
 
 public abstract class Packet {
+    public static final int TYPE_SIZE = 1;
+    public static final int LENGTH_SIZE = 4;
+    public static final int MAX_LENGTH = 65536;
+    public static final int MIN_LENGTH = TYPE_SIZE;
+
     private final PacketType type;
 
     public Packet(PacketType argType) {
@@ -15,10 +20,13 @@ public abstract class Packet {
 
     byte[] serialize() {
         int contentSize = getContentSize();
-        PacketWriter writer = new PacketWriter(contentSize + 5);
 
+        assert contentSize + TYPE_SIZE < MAX_LENGTH;
+
+        PacketWriter writer = new PacketWriter(contentSize + LENGTH_SIZE + TYPE_SIZE);
+
+        writer.writeInt(contentSize + TYPE_SIZE);
         writer.writeByte(type.getValue());
-        writer.writeInt(contentSize);
 
         serializeContent(writer);
 
@@ -29,13 +37,12 @@ public abstract class Packet {
         return type;
     }
 
-    static Packet deserialize(byte packetTypeByte, byte[] contentBuffer)
-            throws PacketDeserializationException {
+    static Packet deserialize(byte[] packetData) throws PacketDeserializationException {
 
         try {
-            PacketType packetType = PacketType.fromValue(packetTypeByte);
+            PacketType packetType = PacketType.fromValue(packetData[0]);
             Packet packet = Packet.fromType(packetType);
-            PacketReader reader = new PacketReader(contentBuffer, 0, contentBuffer.length);
+            PacketReader reader = new PacketReader(packetData, TYPE_SIZE, packetData.length);
 
             packet.deserializeContent(reader);
 

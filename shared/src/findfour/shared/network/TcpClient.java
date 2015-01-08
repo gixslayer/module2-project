@@ -16,6 +16,8 @@ public class TcpClient extends EventRaiser implements Runnable {
     public static final int EVENT_CONNECT_FAILED = 1;
     public static final int EVENT_DISCONNECTED = 2;
     public static final int EVENT_PACKET_RECEIVED = 3;
+    public static final int EVENT_RECEIVE_FAILED = 4;
+    public static final int EVENT_SEND_FAILED = 5;
 
     private final byte[] buffer;
     private final PacketBuffer packetBuffer;
@@ -35,6 +37,8 @@ public class TcpClient extends EventRaiser implements Runnable {
         dispatcher.registerEvent(EVENT_CONNECT_FAILED, String.class);
         dispatcher.registerEvent(EVENT_DISCONNECTED);
         dispatcher.registerEvent(EVENT_PACKET_RECEIVED, Packet.class);
+        dispatcher.registerEvent(EVENT_RECEIVE_FAILED, String.class);
+        dispatcher.registerEvent(EVENT_SEND_FAILED, String.class);
     }
 
     public void connect(String host, int port, int timeout) {
@@ -63,14 +67,16 @@ public class TcpClient extends EventRaiser implements Runnable {
         try {
             // Closing the socket will also close the underlying input/output streams.
             socket.close();
+        } catch (IOException e) {
+            // There is no sensible thing to do when the socket, for whatever reason, fails to
+            // close. Do something (even though it's useless) to prevent a Checkstyle warning.
+            e.getMessage();
+        } finally {
             input = null;
             output = null;
             connected = false;
 
             dispatcher.raiseEvent(EVENT_DISCONNECTED);
-        } catch (IOException e) {
-            // TODO: Log?
-            e.getMessage();
         }
     }
 
@@ -80,7 +86,10 @@ public class TcpClient extends EventRaiser implements Runnable {
         try {
             output.write(data);
         } catch (IOException e) {
-            e.getMessage();
+            dispatcher.raiseEvent(EVENT_SEND_FAILED, e.getMessage());
+
+            // Drop the connection if data cannot be send for whatever reason.
+            disconnect();
         }
     }
 
@@ -103,11 +112,19 @@ public class TcpClient extends EventRaiser implements Runnable {
             if (bytesReceived < 1) {
                 disconnect();
             } else {
-                packetBuffer.addData(buffer, 0, bytesReceived);
+                try {
+                    packetBuffer.handleData(buffer, 0, bytesReceived);
 
-                while (packetBuffer.hasPacket()) {
-                    Packet packet = packetBuffer.nextPacket();
-                    dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, packet);
+                    while (packetBuffer.hasPacket()) {
+                        Packet packet = packetBuffer.nextPacket();
+                        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, packet);
+                    }
+                } catch (PacketBufferException e) {
+                    dispatcher.raiseEvent(EVENT_RECEIVE_FAILED, e.getMessage());
+
+                    // When a packet could not be deserialized properly it is unlikely following
+                    // packets will be properly deserialized so drop the connection.
+                    disconnect();
                 }
             }
         }
