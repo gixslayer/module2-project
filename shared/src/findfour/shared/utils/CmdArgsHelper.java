@@ -1,88 +1,86 @@
 package findfour.shared.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import findfour.shared.ArgumentException;
 
 public class CmdArgsHelper {
-    private final List<String> flagList;
-    private final Map<String, String> argMap;
+    private final Map<String, Flag> registeredFlags;
+    private final Map<String, Argument> registeredArgs;
+    private final Map<String, String> aliasMapping;
 
-    public CmdArgsHelper(String[] args) {
-        this.flagList = new ArrayList<String>();
-        this.argMap = new HashMap<String, String>();
+    public CmdArgsHelper() {
+        this.registeredFlags = new HashMap<String, Flag>();
+        this.registeredArgs = new HashMap<String, Argument>();
+        this.aliasMapping = new HashMap<String, String>();
+    }
 
-        parse(args);
+    public void registerFlag(String name, String alias, String description) {
+        if (aliasMapping.containsKey(alias)) {
+            throw new ArgumentException("alias", "Duplicate alias registration.");
+        } else if (registeredArgs.containsKey(name)) {
+            throw new ArgumentException("name", "Duplicate name registration.");
+        } else if (registeredFlags.containsKey(name)) {
+            throw new ArgumentException("name", "Duplicate name registration.");
+        }
+
+        Flag flag = new Flag(name, alias, description);
+
+        registeredFlags.put(name, flag);
+        aliasMapping.put(alias, name);
+    }
+
+    public void registerArg(String name, String alias, String description, String value,
+            boolean required) {
+
+    }
+
+    public boolean parse(String[] args) {
+        return false;
     }
 
     public boolean hasFlag(String flag) {
-        return flagList.contains(flag);
+        return false;
     }
 
     public boolean hasArg(String name) {
-        return argMap.containsKey(name);
+        return false;
     }
 
     public String getArg(String name) {
-        if (!hasArg(name)) {
-            throw new ArgumentException("name", "Could not find the argument");
-        }
-
-        return argMap.get(name);
-    }
-
-    public String getArg(String name, String defaultValue) {
-        return hasArg(name) ? argMap.get(name) : defaultValue;
+        return null;
     }
 
     public int getArgAsInt(String name) {
-        String value = getArg(name);
-
-        // Any formatting exceptions will be mitigated to the caller.
-        return Integer.parseInt(value);
+        return 0;
     }
 
-    public int getArgAsInt(String name, int defaultValue) {
-        if (!hasArg(name)) {
-            return defaultValue;
-        }
+    private class Flag {
+        private final String name;
+        private final String alias;
+        private final String description;
 
-        String value = getArg(name);
-
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return defaultValue;
+        Flag(String argName, String argAlias, String argDescription) {
+            this.name = argName;
+            this.alias = argAlias;
+            this.description = argDescription;
         }
     }
 
-    private void parse(String[] args) {
-        // Normally I'd use a for-loop for this, but as I modify the index variable which
-        // apparently raises a Checkstyle warning I switched to this construct.
-        int i = 0;
+    private class Argument {
+        private final String name;
+        private final String alias;
+        private final String description;
+        private final String defaultValue;
+        private final boolean required;
 
-        while (i < args.length) {
-            String arg = args[i++];
-
-            if (arg.startsWith("--") && arg.length() >= 3) {
-                // Argument -> --X value.
-                // Advance to the value part of the argument.
-                i++;
-
-                // Make sure that index is valid..
-                // If the index isn't valid this argument is ignored.
-                if (i < args.length) {
-                    argMap.put(arg.substring(2), args[i]);
-                }
-            } else if (arg.startsWith("-") && arg.length() >= 2) {
-                // Flag -> -X.
-                flagList.add(arg.substring(1));
-            }
-
-            // If the argument is neither an argument or a flag it is ignored.
+        Argument(String argName, String argAlias, String desc, String value, boolean argRequired) {
+            this.name = argName;
+            this.alias = argAlias;
+            this.description = desc;
+            this.defaultValue = value;
+            this.required = argRequired;
         }
     }
 
