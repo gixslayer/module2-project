@@ -1,8 +1,6 @@
 package client;
 
 import findfour.shared.events.EventHandler;
-import findfour.shared.network.Packet;
-import findfour.shared.network.PacketTest;
 import findfour.shared.network.TcpClient;
 
 public class Main {
@@ -35,12 +33,11 @@ public class Main {
     }
 
     @EventHandler(eventId = TcpClient.EVENT_PACKET_RECEIVED)
-    private void packetReceived(Packet packet) {
+    private void packetReceived(String packet) {
         System.out.println("Received packet");
-        PacketTest packetTest = (PacketTest) packet;
 
-        System.out.println("Message: " + packetTest.getData());
+        System.out.println("Message: " + packet);
 
-        client.send(packetTest);
+        client.send(packet);
     }
 }

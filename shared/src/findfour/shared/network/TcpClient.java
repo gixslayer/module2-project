@@ -1,8 +1,10 @@
 package findfour.shared.network;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -11,33 +13,28 @@ import java.net.SocketTimeoutException;
 import findfour.shared.events.EventRaiser;
 
 public class TcpClient extends EventRaiser implements Runnable {
-    public static final int BUFFER_SIZE = 4096;
     public static final int EVENT_CONNECTED = 0;
     public static final int EVENT_CONNECT_FAILED = 1;
     public static final int EVENT_DISCONNECTED = 2;
     public static final int EVENT_PACKET_RECEIVED = 3;
-    public static final int EVENT_RECEIVE_FAILED = 4;
-    public static final int EVENT_SEND_FAILED = 5;
+    public static final int EVENT_SEND_FAILED = 4;
 
-    private final byte[] buffer;
-    private final PacketBuffer packetBuffer;
     private Socket socket;
     private SocketAddress address;
-    private InputStream input;
-    private OutputStream output;
+    //private InputStream input;
+    private BufferedReader input;
+    //private OutputStream output;
+    private BufferedWriter output;
     private Thread receiveThread;
     private volatile boolean connected;
 
     public TcpClient() {
-        this.buffer = new byte[BUFFER_SIZE];
-        this.packetBuffer = new PacketBuffer();
         this.connected = false;
 
         dispatcher.registerEvent(EVENT_CONNECTED);
         dispatcher.registerEvent(EVENT_CONNECT_FAILED, String.class);
         dispatcher.registerEvent(EVENT_DISCONNECTED);
-        dispatcher.registerEvent(EVENT_PACKET_RECEIVED, Packet.class);
-        dispatcher.registerEvent(EVENT_RECEIVE_FAILED, String.class);
+        dispatcher.registerEvent(EVENT_PACKET_RECEIVED, String.class);
         dispatcher.registerEvent(EVENT_SEND_FAILED, String.class);
     }
 
@@ -46,8 +43,8 @@ public class TcpClient extends EventRaiser implements Runnable {
             address = new InetSocketAddress(host, port);
             socket = new Socket();
             socket.connect(address, timeout);
-            input = socket.getInputStream();
-            output = socket.getOutputStream();
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             connected = true;
             receiveThread = new Thread(this, "TcpClient-receive");
 
@@ -80,11 +77,12 @@ public class TcpClient extends EventRaiser implements Runnable {
         }
     }
 
-    public void send(Packet packet) {
-        byte[] data = packet.serialize();
+    public void send(String packet) {
 
         try {
-            output.write(data);
+            output.write(packet);
+            output.newLine(); // TODO: Is this needed?
+            output.flush();
         } catch (IOException e) {
             dispatcher.raiseEvent(EVENT_SEND_FAILED, e.getMessage());
 
@@ -99,33 +97,19 @@ public class TcpClient extends EventRaiser implements Runnable {
 
     @Override
     public void run() {
-        int bytesReceived;
+        String buffer;
 
         while (connected) {
             try {
-                bytesReceived = input.read(buffer);
+                buffer = input.readLine();
+
+                if (buffer == null) {
+                    disconnect();
+                } else {
+                    dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, buffer);
+                }
             } catch (IOException e) {
                 disconnect();
-                break;
-            }
-
-            if (bytesReceived < 1) {
-                disconnect();
-            } else {
-                try {
-                    packetBuffer.handleData(buffer, 0, bytesReceived);
-
-                    while (packetBuffer.hasPacket()) {
-                        Packet packet = packetBuffer.nextPacket();
-                        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, packet);
-                    }
-                } catch (PacketBufferException e) {
-                    dispatcher.raiseEvent(EVENT_RECEIVE_FAILED, e.getMessage());
-
-                    // When a packet could not be deserialized properly it is unlikely following
-                    // packets will be properly deserialized so drop the connection.
-                    disconnect();
-                }
             }
         }
     }

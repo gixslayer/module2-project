@@ -1,15 +1,16 @@
 package findfour.shared.network;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
-import findfour.shared.ArgumentException;
 import findfour.shared.events.EventHandler;
 import findfour.shared.events.EventRaiser;
 
@@ -21,28 +22,29 @@ public class TcpServer extends EventRaiser implements Runnable {
     public static final int EVENT_CLIENT_DISCONNECTED = 4;
     public static final int EVENT_PACKET_RECEIVED = 5;
     public static final int EVENT_SEND_FAILED = 6;
-    public static final int EVENT_RECEIVE_FAILED = 7;
 
-    private final Map<Integer, Client> connectedClients;
+    // TODO: Do we need to maintain a list of connected clients?
+    // It can be used to broadcast a message to all clients, but will we use that directly through
+    // this class? If this class doesn't store a reference, nor does an external class how will
+    // Java handle garbage collection, will having a running thread prevent the garbage collection
+    // or will it still be marked as unreachable?
+    private final List<Client> connectedClients;
     private final Object syncRoot;
     private ServerSocket serverSocket;
     private Thread listenThread;
-    private int lastClientId;
     private volatile boolean keepListening;
 
     public TcpServer() {
         this.syncRoot = new Object();
-        this.connectedClients = new HashMap<Integer, Client>();
-        this.lastClientId = -1;
+        this.connectedClients = new LinkedList<Client>();
 
         dispatcher.registerEvent(EVENT_STARTED, int.class);
         dispatcher.registerEvent(EVENT_START_FAILED, int.class, String.class);
         dispatcher.registerEvent(EVENT_STOPPED);
-        dispatcher.registerEvent(EVENT_CLIENT_CONNECTED, int.class, String.class);
-        dispatcher.registerEvent(EVENT_CLIENT_DISCONNECTED, int.class);
-        dispatcher.registerEvent(EVENT_PACKET_RECEIVED, int.class, Packet.class);
-        dispatcher.registerEvent(EVENT_SEND_FAILED, int.class, String.class);
-        dispatcher.registerEvent(EVENT_RECEIVE_FAILED, int.class, String.class);
+        dispatcher.registerEvent(EVENT_CLIENT_CONNECTED, Client.class, String.class);
+        dispatcher.registerEvent(EVENT_CLIENT_DISCONNECTED, Client.class);
+        dispatcher.registerEvent(EVENT_PACKET_RECEIVED, Client.class, String.class);
+        dispatcher.registerEvent(EVENT_SEND_FAILED, Client.class, String.class);
     }
 
     public void start(int port) {
@@ -61,8 +63,29 @@ public class TcpServer extends EventRaiser implements Runnable {
         }
     }
 
-    public void stop() {
+    public synchronized void stop() {
+        // Don't bother stopping if the server isn't running.
+        if (!keepListening) {
+            return;
+        }
+
         keepListening = false;
+
+        /* 
+         * Disconnect all clients when the server stops. Calling disconnect will raise the
+         * EVENT_CLIENT_DISCONNECTED, in which the handler will try to obtain a lock to syncRoot
+         * which is already obtained and then remove the client from the connectedClients list.
+         * This is why the connectedClients is copied to a local array (to prevent modifying the 
+         * connectedClients collection while iterating).  
+         */
+        synchronized (syncRoot) {
+            Client[] clients = connectedClients.toArray(new Client[0]);
+
+            for (Client client : clients) {
+                client.disconnect();
+            }
+        }
+
         try {
             serverSocket.close();
 
@@ -74,18 +97,6 @@ public class TcpServer extends EventRaiser implements Runnable {
         }
     }
 
-    public void send(int clientId, Packet packet) {
-        if (!hasClient(clientId)) {
-            throw new ArgumentException("clientId", "Unknown client id: %d", clientId);
-        }
-
-        connectedClients.get(clientId).send(packet);
-    }
-
-    public boolean hasClient(int clientId) {
-        return connectedClients.containsKey(clientId);
-    }
-
     public boolean isRunning() {
         return keepListening;
     }
@@ -95,20 +106,15 @@ public class TcpServer extends EventRaiser implements Runnable {
         while (keepListening) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                int clientId = getNextClientId();
-                Client client;
 
                 try {
-                    client = new Client(clientId, clientSocket);
-
+                    Client client = new Client(clientSocket);
+                    registerClient(client);
                 } catch (IOException e) {
                     // Client socket accepted correctly, but then failed to open input/output
                     // streams. Drop the client.
-                    // TODO: Log?
-                    continue;
+                    clientSocket.close();
                 }
-
-                registerClient(client);
 
             } catch (IOException e) {
                 stop();
@@ -116,91 +122,60 @@ public class TcpServer extends EventRaiser implements Runnable {
         }
     }
 
-    private int getNextClientId() {
-        int clientId = lastClientId + 1;
-
-        while (hasClient(clientId)) {
-            clientId = clientId == Integer.MAX_VALUE ? 0 : clientId + 1;
-        }
-
-        lastClientId = clientId == Integer.MAX_VALUE ? -1 : clientId;
-
-        return clientId;
-    }
-
     private void registerClient(Client client) {
         client.registerEventHandlers(this);
         client.startReceiving();
 
         synchronized (syncRoot) {
-            connectedClients.put(client.getClientId(), client);
+            connectedClients.add(client);
         }
 
-        dispatcher
-                .raiseEvent(EVENT_CLIENT_CONNECTED, client.getClientId(), client.getHostAddress());
+        dispatcher.raiseEvent(EVENT_CLIENT_CONNECTED, client, client.getHostAddress());
     }
 
     // --- Client event handlers ---
     @EventHandler(eventId = Client.EVENT_DISCONNECTED)
-    private void clientDisconnected(int clientId) {
+    private void clientDisconnected(Client client) {
         synchronized (syncRoot) {
-            connectedClients.remove(clientId);
+            connectedClients.remove(client);
         }
 
-        dispatcher.raiseEvent(EVENT_CLIENT_DISCONNECTED, clientId);
+        dispatcher.raiseEvent(EVENT_CLIENT_DISCONNECTED, client);
     }
 
     @EventHandler(eventId = Client.EVENT_PACKET_RECEIVED)
-    private void clientPacketReceived(int clientId, Packet packet) {
-        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet);
+    private void clientPacketReceived(Client client, String packet) {
+        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, client, packet);
     }
 
     @EventHandler(eventId = Client.EVENT_SEND_FAILED)
-    private void clientSendFailed(int clientId, String reason) {
-        dispatcher.raiseEvent(EVENT_SEND_FAILED, clientId, reason);
+    private void clientSendFailed(Client client, String reason) {
+        dispatcher.raiseEvent(EVENT_SEND_FAILED, client, reason);
     }
 
-    @EventHandler(eventId = Client.EVENT_RECEIVE_FAILED)
-    private void clientReceiveFailed(int clientId, String reason) {
-        dispatcher.raiseEvent(EVENT_RECEIVE_FAILED, clientId, reason);
-    }
-
-    private class Client extends EventRaiser implements Runnable {
-        public static final int BUFFER_SIZE = 4096;
+    public class Client extends EventRaiser implements Runnable {
         public static final int EVENT_DISCONNECTED = 0;
         public static final int EVENT_PACKET_RECEIVED = 1;
         public static final int EVENT_SEND_FAILED = 2;
-        public static final int EVENT_RECEIVE_FAILED = 3;
 
-        private final int clientId;
         private final Socket socket;
-        private final InputStream inputStream;
-        private final OutputStream outputStream;
-        private final byte[] buffer;
-        private final PacketBuffer packetBuffer;
+        private final BufferedReader input;
+        private final BufferedWriter output;
         private volatile boolean connected;
 
-        public Client(int argClientId, Socket argSocket) throws IOException {
-            this.clientId = argClientId;
+        public Client(Socket argSocket) throws IOException {
             this.socket = argSocket;
-            this.inputStream = argSocket.getInputStream();
-            this.outputStream = argSocket.getOutputStream();
-            this.buffer = new byte[BUFFER_SIZE];
-            this.packetBuffer = new PacketBuffer();
+            this.input = new BufferedReader(new InputStreamReader(argSocket.getInputStream()));
+            this.output = new BufferedWriter(new OutputStreamWriter(argSocket.getOutputStream()));
             this.connected = true;
 
-            dispatcher.registerEvent(EVENT_DISCONNECTED, int.class);
-            dispatcher.registerEvent(EVENT_PACKET_RECEIVED, int.class, Packet.class);
-            dispatcher.registerEvent(EVENT_RECEIVE_FAILED, int.class, String.class);
-            dispatcher.registerEvent(EVENT_SEND_FAILED, int.class, String.class);
+            dispatcher.registerEvent(EVENT_DISCONNECTED, Client.class);
+            dispatcher.registerEvent(EVENT_PACKET_RECEIVED, Client.class, String.class);
+            dispatcher.registerEvent(EVENT_SEND_FAILED, Client.class, String.class);
         }
 
         public void startReceiving() {
-            new Thread(this, String.format("TcpServer-client%d-receive", clientId)).start();
-        }
-
-        public int getClientId() {
-            return clientId;
+            new Thread(this, String.format("TcpServer-client%d-receive", this.hashCode())).start();
         }
 
         public String getHostAddress() {
@@ -209,54 +184,39 @@ public class TcpServer extends EventRaiser implements Runnable {
             return address.getHostString();
         }
 
-        public void send(Packet packet) {
-            byte[] data = packet.serialize();
-
+        public void send(String packet) {
             try {
-                outputStream.write(data);
+                output.write(packet);
+                output.newLine();
+                output.flush();
             } catch (IOException e) {
-                dispatcher.raiseEvent(EVENT_SEND_FAILED, clientId, e.getMessage());
+                dispatcher.raiseEvent(EVENT_SEND_FAILED, this, e.getMessage());
 
-                // Drop the client if data cannot be send for whatever reason.
+                // Drop the connection if data cannot be send for whatever reason.
                 disconnect();
             }
         }
 
         @Override
         public void run() {
-            int bytesReceived;
+            String buffer;
 
             while (connected) {
                 try {
-                    bytesReceived = inputStream.read(buffer);
+                    buffer = input.readLine();
+
+                    if (buffer == null) {
+                        disconnect();
+                    } else {
+                        dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, this, buffer);
+                    }
                 } catch (IOException e) {
                     disconnect();
-                    break;
-                }
-
-                if (bytesReceived < 1) {
-                    disconnect();
-                } else {
-                    try {
-                        packetBuffer.handleData(buffer, 0, bytesReceived);
-
-                        while (packetBuffer.hasPacket()) {
-                            Packet packet = packetBuffer.nextPacket();
-                            dispatcher.raiseEvent(EVENT_PACKET_RECEIVED, clientId, packet);
-                        }
-                    } catch (PacketBufferException e) {
-                        dispatcher.raiseEvent(EVENT_RECEIVE_FAILED, clientId, e.getMessage());
-
-                        // When a packet could not be deserialized properly it is unlikely following
-                        // packets will be properly deserialized so drop the connection.
-                        disconnect();
-                    }
-
                 }
             }
         }
 
-        private void disconnect() {
+        public void disconnect() {
             try {
                 socket.close();
             } catch (IOException e) {
@@ -266,7 +226,7 @@ public class TcpServer extends EventRaiser implements Runnable {
             } finally {
                 connected = false;
 
-                dispatcher.raiseEvent(EVENT_DISCONNECTED, clientId);
+                dispatcher.raiseEvent(EVENT_DISCONNECTED, this);
             }
         }
     }
