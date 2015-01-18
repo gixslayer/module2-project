@@ -1,6 +1,5 @@
 package server.rooms;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +12,15 @@ public abstract class Room {
         this.players = new LinkedList<Player>();
     }
 
-    public Iterator<Player> getPlayers() {
-        return players.iterator();
+    public synchronized void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    public synchronized void removePlayer(Player player) {
+        players.remove(player);
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }

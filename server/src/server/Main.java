@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import server.commands.CommandHandler;
 import server.commands.CommandInvoker;
+import server.matchmaking.MatchMaker;
 import server.player.Player;
 import server.player.PlayerManager;
 import server.rooms.RoomManager;
@@ -24,6 +25,7 @@ public final class Main {
     private final TcpServer server;
     private final PlayerManager playerManager;
     private final RoomManager roomManager;
+    private final MatchMaker matchMaker;
     private final BufferedReader input;
     private final CommandInvoker commandInvoker;
     private boolean keepRunning;
@@ -32,6 +34,7 @@ public final class Main {
         this.server = new TcpServer();
         this.playerManager = new PlayerManager();
         this.roomManager = new RoomManager();
+        this.matchMaker = new MatchMaker();
         this.input = new BufferedReader(new InputStreamReader(System.in));
         this.commandInvoker = new CommandInvoker();
         this.keepRunning = true;
@@ -155,6 +158,10 @@ public final class Main {
 
     public RoomManager getRoomManager() {
         return roomManager;
+    }
+
+    public MatchMaker getMatchMaker() {
+        return matchMaker;
     }
 
     public TcpServer getServer() {

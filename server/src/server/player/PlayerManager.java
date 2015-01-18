@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import server.Main;
+import server.network.DefaultProtocol;
+import server.network.Protocol;
+import server.rooms.Lobby;
 import findfour.shared.ArgumentNullException;
 import findfour.shared.network.TcpServer;
 
@@ -38,13 +42,17 @@ public final class PlayerManager {
         }
     }
 
-    public void completeSession(TcpServer.Client client, String name) {
-        Player player = clientToPlayerMapping.get(client);
+    public void completeSession(Player player, String name, String group, String[] extensions) {
+        Lobby lobby = Main.INSTANCE.getRoomManager().getLobby();
 
         player.setName(name);
+        player.setGroup(group);
+        player.setExtensions(extensions);
         player.setState(PlayerState.InLobby);
-        // TODO: Deduct protocol from handshake here?
-        // TODO: Validation in here or before this method is called.
+        player.setProtocol(getProtocol(player, group, extensions));
+        player.setRoom(lobby);
+
+        lobby.addPlayer(player);
 
         synchronized (syncRoot) {
             initialSessions.remove(player);
@@ -101,8 +109,17 @@ public final class PlayerManager {
     }
 
     public boolean isPlayerNameAvailable(String name) {
-        // TODO: Check validity of the name.
-
+        // FIXME: It is possible this method is called twice by two different clients before the
+        // client session is completed, which would allow both clients to use the same name which
+        // would crash on the second client's completeSession.
         return !nameToPlayerMapping.containsKey(name);
+    }
+
+    private Protocol getProtocol(Player player, String group, String[] extensions) {
+        //if (group.equals(Constants.GROUP)) {
+        // TODO: Return our custom protocol.
+        //}
+
+        return new DefaultProtocol(player, extensions);
     }
 }

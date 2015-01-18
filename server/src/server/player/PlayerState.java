@@ -12,5 +12,9 @@ public enum PlayerState {
     /**
      * Currently in the lobby.
      */
-    InLobby
+    InLobby,
+    /**
+     * Currently waiting for a game.
+     */
+    InQueue
 }

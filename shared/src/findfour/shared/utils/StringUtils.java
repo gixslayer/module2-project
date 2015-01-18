@@ -3,6 +3,8 @@ package findfour.shared.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import findfour.shared.ArgumentException;
+
 public final class StringUtils {
     private static final char QUOTE = '\"';
 
@@ -62,6 +64,14 @@ public final class StringUtils {
             return false;
         }
 
+    }
+
+    public static int parseInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            throw new ArgumentException("value", "Not a valid integer");
+        }
     }
 
     // Why doesn't the Java library contain a function for this???
