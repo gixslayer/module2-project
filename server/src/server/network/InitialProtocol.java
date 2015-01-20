@@ -4,6 +4,7 @@ import server.Constants;
 import server.Main;
 import server.player.Player;
 import server.player.PlayerManager;
+import server.player.PlayerState;
 import findfour.shared.utils.StringUtils;
 
 public final class InitialProtocol extends Protocol {
@@ -50,20 +51,19 @@ public final class InitialProtocol extends Protocol {
                 send(ERR_INVALID_PARAMETER);
             } else if (!areExtensionsValid(supportedExtension)) {
                 send(ERR_INVALID_PARAMETER);
+            } else if (!playerManager.completeSession(player, requestedName, group,
+                    supportedExtension)) {
+                // If completeSession returns false it means that the requested name is taken.
+                send(ERR_INVALID_USERNAME);
             } else {
-                playerManager.completeSession(player, requestedName, group, supportedExtension);
-
+                // Client successfully accepted.
                 sendAccept();
             }
         }
     }
 
     private boolean isNameValid(String name) {
-        if (!name.matches("\\w+")) {
-            return false;
-        }
-
-        return playerManager.isPlayerNameAvailable(name);
+        return name.matches("\\w+");
     }
 
     private boolean isGroupValid(String group) {
@@ -81,11 +81,7 @@ public final class InitialProtocol extends Protocol {
     }
 
     private void sendAccept() {
-        String packet =
-                String.format("%s %s %s", CMD_ACCEPT, Constants.GROUP,
-                        Constants.SUPPORTED_EXTENSIONS);
-
-        send(packet);
+        send("%s %s %s", CMD_ACCEPT, Constants.GROUP, Constants.SUPPORTED_EXTENSIONS);
     }
 
     private boolean isExtensionValid(String extension) {
@@ -130,6 +126,18 @@ public final class InitialProtocol extends Protocol {
 
     @Override
     public void sendGameDraw() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendOpponentDisconnected() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendStateChange(String playerName, PlayerState state) {
         // TODO Auto-generated method stub
 
     }

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import server.player.Player;
-import server.player.PlayerState;
 
 public final class RoomManager {
     private final Lobby lobby;
@@ -23,14 +22,8 @@ public final class RoomManager {
         String roomName = String.format("%svs%s", playerA.getName(), playerB.getName());
         GameRoom room = new GameRoom(roomName, playerA, playerB);
 
-        playerA.setState(PlayerState.InGame);
-        playerB.setState(PlayerState.InGame);
-
-        lobby.removePlayer(playerA);
-        lobby.removePlayer(playerB);
-
-        playerA.setRoom(room);
-        playerB.setRoom(room);
+        playerA.moveToGame(room);
+        playerB.moveToGame(room);
 
         gameRooms.put(roomName, room);
 
@@ -39,10 +32,7 @@ public final class RoomManager {
 
     void endGame(GameRoom room) {
         for (Player player : room.getPlayers()) {
-            player.setState(PlayerState.InLobby);
-            player.setRoom(lobby);
-
-            lobby.addPlayer(player);
+            player.moveToLobby();
         }
 
         gameRooms.remove(room.getName());

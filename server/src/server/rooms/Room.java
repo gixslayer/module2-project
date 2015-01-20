@@ -12,6 +12,10 @@ public abstract class Room {
         this.players = new LinkedList<Player>();
     }
 
+    public synchronized void onPlayerDisconnect(Player player) {
+        players.remove(player);
+    }
+
     public synchronized void addPlayer(Player player) {
         players.add(player);
     }

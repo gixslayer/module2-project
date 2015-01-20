@@ -1,7 +1,10 @@
 package server.player;
 
+import server.Main;
 import server.network.InitialProtocol;
 import server.network.Protocol;
+import server.rooms.GameRoom;
+import server.rooms.Lobby;
 import server.rooms.Room;
 import findfour.shared.game.Disc;
 import findfour.shared.network.TcpServer;
@@ -53,6 +56,28 @@ public final class Player {
 
     public void setState(PlayerState argState) {
         state = argState;
+
+        Main.INSTANCE.getRoomManager().getLobby().playerStateChanged(this);
+    }
+
+    public void moveToLobby() {
+        Lobby lobby = Main.INSTANCE.getRoomManager().getLobby();
+
+        setState(PlayerState.InLobby);
+        setRoom(lobby);
+
+        lobby.addPlayer(this);
+    }
+
+    public void moveToGame(GameRoom room) {
+        // NOTE: The current room is assumed to be the lobby, as the player can only start a game
+        // from being in the lobby.
+        currentRoom.removePlayer(this);
+
+        setState(PlayerState.InGame);
+        setRoom(room);
+
+        room.addPlayer(this);
     }
 
     public void setRoom(Room room) {

@@ -28,6 +28,12 @@ public final class MatchMaker {
         }
     }
 
+    public synchronized void removeFromQueue(Player player) {
+        if (queuedPlayers.contains(player)) {
+            queuedPlayers.remove(player);
+        }
+    }
+
     private Player findMatch(Player player) {
         // Very simple match making for now. Might expand on this later.
         if (queuedPlayers.size() != 0) {

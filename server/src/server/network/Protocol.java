@@ -1,6 +1,7 @@
 package server.network;
 
 import server.player.Player;
+import server.player.PlayerState;
 
 public abstract class Protocol {
     public static final char DELIMITER = ' ';
@@ -27,7 +28,15 @@ public abstract class Protocol {
 
     public abstract void sendGameDraw();
 
+    public abstract void sendOpponentDisconnected();
+
+    public abstract void sendStateChange(String playerName, PlayerState state);
+
     protected void send(String packet) {
         player.getClient().send(packet);
+    }
+
+    protected void send(String format, Object... args) {
+        player.getClient().send(String.format(format, args));
     }
 }

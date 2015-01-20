@@ -8,7 +8,7 @@ import java.util.Map;
 import server.Main;
 import server.network.DefaultProtocol;
 import server.network.Protocol;
-import server.rooms.Lobby;
+import findfour.shared.ArgumentException;
 import findfour.shared.ArgumentNullException;
 import findfour.shared.network.TcpServer;
 
@@ -34,7 +34,7 @@ public final class PlayerManager {
 
         synchronized (syncRoot) {
             if (clientToPlayerMapping.containsKey(client)) {
-                // TODO: Throw an exception, client already has a session.
+                throw new ArgumentException("client", "Client already has a session");
             }
 
             initialSessions.add(player);
@@ -42,21 +42,22 @@ public final class PlayerManager {
         }
     }
 
-    public void completeSession(Player player, String name, String group, String[] extensions) {
-        Lobby lobby = Main.INSTANCE.getRoomManager().getLobby();
-
-        player.setName(name);
-        player.setGroup(group);
-        player.setExtensions(extensions);
-        player.setState(PlayerState.InLobby);
-        player.setProtocol(getProtocol(player, group, extensions));
-        player.setRoom(lobby);
-
-        lobby.addPlayer(player);
-
+    public boolean completeSession(Player player, String name, String group, String[] extensions) {
         synchronized (syncRoot) {
+            if (!nameToPlayerMapping.containsKey(name)) {
+                return false;
+            }
+
+            player.setName(name);
+            player.setGroup(group);
+            player.setExtensions(extensions);
+            player.setProtocol(getProtocol(player, group, extensions));
+            player.moveToLobby();
+
             initialSessions.remove(player);
             nameToPlayerMapping.put(name, player);
+
+            return true;
         }
     }
 
@@ -68,7 +69,15 @@ public final class PlayerManager {
             if (player.getState() == PlayerState.InitialConnect) {
                 initialSessions.remove(player);
             } else {
+                handleDisconnect(player);
+
                 nameToPlayerMapping.remove(player.getName());
+
+                /*
+                 * Finally set the player state to disconnected. This will notify all clients in 
+                 * the lobby of this client's disconnect.
+                 */
+                player.setState(PlayerState.Disconnected);
             }
         }
     }
@@ -108,11 +117,18 @@ public final class PlayerManager {
         }
     }
 
-    public boolean isPlayerNameAvailable(String name) {
-        // FIXME: It is possible this method is called twice by two different clients before the
-        // client session is completed, which would allow both clients to use the same name which
-        // would crash on the second client's completeSession.
-        return !nameToPlayerMapping.containsKey(name);
+    private void handleDisconnect(Player player) {
+        PlayerState state = player.getState();
+
+        // If a player disconnects while in a room (game/lobby), notify that room.
+        if (state == PlayerState.InGame || state == PlayerState.InLobby) {
+            player.getRoom().onPlayerDisconnect(player);
+        }
+
+        // If a player disconnects while in a queue, remove him from the queue.
+        if (state == PlayerState.InQueue) {
+            Main.INSTANCE.getMatchMaker().removeFromQueue(player);
+        }
     }
 
     private Protocol getProtocol(Player player, String group, String[] extensions) {

@@ -59,8 +59,36 @@ public final class GameRoom extends Room {
         }
     }
 
+    @Override
+    public synchronized void onPlayerDisconnect(Player player) {
+        super.onPlayerDisconnect(player);
+
+        if (isPlayer(player)) {
+            // One of the players disconnected. End the game.
+            Player opponent = getOpponent(player);
+            String opponentName = opponent.getName();
+
+            // Notify the opponent that his opponent has disconnected.
+            opponent.getProtocol().sendOpponentDisconnected();
+
+            // Notify everyone in the game that there is a winner.
+            for (Player player2 : getPlayers()) {
+                player2.getProtocol().sendGameWon(opponentName);
+            }
+        }
+    }
+
     public String getName() {
         return roomName;
+    }
+
+    private boolean isPlayer(Player player) {
+        return player == playerRed || player == playerYellow;
+    }
+
+    private Player getOpponent(Player player) {
+        // NOTE: Assumes isPlayer(player) == true.
+        return player == playerRed ? playerYellow : playerRed;
     }
 
     private void handleGameOver() {

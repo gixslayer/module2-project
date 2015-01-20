@@ -16,5 +16,9 @@ public enum PlayerState {
     /**
      * Currently waiting for a game.
      */
-    InQueue
+    InQueue,
+    /**
+     * Player has disconnected.
+     */
+    Disconnected
 }
