@@ -60,7 +60,7 @@ public final class Main {
     }
 
     private void initialize() {
-        Log.setLogLevel(LogLevel.Verbose);
+        Log.setLogLevel(LogLevel.Normal);
         Log.registerListener(new ConsoleListener());
 
         server.registerEventHandlers(this);
@@ -106,6 +106,25 @@ public final class Main {
         keepRunning = false;
     }
 
+    @CommandHandler
+    private void cmdSetLogLevel(String level) {
+        if (level.equals("off")) {
+            Log.setLogLevel(LogLevel.Off);
+            Log.info(LogLevel.Minimal, "Set log level to: %s", level);
+        } else if (level.equals("minimal")) {
+            Log.setLogLevel(LogLevel.Minimal);
+            Log.info(LogLevel.Minimal, "Set log level to: %s", level);
+        } else if (level.equals("normal")) {
+            Log.setLogLevel(LogLevel.Normal);
+            Log.info(LogLevel.Minimal, "Set log level to: %s", level);
+        } else if (level.equals("verbose")) {
+            Log.setLogLevel(LogLevel.Verbose);
+            Log.info(LogLevel.Minimal, "Set log level to: %s", level);
+        } else {
+            Log.error(LogLevel.Minimal, "Unknown log level: %s", level);
+        }
+    }
+
     //----- Server event handlers -----
     @EventHandler(eventId = TcpServer.EVENT_STARTED)
     private void eventStarted(int port) {
@@ -124,7 +143,7 @@ public final class Main {
 
     @EventHandler(eventId = TcpServer.EVENT_CLIENT_CONNECTED)
     private void eventClientConnected(TcpServer.Client client, String host) {
-        Log.info(LogLevel.Verbose, "Client connected from %s", host);
+        Log.info(LogLevel.Normal, "Client connected from %s", host);
 
         playerManager.createSession(client);
     }
@@ -133,7 +152,7 @@ public final class Main {
     private void eventClientDisconnected(TcpServer.Client client) {
         Player player = playerManager.get(client);
 
-        Log.info(LogLevel.Verbose, "Client %s disconnected", player.getName());
+        Log.info(LogLevel.Normal, "Client %s disconnected", player.getName());
 
         playerManager.endSession(client);
     }
