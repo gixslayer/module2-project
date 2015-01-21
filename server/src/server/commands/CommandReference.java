@@ -45,6 +45,15 @@ class CommandReference {
                 }
             } else if (parameterTypes[i].equals(String.class)) {
                 invokeArgs[i] = args[i];
+            } else if (parameterTypes[i].equals(boolean.class)) {
+                if (!args[i].matches("true|false")) {
+                    Log.error(LogLevel.Minimal,
+                            "failed to parse value (%s) as a valid boolean at parameter %d",
+                            args[i], i);
+                    return;
+                } else {
+                    invokeArgs[i] = args[i].equals("true");
+                }
             } else {
                 throw new CommandException("Invalid parameter type (%s) at parameter %d.",
                         parameterTypes[i].getSimpleName(), i);
