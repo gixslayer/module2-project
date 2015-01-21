@@ -32,6 +32,14 @@ public abstract class Protocol {
 
     public abstract void sendStateChange(String playerName, PlayerState state);
 
+    public abstract void sendClientStates();
+
+    public abstract void sendChat(String playerName, String message);
+
+    public abstract void sendChallengeNotify(String playerName);
+
+    public abstract boolean supportsChallenging();
+
     protected void send(String packet) {
         player.getClient().send(packet);
     }

@@ -1,5 +1,6 @@
 package server.player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -88,6 +89,12 @@ public final class PlayerManager {
         }
     }
 
+    public boolean hasSession(String name) {
+        synchronized (syncRoot) {
+            return nameToPlayerMapping.containsKey(name);
+        }
+    }
+
     public Player get(String name) {
         if (name == null) {
             throw new ArgumentNullException("name");
@@ -115,6 +122,20 @@ public final class PlayerManager {
 
             return clientToPlayerMapping.get(client);
         }
+    }
+
+    public List<Player> getAllBut(Player player) {
+        List<Player> result = new ArrayList<Player>();
+
+        synchronized (syncRoot) {
+            for (Map.Entry<String, Player> entry : nameToPlayerMapping.entrySet()) {
+                if (entry.getValue() != player) {
+                    result.add(entry.getValue());
+                }
+            }
+        }
+
+        return result;
     }
 
     private void handleDisconnect(Player player) {

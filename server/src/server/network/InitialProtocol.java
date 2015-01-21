@@ -141,4 +141,27 @@ public final class InitialProtocol extends Protocol {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void sendClientStates() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendChat(String playerName, String message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendChallengeNotify(String playerName) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean supportsChallenging() {
+        return false;
+    }
 }

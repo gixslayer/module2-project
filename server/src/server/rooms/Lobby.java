@@ -18,8 +18,7 @@ public final class Lobby extends Room {
 
     @Override
     public void addPlayer(Player player) {
-        // If a client enters the lobby spam him with the current state of all other clients.
-        // This method is FAR from pretty, but it *sort of* works.
+        player.getProtocol().sendClientStates();
 
         super.addPlayer(player);
     }

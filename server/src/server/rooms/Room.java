@@ -24,6 +24,16 @@ public abstract class Room {
         players.remove(player);
     }
 
+    public synchronized void broadcastChat(Player source, String message) {
+        String playerName = source.getName();
+
+        for (Player player : players) {
+            if (player != source) {
+                player.getProtocol().sendChat(playerName, message);
+            }
+        }
+    }
+
     public List<Player> getPlayers() {
         return players;
     }

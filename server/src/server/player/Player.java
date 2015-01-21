@@ -1,5 +1,8 @@
 package server.player;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import server.Main;
 import server.network.InitialProtocol;
 import server.network.Protocol;
@@ -15,6 +18,7 @@ public final class Player {
     public static final String[] INITIAL_EXTENSIONS = new String[0];
 
     private final TcpServer.Client client;
+    private final List<Player> activeChallenges;
     private String name;
     private PlayerState state;
     private Protocol protocol;
@@ -25,6 +29,7 @@ public final class Player {
 
     public Player(TcpServer.Client argClient) {
         this.client = argClient;
+        this.activeChallenges = new LinkedList<Player>();
         this.name = INITIAL_NAME;
         this.state = PlayerState.InitialConnect;
         this.protocol = new InitialProtocol(this);
@@ -86,6 +91,18 @@ public final class Player {
 
     public void setColor(Disc argColor) {
         color = argColor;
+    }
+
+    public synchronized void addChallenger(Player player) {
+        activeChallenges.add(player);
+    }
+
+    public synchronized void removeChallenger(Player player) {
+        activeChallenges.remove(player);
+    }
+
+    public synchronized boolean hasChallenger(Player player) {
+        return activeChallenges.contains(player);
     }
 
     public String getName() {
