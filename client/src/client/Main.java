@@ -1,43 +1,30 @@
 package client;
 
-import findfour.shared.events.EventHandler;
-import findfour.shared.network.TcpClient;
+import client.server.Client;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
+    //Variables
+    public static final Main INSTANCE = new Main();
+    private boolean keepRunning;
+    private BufferedReader input;
 
-    private static TcpClient client = new TcpClient();
-
-    public static void main(String[] args) throws InterruptedException {
-        client.registerEventHandlers(new Main());
-        client.registerStaticEventHandlers(Main.class);
-        client.connect("127.0.0.1", 6666, 1000);
-
-        while (client.isConnected()) {
-            Thread.sleep(100);
-        }
+    //Constructor
+    private Main(){
+        this.input = new BufferedReader(new InputStreamReader(System.in));
+        keepRunning= true;
+    }
+    //Main
+    public static void main(String[] args) {
+        INSTANCE.gui();
+    }
+    public void gui(){
+        Client client = new Client();
+        ConnectForm m = new ConnectForm(client);
+        m.start();
     }
 
-    @EventHandler(eventId = TcpClient.EVENT_CONNECTED)
-    private void connected() {
-        System.out.println("Connected");
-    }
 
-    @EventHandler(eventId = TcpClient.EVENT_DISCONNECTED)
-    private void disconnected() {
-        System.out.println("Disconnected");
-    }
-
-    @EventHandler(eventId = TcpClient.EVENT_CONNECTED)
-    private static void staticTest() {
-        System.out.println("Static event");
-    }
-
-    @EventHandler(eventId = TcpClient.EVENT_PACKET_RECEIVED)
-    private void packetReceived(String packet) {
-        System.out.println("Received packet");
-
-        System.out.println("Message: " + packet);
-
-        client.send(packet);
-    }
 }

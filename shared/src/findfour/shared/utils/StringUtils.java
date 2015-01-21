@@ -1,9 +1,9 @@
 package findfour.shared.utils;
 
+import findfour.shared.ArgumentException;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import findfour.shared.ArgumentException;
 
 public final class StringUtils {
     private static final char QUOTE = '\"';

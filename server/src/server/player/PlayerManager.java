@@ -45,7 +45,7 @@ public final class PlayerManager {
 
     public boolean completeSession(Player player, String name, String group, String[] extensions) {
         synchronized (syncRoot) {
-            if (!nameToPlayerMapping.containsKey(name)) {
+            if (nameToPlayerMapping.containsKey(name)) {
                 return false;
             }
 

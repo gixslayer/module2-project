@@ -44,17 +44,16 @@ public final class InitialProtocol extends Protocol {
             String group = args[1];
             String[] supportedExtension = new String[args.length - 2];
             System.arraycopy(args, 2, supportedExtension, 0, supportedExtension.length);
-
             if (!isNameValid(requestedName)) {
                 send(ERR_INVALID_USERNAME);
             } else if (!isGroupValid(group)) {
                 send(ERR_INVALID_PARAMETER);
             } else if (!areExtensionsValid(supportedExtension)) {
                 send(ERR_INVALID_PARAMETER);
-            } else if (!playerManager.completeSession(player, requestedName, group,
-                    supportedExtension)) {
+            } else if (!playerManager.completeSession(player, requestedName, group, supportedExtension)) {
+                System.out.println("Invaliduser andere error");
                 // If completeSession returns false it means that the requested name is taken.
-                send(ERR_INVALID_USERNAME);
+               send(ERR_INVALID_USERNAME);
             } else {
                 // Client successfully accepted.
                 sendAccept();

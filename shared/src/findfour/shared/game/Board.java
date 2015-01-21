@@ -1,6 +1,5 @@
 package findfour.shared.game;
 
-import findfour.shared.ArgumentException;
 import findfour.shared.ArgumentOutOfRangeException;
 
 public class Board {
@@ -19,7 +18,7 @@ public class Board {
         }
 
         for (int row = 0; row < ROWS; row++) {
-            if (getSlot(column, row) != Disc.None) {
+            if (getSlot(column, row) != Disc.None && getSlot(column, row) != null ) {
                 return row - 1;
             }
         }
@@ -30,7 +29,7 @@ public class Board {
     public boolean isMoveValid(int column, Disc disc) {
         if (column < 0 || column >= COLUMNS) {
             return false;
-        } else if (disc == Disc.None) {
+        } else if (disc == Disc.None && disc != null) {
             return false;
         } else if (!hasFreeSlot(column)) {
             return false;
@@ -62,9 +61,9 @@ public class Board {
         }
     }
 
-    void makeMove(int column, Disc disc) {
+    public void makeMove(int column, Disc disc) {
         if (!isMoveValid(column, disc)) {
-            throw new ArgumentException("column", "invalid move");
+            //throw new ArgumentException("column", "invalid move");
         }
 
         setSlot(column, getNextFreeSlot(column), disc);
@@ -244,14 +243,12 @@ public class Board {
 
         return false;
     }
-
-    private void setSlot(int column, int row, Disc disc) {
+    public void setSlot(int column, int row, Disc disc) {
         assert column >= 0 && column < COLUMNS;
         assert row >= 0 && row < ROWS;
 
         grid[row * COLUMNS + column] = disc;
     }
-
     private boolean hasFreeSlot(int column) {
         assert column >= 0 && column < COLUMNS;
 
