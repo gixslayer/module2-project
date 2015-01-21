@@ -6,6 +6,7 @@ import java.util.List;
 public class Log {
     private static final List<LogListener> LISTENERS = new ArrayList<LogListener>();
     private static LogLevel currentLevel;
+    private static boolean debugEnabled;
 
     public static void info(LogLevel level, String format, Object... args) {
         info(level, String.format(format, args));
@@ -43,6 +44,18 @@ public class Log {
         }
     }
 
+    public static void debug(String format, Object... args) {
+        debug(String.format(format, args));
+    }
+
+    public static void debug(String message) {
+        if (debugEnabled) {
+            for (LogListener listener : LISTENERS) {
+                listener.debug(message);
+            }
+        }
+    }
+
     public static void registerListener(LogListener listener) {
         LISTENERS.add(listener);
     }
@@ -57,7 +70,15 @@ public class Log {
         return currentLevel;
     }
 
+    public static boolean isDebugEnabled() {
+        return debugEnabled;
+    }
+
     public static void setLogLevel(LogLevel newLevel) {
         currentLevel = newLevel;
+    }
+
+    public static void setDebugEnabled(boolean value) {
+        debugEnabled = value;
     }
 }

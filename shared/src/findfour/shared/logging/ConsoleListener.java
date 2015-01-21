@@ -17,4 +17,8 @@ public class ConsoleListener implements LogListener {
         System.err.println(message);
     }
 
+    @Override
+    public synchronized void debug(String message) {
+        System.out.printf("DEBUG: %s\n", message);
+    }
 }
