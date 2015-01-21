@@ -21,23 +21,24 @@ public class Client extends Thread {
 
     private boolean ready = false;
     private String opponent;
-    private boolean myTurn =false;
+    private boolean myTurn = false;
     private Disc disc;
 
     private final TcpClient tcpclient;
     private final Protocol protocol;
     private Board board;
 
-
-    // ---------------------------------------Constructor ------------------------------------------------
-    public Client (TcpClient argClient, String argName, String argGroup, String[] argSupportedExtensions ){
+    // ---------------------------------------Constructor -----------------------------------------
+    public Client(TcpClient argClient, String argName, String argGroup,
+            String[] argSupportedExtensions) {
         this.tcpclient = argClient;
         this.name = argName;
         this.group = argGroup;
         this.supportedExtensions = argSupportedExtensions;
         protocol = new Protocol(tcpclient, this);
     }
-    public Client (){
+
+    public Client() {
         this.tcpclient = new TcpClient();
         this.name = INITIAL_NAME;
         this.group = INITIAL_GROUP;
@@ -45,12 +46,11 @@ public class Client extends Thread {
         protocol = new Protocol(tcpclient, this);
     }
 
-    //---------------------------------------Methods----------------------------------------------------------------
+    //---------------------------------------Methods-----------------------------------------------
 
     public TcpClient getTcpclient() {
         return tcpclient;
     }
-
 
     public String getClientName() {
         return name;
@@ -59,51 +59,58 @@ public class Client extends Thread {
     public boolean isMyTurn() {
         return myTurn;
     }
-    public void doMove(int i, String player){
-        if (player.equals(name)){
-            board.makeMove(i,Disc.Red);
-        }else if (player.equals(opponent)){
-            board.makeMove(i,Disc.Yellow);
-        }else{
+
+    public void doMove(int i, String player) {
+        if (player.equals(name)) {
+            board.makeMove(i, Disc.Red);
+        } else if (player.equals(opponent)) {
+            board.makeMove(i, Disc.Yellow);
+        } else {
             System.out.println("Invalid playername");
         }
 
     }
 
-    public void setMyTurn(boolean myTurn) {
-        this.myTurn = myTurn;
+    public void setMyTurn(boolean argMyTurn) {
+        this.myTurn = argMyTurn;
     }
-    public void resetBoard(){
+
+    public void resetBoard() {
         this.board = new Board();
     }
+
     public String getGroup() {
         return group;
     }
-    public void setOpponent(String opponent){
-        this.opponent = opponent;
+
+    public void setOpponent(String argOpponent) {
+        this.opponent = argOpponent;
     }
-    public String getOpponent(){
+
+    public String getOpponent() {
         return opponent;
     }
-    public boolean hasOpponent(){
+
+    public boolean hasOpponent() {
         return opponent != null;
     }
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return tcpclient.isConnected();
     }
 
-    public void stopConnection(){
+    public void stopConnection() {
         tcpclient.disconnect();
     }
 
-    public void setReady(Boolean b){
+    public void setReady(Boolean b) {
         this.ready = b;
     }
-    public void tellReady(){
-        if(ready){
+
+    public void tellReady() {
+        if (ready) {
             protocol.sendReady();
-        }else{
+        } else {
             System.out.println("Not accepted by server");
         }
     }
@@ -112,30 +119,26 @@ public class Client extends Thread {
         return serverport;
     }
 
-    public void setServerport(int serverport) {
-        this.serverport = serverport;
+    public void setServerport(int argServerport) {
+        this.serverport = argServerport;
     }
 
     public String getServername() {
         return servername;
     }
 
-    public void setServername(String servername) {
-        this.servername = servername;
+    public void setServername(String argServername) {
+        this.servername = argServername;
     }
 
     @Override
     public void run() {
-        try {
-            if(!tcpclient.isConnected()){
-                this.connect();
-            }
-        }catch(Exception e){
-            System.out.println("Connection aborted");
+        if (!tcpclient.isConnected()) {
+            this.connect();
         }
     }
 
-    public void connect() throws InterruptedException{
+    public void connect() {
         //Set up connection
         tcpclient.registerEventHandlers(this);
         tcpclient.registerStaticEventHandlers(Client.class);
@@ -143,11 +146,16 @@ public class Client extends Thread {
         protocol.sendJoin(name, group);
 
         while (tcpclient.isConnected()) {
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
     }
-    //-------------------------------Eventhandling for connections--------------------------------------------------
+
+    //-------------------------------Eventhandling for connections---------------------------------
     @EventHandler(eventId = TcpClient.EVENT_CONNECTED)
     private void connected() {
         System.out.println("Connected");
@@ -169,9 +177,5 @@ public class Client extends Thread {
 
         System.out.println("Message: " + packet);
     }
-
-
-
-
 
 }

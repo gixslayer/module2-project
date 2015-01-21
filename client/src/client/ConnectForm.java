@@ -1,22 +1,25 @@
 package client;
 
-import client.server.Client;
-
-import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import client.server.Client;
 
 /**
  * Created by joran on 21-1-15.
  */
-public class ConnectForm extends Thread{
+public class ConnectForm extends Thread {
     private JPanel connect;
     private JButton connectButton;
     private Client client;
-    private JFormattedTextField port ;
+    private JFormattedTextField port;
     private JFormattedTextField ipadres;
     private JFrame frame;
-
 
     public ConnectForm(Client c) {
         this.client = c;
@@ -32,8 +35,7 @@ public class ConnectForm extends Thread{
 
     }
 
-
-    public void startClient(){
+    public void startClient() {
         client.setServerport((int) port.getValue());
         client.setServername((String) ipadres.getValue());
         client.start();
@@ -46,7 +48,6 @@ public class ConnectForm extends Thread{
         }
     }
 
-
     @Override
     public void run() {
         frame = new JFrame("ConnectForm");
@@ -55,6 +56,5 @@ public class ConnectForm extends Thread{
         frame.pack();
         frame.setVisible(true);
     }
-
 
 }
