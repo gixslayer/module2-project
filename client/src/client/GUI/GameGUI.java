@@ -1,5 +1,6 @@
-package client;
+package client.GUI;
 
+import client.ClientController;
 import findfour.shared.game.Board;
 import findfour.shared.game.Disc;
 
@@ -24,29 +25,35 @@ public class GameGUI extends JFrame {
     public static final int CELL_PADDING = CELL_SIZE / 6;
     public static final int SYMBOL_SIZE = CELL_SIZE - CELL_PADDING * 2;
     public static final int SYMBOL_STROKE_WIDTH = 8;
-    public Board board = new Board();
+    public Board board;
+    public final ClientController client;
 
 
         private DrawCanvas canvas; // Drawing canvas (JPanel) for the game board
         private JLabel statusBar;  // Status Bar
 
         /** Constructor to setup the game and the GUI components */
-        public GameGUI() {
+        public GameGUI(ClientController clientController) {
+            this.client = clientController;
             canvas = new DrawCanvas();  // Construct a drawing canvas (a JPanel)
             canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
 
-            // The canvas (JPanel) fires a MouseEvent upon mouse-click
+
             canvas.addMouseListener(new MouseAdapter() {
+
                 @Override
                 public void mouseClicked(MouseEvent e) {  // mouse-clicked handler
+                    System.out.println("Click!");
                     int mouseX = e.getX();
                     int mouseY = e.getY();
                     // Get the row and column clicked
                     int rowSelected = mouseY / CELL_SIZE;
                     int colSelected = mouseX / CELL_SIZE;
-
+                    client.getBoard().makeMove(colSelected, Disc.Yellow);
+                    System.out.println(colSelected);
                     repaint();
                 }
+
             });
 
             // Setup the status bar (JLabel) to display status message
@@ -61,9 +68,8 @@ public class GameGUI extends JFrame {
 
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             pack();  // pack all the components in this JFrame
-            setTitle("Tic Tac Toe");
+            setTitle("Connect 4");
             setVisible(true);  // show this JFrame
-
         }
 
         /** Initialize the game-board contents and the status */
@@ -78,7 +84,6 @@ public class GameGUI extends JFrame {
             public void paintComponent(Graphics g) {  // invoke via repaint()
                 super.paintComponent(g);    // fill background
                 setBackground(Color.WHITE); // set its background color
-
                 // Draw the grid-lines
                 g.setColor(Color.LIGHT_GRAY);
                 for (int row = 1; row < ROWS; ++row) {
@@ -89,7 +94,6 @@ public class GameGUI extends JFrame {
                     g.fillRoundRect(CELL_SIZE * col - GRID_WIDHT_HALF, 0,
                             GRID_WIDTH, CANVAS_HEIGHT - 1, GRID_WIDTH, GRID_WIDTH);
                 }
-
                 // Draw the Seeds of all the cells if they are not empty
                 // Use Graphics2D which allows us to set the pen's stroke
                 Graphics2D g2d = (Graphics2D) g;
@@ -99,29 +103,18 @@ public class GameGUI extends JFrame {
                     for (int col = 0; col < COLS; ++col) {
                         int x1 = col * CELL_SIZE + CELL_PADDING;
                         int y1 = row * CELL_SIZE + CELL_PADDING;
-                        if (board.getSlot(col, row) == Disc.Red) {
+                        if (client.getBoard().getSlot(col, row) == Disc.Red) {
                             g2d.setColor(Color.RED);
                             g2d.drawOval(x1,y1, SYMBOL_SIZE, SYMBOL_SIZE);
-                        } else if (board.getSlot(col, row) == Disc.Yellow) {
+                        } else if (client.getBoard().getSlot(col, row) == Disc.Yellow) {
                             g2d.setColor(Color.YELLOW);
                             g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
                        }
                         }
                     }
                 }
+
             }
 
-            /**
-             * The entry main() method
-             */
-            public static void main(String[] args) {
-                // Run GUI codes in the Event-Dispatching thread for thread safety
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new GameGUI(); // Let the constructor do the job
-                    }
-                });
-            }
 }
 
