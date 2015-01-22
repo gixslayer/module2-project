@@ -6,6 +6,8 @@ import java.util.List;
 import server.Main;
 import server.player.Player;
 import server.player.PlayerState;
+import findfour.shared.logging.Log;
+import findfour.shared.logging.LogLevel;
 
 public final class MatchMaker {
     private final List<Player> queuedPlayers;
@@ -21,7 +23,12 @@ public final class MatchMaker {
 
         if (opponent == null) {
             queuedPlayers.add(player);
+
+            Log.info(LogLevel.Verbose, "Added %s to the matchmaking queue", player.getName());
         } else {
+            Log.info(LogLevel.Verbose, "Found a match for the players %s and %s", player.getName(),
+                    opponent.getName());
+
             queuedPlayers.remove(opponent);
 
             Main.INSTANCE.getRoomManager().startGame(player, opponent);
@@ -29,9 +36,9 @@ public final class MatchMaker {
     }
 
     public synchronized void removeFromQueue(Player player) {
-        if (queuedPlayers.contains(player)) {
-            queuedPlayers.remove(player);
-        }
+        queuedPlayers.remove(player);
+
+        Log.info(LogLevel.Verbose, "Removed %s from the matchmaking queue", player.getName());
     }
 
     private Player findMatch(Player player) {
