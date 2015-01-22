@@ -18,6 +18,8 @@ public final class Lobby extends Room {
 
     @Override
     public void addPlayer(Player player) {
+        // When a player joins the lobby send him the states of all other clients, which is
+        // required for the lobby extension.
         player.getProtocol().sendClientStates();
 
         super.addPlayer(player);
