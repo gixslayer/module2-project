@@ -6,6 +6,8 @@ import server.matchmaking.Challenger;
 import server.player.Player;
 import server.player.PlayerState;
 import server.rooms.GameRoom;
+import findfour.shared.logging.Log;
+import findfour.shared.logging.LogLevel;
 import findfour.shared.utils.StringUtils;
 
 public final class DefaultProtocol extends Protocol {
@@ -257,6 +259,8 @@ public final class DefaultProtocol extends Protocol {
 
             if (isValidMessage(message)) {
                 String playerName = player.getName();
+
+                Log.info(LogLevel.Verbose, "[Global chat] %s: %s", playerName, message);
 
                 for (Player p : Main.INSTANCE.getPlayerManager().getAllBut(player)) {
                     p.getProtocol().sendChat(playerName, message);
