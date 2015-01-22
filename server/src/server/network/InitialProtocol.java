@@ -36,14 +36,25 @@ public final class InitialProtocol extends Protocol {
         }
     }
 
+    @Override
+    public boolean supportsChallenging() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "initial";
+    }
+
     private void handleJoin(String[] args) {
         if (args.length < 2) {
-            player.getClient().send(ERR_SYNTAX);
+            send(ERR_SYNTAX);
         } else {
             String requestedName = args[0];
             String group = args[1];
             String[] supportedExtension = new String[args.length - 2];
             System.arraycopy(args, 2, supportedExtension, 0, supportedExtension.length);
+
             if (!isNameValid(requestedName)) {
                 send(ERR_INVALID_USERNAME);
             } else if (!isGroupValid(group)) {
@@ -52,8 +63,6 @@ public final class InitialProtocol extends Protocol {
                 send(ERR_INVALID_PARAMETER);
             } else if (!playerManager.completeSession(player, requestedName, group,
                     supportedExtension)) {
-                // FIXME: Why is this here? :-)
-                System.out.println("Invaliduser andere error");
                 // If completeSession returns false it means that the requested name is taken.
                 send(ERR_INVALID_USERNAME);
             } else {
@@ -61,6 +70,10 @@ public final class InitialProtocol extends Protocol {
                 sendAccept();
             }
         }
+    }
+
+    private void sendAccept() {
+        send("%s %s %s", CMD_ACCEPT, Constants.GROUP, Constants.SUPPORTED_EXTENSIONS);
     }
 
     private boolean isNameValid(String name) {
@@ -79,10 +92,6 @@ public final class InitialProtocol extends Protocol {
         }
 
         return true;
-    }
-
-    private void sendAccept() {
-        send("%s %s %s", CMD_ACCEPT, Constants.GROUP, Constants.SUPPORTED_EXTENSIONS);
     }
 
     private boolean isExtensionValid(String extension) {
@@ -159,15 +168,5 @@ public final class InitialProtocol extends Protocol {
     public void sendChallengeNotify(String playerName) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public boolean supportsChallenging() {
-        return false;
-    }
-
-    @Override
-    public String getName() {
-        return "initial";
     }
 }
