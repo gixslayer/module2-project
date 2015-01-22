@@ -10,6 +10,7 @@ import server.rooms.GameRoom;
 import server.rooms.Lobby;
 import server.rooms.Room;
 import findfour.shared.game.Disc;
+import findfour.shared.logging.Log;
 import findfour.shared.network.TcpServer;
 
 public final class Player {
@@ -61,6 +62,8 @@ public final class Player {
 
     public void setState(PlayerState argState) {
         state = argState;
+
+        Log.debug("Player state of %s changed to %s", name, state);
 
         Main.INSTANCE.getRoomManager().getLobby().playerStateChanged(this);
     }
