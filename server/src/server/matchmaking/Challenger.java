@@ -5,6 +5,9 @@ import server.player.Player;
 import server.player.PlayerState;
 
 // TODO: The current challenging system is very ugly and probably broken, improve it.
+// NOTE: These get calls on PlayerManager are bound to crash on high traffic servers as a client
+// could always disconnect while this method is running. Use something like getIfExists which would
+// return null instead of throw an exception.
 public final class Challenger {
     public boolean challenge(Player challenger, String name) {
         if (!Main.INSTANCE.getPlayerManager().hasSession(name)) {
