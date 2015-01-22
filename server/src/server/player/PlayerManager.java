@@ -11,6 +11,8 @@ import server.network.DefaultProtocol;
 import server.network.Protocol;
 import findfour.shared.ArgumentException;
 import findfour.shared.ArgumentNullException;
+import findfour.shared.logging.Log;
+import findfour.shared.logging.LogLevel;
 import findfour.shared.network.TcpServer;
 
 public final class PlayerManager {
@@ -49,14 +51,21 @@ public final class PlayerManager {
                 return false;
             }
 
+            Protocol protocol = getProtocol(player, group, extensions);
+
             player.setName(name);
             player.setGroup(group);
             player.setExtensions(extensions);
-            player.setProtocol(getProtocol(player, group, extensions));
+            player.setProtocol(protocol);
             player.moveToLobby();
 
             initialSessions.remove(player);
             nameToPlayerMapping.put(name, player);
+
+            Log.info(LogLevel.Verbose, "Completed handshake with client %s from group %s", name,
+                    group);
+            Log.debug("ClientInfo %s: protocol %s, extensions %s", name, protocol.getName(),
+                    extensions);
 
             return true;
         }
@@ -159,4 +168,5 @@ public final class PlayerManager {
 
         return new DefaultProtocol(player, extensions);
     }
+
 }
