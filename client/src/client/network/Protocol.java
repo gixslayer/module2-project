@@ -1,12 +1,12 @@
 package client.network;
 
-import client.server.Client;
+import client.ClientController;
 import findfour.shared.network.TcpClient;
 import findfour.shared.utils.StringUtils;
 
 public class Protocol {
     TcpClient client;
-    Client clientm;
+    ClientController clientController;
     //To server
     private static final String CMD_JOIN = "join";
     private static final String CMD_READY = "ready_for_game";
@@ -22,9 +22,9 @@ public class Protocol {
     private static final String CMD_GAME_END = "game_end";
     private static final Character DELIMITER = ' ';
 
-    public Protocol(TcpClient c, Client argClient) {
+    public Protocol(TcpClient c, ClientController argClient) {
         this.client = c;
-        this.clientm = argClient;
+        this.clientController = argClient;
     }
 
     //Send
@@ -34,6 +34,7 @@ public class Protocol {
 
     public void sendReady() {
         client.send(CMD_READY);
+        clientController.resetBoard();
     }
 
     public void sendDoMove(String col) {
@@ -77,39 +78,39 @@ public class Protocol {
 
     //Handle
     public void handleAccept() {
-        clientm.setReady(true);
+        clientController.setReady(true);
     }
 
     public void handleStartGame(String[] args) {
         if (args.length < 2) {
             client.send(ERR_SYNTAX);
         } else {
-            if (args[0] == clientm.getClientName()) {
-                clientm.setOpponent(args[0]);
-            } else if (args[1] == clientm.getClientName()) {
-                clientm.setOpponent(args[1]);
+            if (args[0] == clientController.getClientName()) {
+                clientController.setOpponent(args[0]);
+            } else if (args[1] == clientController.getClientName()) {
+                clientController.setOpponent(args[1]);
             }
-            clientm.resetBoard();
+            clientController.resetBoard();
         }
     }
 
     public void handleRequestMove() {
-        clientm.setMyTurn(true);
+        clientController.setMyTurn(true);
     }
 
     public void handleDoneMove(String[] args) {
         if (args.length < 2) {
             client.send(ERR_SYNTAX);
         } else if (args[1].matches("[0-9]")
-                && (args[0].equals(clientm.getClientName()) || args[0]
-                        .equals(clientm.getOpponent()))) {
-            clientm.doMove(Integer.parseInt(args[1]), args[0]);
+                && (args[0].equals(clientController.getClientName()) || args[0]
+                        .equals(clientController.getOpponent()))) {
+            clientController.doMove(Integer.parseInt(args[1]), args[0]);
         }
     }
 
     public void handleGameEnd(String[] args) {
-        clientm.setOpponent(null);
-        clientm.resetBoard();
+        clientController.setOpponent(null);
+        clientController.resetBoard();
     }
 
     //TODO Implement support for error codes

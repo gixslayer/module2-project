@@ -3,8 +3,6 @@ package client;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import client.server.Client;
-
 public class Main {
     //Variables
     public static final Main INSTANCE = new Main();
@@ -19,13 +17,7 @@ public class Main {
 
     //Main
     public static void main(String[] args) {
-        INSTANCE.gui();
-    }
-
-    public void gui() {
-        Client client = new Client();
-        ConnectForm m = new ConnectForm(client);
-        m.start();
+        new ClientController().start();
     }
 
 }

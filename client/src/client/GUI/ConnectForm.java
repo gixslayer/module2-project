@@ -1,4 +1,4 @@
-package client;
+package client.GUI;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -8,7 +8,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import client.server.Client;
+import client.ClientController;
 
 /**
  * Created by joran on 21-1-15.
@@ -16,40 +16,42 @@ import client.server.Client;
 public class ConnectForm extends Thread {
     private JPanel connect;
     private JButton connectButton;
-    private Client client;
+    private ClientController client;
+    private GuiController guiController;
     private JFormattedTextField port;
     private JFormattedTextField ipadres;
     private JFrame frame;
 
-    public ConnectForm(Client c) {
+    public ConnectForm(ClientController c, GuiController argGuiController) {
         this.client = c;
+        this.guiController = argGuiController;
         this.port.setValue(6666);
         this.ipadres.setValue("127.0.0.1");
         connectButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
                 startClient();
             }
         });
 
     }
 
-    public void startClient() {
-        client.setServerport((int) port.getValue());
-        client.setServername((String) ipadres.getValue());
-        client.start();
+    public synchronized void startClient() {
+        client.getConnection().setServerport((int) port.getValue());
+        client.getConnection().setServername((String) ipadres.getValue());
+        client.getConnection().start();
         frame.setVisible(false);
+        frame.dispose();
+        guiController.runGameGui();
         try {
-            GameGUI.main(null);
-            this.join();
+            join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         frame = new JFrame("ConnectForm");
         frame.setContentPane(this.connect);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
