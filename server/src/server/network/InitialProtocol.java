@@ -50,10 +50,12 @@ public final class InitialProtocol extends Protocol {
                 send(ERR_INVALID_PARAMETER);
             } else if (!areExtensionsValid(supportedExtension)) {
                 send(ERR_INVALID_PARAMETER);
-            } else if (!playerManager.completeSession(player, requestedName, group, supportedExtension)) {
+            } else if (!playerManager.completeSession(player, requestedName, group,
+                    supportedExtension)) {
+                // FIXME: Why is this here? :-)
                 System.out.println("Invaliduser andere error");
                 // If completeSession returns false it means that the requested name is taken.
-               send(ERR_INVALID_USERNAME);
+                send(ERR_INVALID_USERNAME);
             } else {
                 // Client successfully accepted.
                 sendAccept();
@@ -162,5 +164,10 @@ public final class InitialProtocol extends Protocol {
     @Override
     public boolean supportsChallenging() {
         return false;
+    }
+
+    @Override
+    public String getName() {
+        return "initial";
     }
 }

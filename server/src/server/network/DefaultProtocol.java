@@ -147,20 +147,6 @@ public final class DefaultProtocol extends Protocol {
     public void sendChallengeNotify(String playerName) {
         send("%s %s", CMD_CHALLENGE, playerName);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     @Override
@@ -202,6 +188,11 @@ public final class DefaultProtocol extends Protocol {
     @Override
     public boolean supportsChallenging() {
         return hasChallengeExt;
+    }
+
+    @Override
+    public String getName() {
+        return "default";
     }
 
     private void handleReady() {

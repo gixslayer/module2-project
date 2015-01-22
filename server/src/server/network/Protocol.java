@@ -40,6 +40,8 @@ public abstract class Protocol {
 
     public abstract boolean supportsChallenging();
 
+    public abstract String getName();
+
     protected void send(String packet) {
         player.getClient().send(packet);
     }
