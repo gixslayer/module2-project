@@ -61,6 +61,7 @@ public final class Main {
 
     private void initialize() {
         Log.setLogLevel(LogLevel.Normal);
+        Log.setDebugEnabled(false);
         Log.registerListener(new ConsoleListener());
 
         server.registerEventHandlers(this);
@@ -125,6 +126,13 @@ public final class Main {
         }
     }
 
+    @CommandHandler
+    private void cmdDebugMode(boolean value) {
+        Log.setDebugEnabled(value);
+
+        Log.info(LogLevel.Minimal, "%s debug mode", value ? "Enabled" : "Disabled");
+    }
+
     //----- Server event handlers -----
     @EventHandler(eventId = TcpServer.EVENT_STARTED)
     private void eventStarted(int port) {
@@ -161,7 +169,7 @@ public final class Main {
     private void eventPacketReceived(TcpServer.Client client, String packet) {
         Player player = playerManager.get(client);
 
-        Log.info(LogLevel.Verbose, "Received packet from %s: %s", player.getName(), packet);
+        Log.debug("Received packet from %s: %s", player.getName(), packet);
 
         player.getProtocol().handlePacket(packet);
     }
