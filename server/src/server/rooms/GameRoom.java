@@ -36,31 +36,31 @@ public final class GameRoom extends Room {
     }
 
     public synchronized void handleMove(Player player, int column) {
-        if (currentTurn == player) {
-            if (gameState.isMoveValid(column, player.getColor())) {
-                gameState.makeMove(column, player.getColor());
-
-                String playerName = player.getName();
-                // Broadcast the move to all players in the room.
-                for (Player player2 : getPlayers()) {
-                    player2.getProtocol().sendDoneMove(playerName, column);
-                }
-
-                if (gameState.isGameOver()) {
-                    handleGameOver();
-                } else {
-                    beginNextTurn();
-                }
-            } else {
-                player.getProtocol().sendInvalidMove();
-            }
-        } else {
+        if (currentTurn != player) {
             player.getProtocol().sendNotYourMove();
+        } else if (!gameState.isMoveValid(column, player.getColor())) {
+            player.getProtocol().sendInvalidMove();
+        } else {
+            gameState.makeMove(column, player.getColor());
+
+            String playerName = player.getName();
+            // Broadcast the move to all players in the room.
+            for (Player player2 : getPlayers()) {
+                player2.getProtocol().sendDoneMove(playerName, column);
+            }
+
+            if (gameState.isGameOver()) {
+                handleGameOver();
+            } else {
+                beginNextTurn();
+            }
         }
     }
 
     @Override
     public synchronized void onPlayerDisconnect(Player player) {
+        // Call the base method first to remove the player from the players list. This prevents
+        // possibly trying to send data to that disconnected player.
         super.onPlayerDisconnect(player);
 
         if (isPlayer(player)) {
@@ -73,6 +73,8 @@ public final class GameRoom extends Room {
 
             // Notify everyone in the game that there is a winner.
             for (Player player2 : getPlayers()) {
+                // TODO: Spectators should really receive a 'player x disconnected' message along
+                // with the winner.
                 player2.getProtocol().sendGameWon(opponentName);
             }
         }
