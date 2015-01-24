@@ -217,6 +217,10 @@ public class TcpServer extends EventRaiser implements Runnable {
         }
 
         public void disconnect() {
+            if (!connected) {
+                return;
+            }
+
             try {
                 socket.close();
             } catch (IOException e) {

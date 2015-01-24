@@ -53,8 +53,8 @@ public final class DefaultProtocol extends Protocol {
     }
 
     @Override
-    public void sendStartGame(String opponent) {
-        send("%s %s %s", CMD_START_GAME, player.getName(), opponent);
+    public void sendStartGame(String startingPlayer, String otherPlayer) {
+        send("%s %s %s", CMD_START_GAME, startingPlayer, otherPlayer);
     }
 
     @Override
@@ -99,22 +99,23 @@ public final class DefaultProtocol extends Protocol {
             return;
         }
 
-        // The stateString must have an initial value, but will always be assigned another value.
-        String stateString = null;
+        if (stateCache.differs(playerName, state)) {
+            stateCache.update(playerName, state);
 
-        if (state == PlayerState.InGame) {
-            stateString = STATE_INGAME;
-        } else if (state == PlayerState.InLobby) {
-            stateString = STATE_INLOBBY;
-        } else if (state == PlayerState.InQueue) {
-            stateString = STATE_INQUEUE;
-        } else if (state == PlayerState.Disconnected) {
-            stateString = STATE_DISCONNECTED;
+            String stateString = null;
+
+            if (state == PlayerState.InGame) {
+                stateString = STATE_INGAME;
+            } else if (state == PlayerState.InLobby) {
+                stateString = STATE_INLOBBY;
+            } else if (state == PlayerState.InQueue) {
+                stateString = STATE_INQUEUE;
+            } else if (state == PlayerState.Disconnected) {
+                stateString = STATE_DISCONNECTED;
+            }
+
+            send("%s %s %s", CMD_STATE_CHANGE, playerName, stateString);
         }
-
-        stateCache.update(playerName, state);
-
-        send("%s %s %s", CMD_STATE_CHANGE, playerName, stateString);
     }
 
     @Override
@@ -148,6 +149,11 @@ public final class DefaultProtocol extends Protocol {
     @Override
     public void sendChallengeNotify(String playerName) {
         send("%s %s", CMD_CHALLENGE, playerName);
+
+    }
+
+    @Override
+    public void sendAccept() {
 
     }
 
@@ -332,7 +338,7 @@ public final class DefaultProtocol extends Protocol {
     }
 
     private boolean isValidMessage(String message) {
-        return message.matches("");
+        return message.matches("[a-zA-Z0-9 ]*");
     }
 
     private boolean isValidName(String name) {

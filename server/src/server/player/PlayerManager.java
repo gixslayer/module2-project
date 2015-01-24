@@ -51,11 +51,18 @@ public final class PlayerManager {
                 return false;
             }
 
+            Protocol currentProtocol = player.getProtocol();
             Protocol protocol = getProtocol(player, group, extensions);
+            String extensionsString = formatExtensions(extensions);
+
+            // Moved send accept here as putting the player in the lobby would trigger sending
+            // client states to the player state (if it supports the Lobby extension) before
+            // sending the accept packet.
+            currentProtocol.sendAccept();
 
             player.setName(name);
             player.setGroup(group);
-            player.setExtensions(extensions);
+            player.setExtensions(extensionsString);
             player.setProtocol(protocol);
             player.moveToLobby();
 
@@ -65,7 +72,7 @@ public final class PlayerManager {
             Log.info(LogLevel.Verbose, "Completed handshake with client %s from group %s", name,
                     group);
             Log.debug("ClientInfo %s: protocol %s, extensions %s", name, protocol.getName(),
-                    extensions);
+                    extensionsString);
 
             return true;
         }
@@ -133,6 +140,16 @@ public final class PlayerManager {
         }
     }
 
+    public Player getIfExists(String name) {
+        synchronized (syncRoot) {
+            if (nameToPlayerMapping.containsKey(name)) {
+                return nameToPlayerMapping.get(name);
+            } else {
+                return null;
+            }
+        }
+    }
+
     public List<Player> getAllBut(Player player) {
         List<Player> result = new ArrayList<Player>();
 
@@ -145,6 +162,35 @@ public final class PlayerManager {
         }
 
         return result;
+    }
+
+    public List<Player> getAll() {
+        List<Player> result = new ArrayList<Player>(nameToPlayerMapping.size());
+
+        synchronized (syncRoot) {
+            for (Map.Entry<String, Player> entry : nameToPlayerMapping.entrySet()) {
+                result.add(entry.getValue());
+            }
+        }
+
+        return result;
+    }
+
+    private String formatExtensions(String[] extensions) {
+        if (extensions.length == 0) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        result.append(extensions[0]);
+
+        for (int i = 1; i < extensions.length; i++) {
+            result.append(' ');
+            result.append(extensions[i]);
+        }
+
+        return result.toString();
     }
 
     private void handleDisconnect(Player player) {

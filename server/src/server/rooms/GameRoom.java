@@ -6,28 +6,29 @@ import findfour.shared.game.Disc;
 import findfour.shared.game.GameState;
 
 public final class GameRoom extends Room {
-    private final String roomName;
     private final GameState gameState;
     private final Player playerRed;
     private final Player playerYellow;
     private Player currentTurn;
 
     public GameRoom(String name, Player playerA, Player playerB) {
-        this.roomName = name;
+        super(name);
+
         this.gameState = new GameState();
         this.playerRed = playerA;
         this.playerYellow = playerB;
-        this.currentTurn = GameState.STARTING_COLOR == Disc.Red ? playerRed : playerYellow;
     }
 
     public void begin() {
         playerRed.setColor(Disc.Red);
         playerYellow.setColor(Disc.Yellow);
-
-        playerRed.getProtocol().sendStartGame(playerYellow.getName());
-        playerYellow.getProtocol().sendStartGame(playerRed.getName());
+        currentTurn = GameState.STARTING_COLOR == Disc.Red ? playerRed : playerYellow;
 
         String startingPlayer = currentTurn.getName();
+        String otherPlayer = getOpponent(currentTurn).getName();
+
+        playerRed.getProtocol().sendStartGame(startingPlayer, otherPlayer);
+        playerYellow.getProtocol().sendStartGame(startingPlayer, otherPlayer);
 
         // Broadcast to all players in the room. Spectators could be added to this list.
         for (Player player : getPlayers()) {
@@ -77,11 +78,13 @@ public final class GameRoom extends Room {
                 // with the winner.
                 player2.getProtocol().sendGameWon(opponentName);
             }
+
+            Main.INSTANCE.getRoomManager().endGame(this);
         }
     }
 
-    public String getName() {
-        return roomName;
+    public int getSpectatorCount() {
+        return getPlayers().size() - 2;
     }
 
     private boolean isPlayer(Player player) {

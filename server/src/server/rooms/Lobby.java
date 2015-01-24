@@ -4,6 +4,12 @@ import server.player.Player;
 import server.player.PlayerState;
 
 public final class Lobby extends Room {
+    public static final String LOBBY_NAME = "lobby";
+
+    public Lobby() {
+        super(LOBBY_NAME);
+    }
+
     public void playerStateChanged(Player player) {
         String name = player.getName();
         PlayerState state = player.getState();

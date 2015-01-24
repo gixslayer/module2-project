@@ -16,7 +16,7 @@ import findfour.shared.network.TcpServer;
 public final class Player {
     public static final String INITIAL_NAME = "<unknown>";
     public static final String INITIAL_GROUP = "<unknown>";
-    public static final String[] INITIAL_EXTENSIONS = new String[0];
+    public static final String INITIAL_EXTENSIONS = "";
 
     private final TcpServer.Client client;
     private final List<Player> activeChallenges;
@@ -26,7 +26,7 @@ public final class Player {
     private Room currentRoom;
     private String group;
     private Disc color;
-    private String[] supportedExtensions;
+    private String supportedExtensions;
 
     public Player(TcpServer.Client argClient) {
         this.client = argClient;
@@ -52,7 +52,7 @@ public final class Player {
         group = argGroup;
     }
 
-    void setExtensions(String[] extensions) {
+    void setExtensions(String extensions) {
         supportedExtensions = extensions;
     }
 
@@ -132,7 +132,7 @@ public final class Player {
         return color;
     }
 
-    public String[] getExtensions() {
+    public String getExtensions() {
         return supportedExtensions;
     }
 }

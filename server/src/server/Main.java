@@ -10,6 +10,7 @@ import server.matchmaking.Challenger;
 import server.matchmaking.MatchMaker;
 import server.player.Player;
 import server.player.PlayerManager;
+import server.rooms.GameRoom;
 import server.rooms.RoomManager;
 import findfour.shared.events.EventHandler;
 import findfour.shared.logging.ConsoleListener;
@@ -60,8 +61,8 @@ public final class Main {
     }
 
     private void initialize() {
-        Log.setLogLevel(LogLevel.Normal);
-        Log.setDebugEnabled(false);
+        Log.setLogLevel(LogLevel.Verbose);
+        Log.setDebugEnabled(true);
         Log.registerListener(new ConsoleListener());
 
         server.registerEventHandlers(this);
@@ -131,6 +132,41 @@ public final class Main {
         Log.setDebugEnabled(value);
 
         Log.info(LogLevel.Minimal, "%s debug mode", value ? "Enabled" : "Disabled");
+    }
+
+    @CommandHandler
+    private void cmdListClients() {
+        for (Player player : playerManager.getAll()) {
+            Log.info(LogLevel.Minimal, "%s, state: %s, group: %s, protocol: %s", player.getName(),
+                    player.getState(), player.getGroup(), player.getProtocol().getName());
+        }
+    }
+
+    @CommandHandler
+    private void cmdListGames() {
+        for (GameRoom game : roomManager.getGameRooms()) {
+            Log.info(LogLevel.Minimal, "%s (%d spectators)", game.getName(),
+                    game.getSpectatorCount());
+        }
+    }
+
+    @CommandHandler
+    private void cmdClientInfo(String name) {
+        Player player = playerManager.getIfExists(name);
+
+        if (player != null) {
+            String state = player.getState().toString();
+            String group = player.getGroup();
+            String room = player.getRoom().getName();
+            String protocol = player.getProtocol().getName();
+            String extensions = player.getExtensions();
+
+            Log.info(LogLevel.Minimal,
+                    "Name: %s, state: %s, group: %s, room: %s, protocol: %s, extensions: %s", name,
+                    state, group, room, protocol, extensions);
+        } else {
+            Log.info(LogLevel.Minimal, "No client named % was found", name);
+        }
     }
 
     //----- Server event handlers -----

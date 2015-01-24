@@ -37,6 +37,11 @@ public final class InitialProtocol extends Protocol {
     }
 
     @Override
+    public void sendAccept() {
+        send("%s %s %s", CMD_ACCEPT, Constants.GROUP, Constants.SUPPORTED_EXTENSIONS);
+    }
+
+    @Override
     public boolean supportsChallenging() {
         return false;
     }
@@ -65,15 +70,8 @@ public final class InitialProtocol extends Protocol {
                     supportedExtension)) {
                 // If completeSession returns false it means that the requested name is taken.
                 send(ERR_INVALID_USERNAME);
-            } else {
-                // Client successfully accepted.
-                sendAccept();
             }
         }
-    }
-
-    private void sendAccept() {
-        send("%s %s %s", CMD_ACCEPT, Constants.GROUP, Constants.SUPPORTED_EXTENSIONS);
     }
 
     private boolean isNameValid(String name) {
@@ -99,7 +97,7 @@ public final class InitialProtocol extends Protocol {
     }
 
     @Override
-    public void sendStartGame(String opponent) {
+    public void sendStartGame(String startingPlayer, String otherPlayer) {
         // TODO Auto-generated method stub
 
     }

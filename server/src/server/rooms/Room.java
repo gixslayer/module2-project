@@ -9,9 +9,11 @@ import findfour.shared.logging.LogLevel;
 
 public abstract class Room {
     private final List<Player> players;
+    private final String roomName;
 
-    public Room() {
+    public Room(String name) {
         this.players = new LinkedList<Player>();
+        this.roomName = name;
     }
 
     public synchronized void onPlayerDisconnect(Player player) {
@@ -41,5 +43,9 @@ public abstract class Room {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public String getName() {
+        return roomName;
     }
 }

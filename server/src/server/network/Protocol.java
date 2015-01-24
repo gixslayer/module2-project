@@ -14,7 +14,7 @@ public abstract class Protocol {
 
     public abstract void handlePacket(String packet);
 
-    public abstract void sendStartGame(String opponent);
+    public abstract void sendStartGame(String startingPlayer, String otherPlayer);
 
     public abstract void sendRequestMove(String playerName);
 
@@ -37,6 +37,8 @@ public abstract class Protocol {
     public abstract void sendChat(String playerName, String message);
 
     public abstract void sendChallengeNotify(String playerName);
+
+    public abstract void sendAccept();
 
     public abstract boolean supportsChallenging();
 
