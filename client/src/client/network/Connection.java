@@ -3,6 +3,8 @@ package client.network;
 import client.ClientController;
 import findfour.shared.events.EventHandler;
 import findfour.shared.network.TcpClient;
+import javafx.beans.InvalidationListener;
+
 
 /**
  * Created by joran on 21-1-15.
@@ -23,9 +25,11 @@ public class Connection extends Thread {
     //-----------------Methods
     @Override
     public void run() {
-        if (!tcpclient.isConnected()) {
-            this.connect();
-        }
+        connect();
+    }
+
+    public void addListener(InvalidationListener listener) {
+
     }
 
     //This function sets up an connection with the server
@@ -34,10 +38,20 @@ public class Connection extends Thread {
         tcpclient.registerEventHandlers(this);
         tcpclient.registerStaticEventHandlers(ClientController.class);
         tcpclient.connect(servername, serverport, 1000);
-        protocol.sendJoin(clientController.getClientName(), clientController.getGroup());
+        if (tcpclient.isConnected()){
+            clientController.setConnected(true);
+            clientController.getGuiController().closeConnectForm();
+            protocol.sendJoin(clientController.getClientName(), clientController.getGroup());
+        }else{
+            try {
+                clientController.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         while (tcpclient.isConnected()) {
             try {
-                Thread.sleep(100);
+                sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -86,6 +100,8 @@ public class Connection extends Thread {
     @EventHandler(eventId = TcpClient.EVENT_DISCONNECTED)
     private void disconnected() {
         System.out.println("Disconnected");
+        clientController.getGuiController().closeMainform();
+        clientController.getGuiController().openConnectForm();
     }
 
     @EventHandler(eventId = TcpClient.EVENT_CONNECTED)
@@ -97,5 +113,6 @@ public class Connection extends Thread {
     private void packetReceived(String packet) {
         System.out.println("Received packet");
         System.out.println("Message: " + packet);
+        protocol.handlePacket(packet);
     }
 }
