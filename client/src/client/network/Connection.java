@@ -10,6 +10,7 @@ import javafx.beans.InvalidationListener;
  * Created by joran on 21-1-15.
  */
 public class Connection extends Thread {
+    private boolean chatEnabeled;
     private final TcpClient tcpclient;
     private ClientController clientController;
     private Protocol protocol;
@@ -59,6 +60,16 @@ public class Connection extends Thread {
     }
 
     //-----------------Getters and Setters---------------------------------
+
+
+    public boolean isChatEnabeled() {
+        return chatEnabeled;
+    }
+
+    public void setChatEnabeled(boolean chatEnabeled) {
+        this.chatEnabeled = chatEnabeled;
+    }
+
     public ClientController getClient() {
         return clientController;
     }

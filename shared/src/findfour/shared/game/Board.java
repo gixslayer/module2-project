@@ -29,7 +29,7 @@ public class Board {
     public boolean isMoveValid(int column, Disc disc) {
         if (column < 0 || column >= COLUMNS) {
             return false;
-        } else if (disc == Disc.None && disc != null) {
+        } else if (disc == Disc.None || disc == null) {
             return false;
         } else if (!hasFreeSlot(column)) {
             return false;
@@ -49,7 +49,7 @@ public class Board {
         return grid[row * COLUMNS + column];
     }
 
-    void syncTo(Board board) {
+    public void syncTo(Board board) {
         for (int i = 0; i < board.grid.length; i++) {
             this.grid[i] = board.grid[i];
         }
@@ -62,7 +62,8 @@ public class Board {
     }
 
     public void makeMove(int column, Disc disc) {
-        // FIXME: Why is this check removed? All callers should have verified the move is valid
+        // TODO: add check, fixed the bug that broke it :0
+        //
         // before calling this method.
         //if (!isMoveValid(column, disc)) {
         //throw new ArgumentException("column", "invalid move");
@@ -75,11 +76,11 @@ public class Board {
         return isFull() || hasWinner();
     }
 
-    boolean hasWinner() {
+    public boolean hasWinner() {
         return isWinner(Disc.Yellow) || isWinner(Disc.Red);
     }
 
-    Disc getWinner() {
+    public Disc getWinner() {
         if (!hasWinner()) {
             return Disc.None;
         }
@@ -87,7 +88,7 @@ public class Board {
         return isWinner(Disc.Yellow) ? Disc.Yellow : Disc.Red;
     }
 
-    private boolean isFull() {
+    public boolean isFull() {
         for (int i = 0; i < grid.length; i++) {
             if (grid[i] == Disc.None) {
                 return false;
@@ -256,6 +257,14 @@ public class Board {
     private boolean hasFreeSlot(int column) {
         assert column >= 0 && column < COLUMNS;
 
-        return getSlot(column, 0) == Disc.None;
+        return getSlot(column, 0) == Disc.None || getSlot(column, 0) == null;
+    }
+
+    public static int getColumns() {
+        return COLUMNS;
+    }
+
+    public static int getRows() {
+        return ROWS;
     }
 }

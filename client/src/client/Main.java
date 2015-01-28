@@ -9,13 +9,13 @@ public class Main {
     private boolean keepRunning;
     private BufferedReader input;
 
-    //Constructor
+    //Constructors
     private Main() {
         this.input = new BufferedReader(new InputStreamReader(System.in));
         keepRunning = true;
     }
 
-    //Main
+    //Mainstart
     public static void main(String[] args) {
         new ClientController().start();
     }

@@ -5,18 +5,19 @@ import client.network.Connection;
 import findfour.shared.game.Board;
 import findfour.shared.game.Disc;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 /**
  * Created by joran on 21-1-15.
  */
 public class ClientController extends Thread {
     //-------------------------------Fields--------------------------------------------------------
-    public static final String INITIAL_NAME = "name";
+    public static final String INITIAL_NAME = "Name";
     public static final String INITIAL_GROUP = "19";
     public static final String[] INITIAL_EXTENSIONS = new String[0];
+    private boolean aiOn = false;
     public boolean connected;
-    public HashSet<String> lobby = new HashSet<String>();
+    public HashMap<String, String> lobby = new HashMap<String,String>();
     public GuiController guiController = new GuiController(this);
     private String clientName;
     private String group;
@@ -24,10 +25,15 @@ public class ClientController extends Thread {
     private Connection connection = new Connection(this);
     private boolean ready = false;
     private String opponent;
-    //TODO set myturn false
-    private boolean myTurn = true;
+    private boolean myTurn = false;
     private Disc disc;
     private Board board;
+
+    public AI getAi() {
+        return ai;
+    }
+
+    private AI ai = new AI(this);
 
     // ---------------------------------------Constructor -----------------------------------------
     public ClientController(String argName, String argGroup, String[] argSupportedExtensions) {
@@ -58,22 +64,17 @@ public class ClientController extends Thread {
     }
 
     public void addPlayerToLobby(String playername){
-        if (!lobby.contains(playername)){
-            lobby.add(playername);
-            guiController.getMainForm().updateLobby();
-        }
+        lobby.put(playername, null);
+        guiController.getMainForm().updateLobby();
+
     }
     public void addPlayerToLobby(String playername, String state){
-        if (!lobby.contains(playername)){
-            lobby.add(String.format("%s ~%s",playername,state));
-            guiController.getMainForm().updateLobby();
-        }
+        lobby.put(playername, state);
+        guiController.getMainForm().updateLobby();
     }
     public void removePlayerFromLobby(String playername){
-        if (lobby.contains(playername)){
-            lobby.remove(playername);
-            guiController.getMainForm().updateLobby();
-        }
+        lobby.remove(playername);
+        guiController.getMainForm().updateLobby();
     }
     public void doMove(int i, String player) {
         synchronized (board){
@@ -92,6 +93,7 @@ public class ClientController extends Thread {
             if (myTurn) {
                 connection.getProtocol().sendDoMove(String.valueOf(i));
                 myTurn = false;
+                guiController.getControlForm().disableHintButton();
                 guiController.getControlForm().setGameState("Opponents turn.");
             } else {
                 guiController.getControlForm().setGameState("Opponents turn. Not yours");
@@ -100,11 +102,26 @@ public class ClientController extends Thread {
     }
     public void setMyTurnTrue(){
         myTurn = true;
+        guiController.getControlForm().enableHintButton();
+        if (aiOn){
+            ai.doMove(myTurn);
+        }
         guiController.getControlForm().setGameState("Your turn.");
+    }
+
+    public void endGame(String winner){
+        setMyTurn(false);
+        setOpponent(null);
+        resetBoard();
+        guiController.closeControlForm();
+        guiController.sendWinnerMessage(winner);
+        guiController.getMainForm().switchReadyButton();
     }
     public void sendGlobalMessage(String s){
         connection.getProtocol().sendGlobalChat(s);
     }
+
+    public void sendLocalMessage(String s){ connection.getProtocol().sendLocalChat(s);}
 
     public GuiController getGuiController() {
         return guiController;
@@ -117,10 +134,19 @@ public class ClientController extends Thread {
             System.out.println("Not accepted by server");
         }
     }
+    public void sendMessageChatNotEnabeled(){
+        guiController.sendMessageChatNotEnabeled();
+    }
 
     //-------------------------------Small functions-----------------------------------------------
     public boolean isMyTurn() {
         return myTurn;
+    }
+
+    public void setAiOn (Boolean b){ this.aiOn = b;}
+
+    public void newConnection(){
+        connection = new Connection(this);
     }
 
     public boolean hasOpponent() {
@@ -150,6 +176,14 @@ public class ClientController extends Thread {
         this.myTurn = argMyTurn;
     }
 
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
     public String getGroup() {
         return group;
     }
@@ -174,11 +208,12 @@ public class ClientController extends Thread {
         this.ready = b;
     }
 
-    public HashSet<String> getLobby() {
+    public HashMap<String, String> getLobby() {
         return lobby;
     }
 
-    public void setLobby(HashSet<String> lobby) {
+    public void setLobby(HashMap<String, String> lobby) {
         this.lobby = lobby;
     }
+
 }

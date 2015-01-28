@@ -8,7 +8,6 @@ import client.ClientController;
 public class GuiController extends Thread {
     private static ClientController clientController;
     ConnectForm connectForm;
-    GameGUI gameGUI;
     ControlForm controlForm;
     MainForm mainForm;
 
@@ -37,15 +36,25 @@ public class GuiController extends Thread {
     }
 
     public void openControlForm(){
-        controlForm = new ControlForm(clientController);
-        controlForm.run();
+        controlForm = new ControlForm(this);
+        controlForm.start();
     }
     public void closeControlForm(){
         controlForm.close();
-        controlForm = null;
+    }
+    public void sendWinnerMessage(String winner){
+        mainForm.winnerMessage(winner);
+
     }
     public ConnectForm getConnectForm() {
         return connectForm;
+    }
+
+    public void sendMessageChatNotEnabeled(){
+        mainForm.sendMessageChatNotEnabeled();
+        if (controlForm != null){
+            controlForm.sendMessageChatNotEnabeled();
+        }
     }
 
     public static ClientController getClientController() {

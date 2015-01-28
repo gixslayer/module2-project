@@ -8,7 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
+import java.util.HashMap;
 
 /**
  * Created by joran on 26-1-15.
@@ -46,12 +46,16 @@ public class MainForm extends Thread{
     }
     public void sendReady(){
         clientController.getConnection().getProtocol().sendReady();
+        switchReadyButton();
 
     }
     public void sendGlobalMessage(String m){
         clientController.sendGlobalMessage(m);
     }
 
+    public void sendMessageChatNotEnabeled(){
+        textArea1.append(String.format("[System] I'm sorry, but Chatting is not enabeled on this server. %n"));
+    }
     public void run(){
         frame = new JFrame("MainForm");
         frame.setContentPane(this.panel1);
@@ -70,8 +74,14 @@ public class MainForm extends Thread{
     }
 
     public void updateLobby(){
-        HashSet e = clientController.getLobby();
-        list1.setListData(e.toArray());
+        HashMap<String, String> e = clientController.getLobby();
+        Object[] result = e.keySet().toArray();
+        for (int i=0; i < result.length; i++){
+            if (e.get(result[i]) != null) {
+                result[i] = result[i]+ " ~"+e.get(result[i]);
+            }
+        }
+        list1.setListData(result);
     }
 
 
@@ -88,10 +98,23 @@ public class MainForm extends Thread{
         if (winner == null){
             textArea1.append(String.format("[System] The game ended in a draw! %n"));
         }else{
-            textArea1.append(String.format("[System] The winner is %n"));
+            textArea1.append(String.format("[System] The winner is %s",winner));
         }
     }
     public void newMessage(String arg){
+        cleanUpChat();
+        textArea1.append(String.format("[Me] %s %n",arg));
+    }
+
+    public void newMessage(String[] args){
+        cleanUpChat();
+        textArea1.append(String.format("[%s]",args[0]));
+        for (int i =1; i < args.length ; i ++){
+            textArea1.append(String.format(" %s", args[i]));
+        }
+        textArea1.append(String.format("%n"));
+    }
+    public void cleanUpChat(){
         if(textArea1.getLineCount()>(textArea1.getSize().getHeight()/15)){
             int end = 0;
             try {
@@ -101,25 +124,8 @@ public class MainForm extends Thread{
             }
             textArea1.replaceRange("", 0, end);
         }
-        textArea1.append(String.format("[Me] %s %n",arg));
     }
-
-    public void newMessage(String[] args){
-
-
-        if(textArea1.getLineCount()>20) {
-            int end = 0;
-            try {
-                end = textArea1.getLineEndOffset(0);
-            } catch (BadLocationException e) {
-                e.printStackTrace();
-            }
-            textArea1.replaceRange("", 0, end);
-        }
-        textArea1.append(String.format("[%s]",args[0]));
-        for (int i =1; i < args.length ; i ++){
-            textArea1.append(String.format(" %s", args[i]));
-        }
-        textArea1.append(String.format("%n"));
+    public void switchReadyButton(){
+        readyButton.setEnabled(!readyButton.isEnabled());
     }
 }

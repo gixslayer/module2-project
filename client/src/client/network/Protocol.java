@@ -4,6 +4,7 @@ import client.ClientController;
 import findfour.shared.network.TcpClient;
 import findfour.shared.utils.StringUtils;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Protocol {
@@ -15,6 +16,7 @@ public class Protocol {
     private static final String CMD_READY = "ready_for_game";
     private static final String CMD_DOMOVE = "do_move";
     private static final String CMD_GLOBALCHAT = "chat_global";
+    private static final String CMD_LOCALCHAT = "chat_local";
     //Both
     private static final String CMD_ERROR = "error";
     private static final String ERR_SYNTAX = "error 010";
@@ -43,8 +45,19 @@ public class Protocol {
         clientController.resetBoard();
     }
 
-    public void sendGlobalChat(String message){
-        client.send(String.format("%s %s", CMD_GLOBALCHAT ,message));
+    public void sendGlobalChat(String message) {
+        if (clientController.getConnection().isChatEnabeled()) {
+            client.send(String.format("%s %s", CMD_GLOBALCHAT, message));
+        }
+    }
+
+    public void sendLocalChat(String message) {
+        if (clientController.getConnection().isChatEnabeled()) {
+            client.send(String.format("%s %s", CMD_LOCALCHAT, message));
+        }
+    }
+    public void displayMessageChatNotAvailable(){
+        clientController.sendMessageChatNotEnabeled();
     }
 
     public void sendDoMove(String col) {
@@ -65,7 +78,7 @@ public class Protocol {
         String[] args = StringUtils.extractArgs(packet, DELIMITER, false);
         switch (command) {
             case CMD_ACCEPT:
-                handleAccept();
+                handleAccept(args);
                 break;
             case CMD_START_GAME:
                 handleStartGame(args);
@@ -92,8 +105,10 @@ public class Protocol {
     }
 
     //Handle
-    public void handleAccept() {
-        clientController.setReady(true);
+    public void handleAccept(String[] args) {
+        if(args[1].equals("Chat")||args[2].equals("Chat")||args[3].equals("Chat")){
+            clientController.getConnection().setChatEnabeled(true);
+        }
     }
 
     public void handleStartGame(String[] args) {
@@ -130,10 +145,11 @@ public class Protocol {
     }
 
     public void handleGameEnd(String[] args) {
-        clientController.getGuiController().closeControlForm();
-        clientController.setMyTurn(false);
-        clientController.setOpponent(null);
-        clientController.resetBoard();
+        if (args.length > 0) {
+            clientController.endGame(args[0]);
+        }else{
+            clientController.endGame(null);
+        }
     }
 
     //TODO Implement support for error codes
@@ -146,7 +162,18 @@ public class Protocol {
         }
     }
     public void handleMessage(String[] args){
-        clientController.getGuiController().getMainForm().newMessage(args);
+        //First check if local or global chat
+        if (args[0].equals("|global|")) {
+            clientController.getGuiController().getMainForm().newMessage(Arrays.copyOfRange(args, 1, args.length));
+        }else if (args[0].equals("|local|") && clientController.getGuiController().getControlForm() != null){
+            clientController.getGuiController().getControlForm().newMessage(Arrays.copyOfRange(args, 1, args.length));
+        }else{
+            //If server doesn't say print to both
+            clientController.getGuiController().getMainForm().newMessage(args);
+            if (clientController.getGuiController().getControlForm() != null){
+                clientController.getGuiController().getControlForm().newMessage(Arrays.copyOfRange(args, 1, args.length));
+            }
+        }
     }
     //TODO check for valid input
     public void handleStateChange(String[] args){
@@ -161,7 +188,7 @@ public class Protocol {
                 clientController.removePlayerFromLobby(args[0]);
                 break;
             case "game":
-                clientController.addPlayerToLobby(args[0],"inGame");
+                clientController.addPlayerToLobby(args[0], "inGame");
                 break;
         }
     }
