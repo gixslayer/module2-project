@@ -66,17 +66,13 @@ public final class GameRoom extends Room {
 
         if (isPlayer(player)) {
             // One of the players disconnected. End the game.
-            Player opponent = getOpponent(player);
-            String opponentName = opponent.getName();
+            String opponent = getOpponent(player).getName();
+            String playerName = player.getName();
 
-            // Notify the opponent that his opponent has disconnected.
-            opponent.getProtocol().sendOpponentDisconnected();
-
-            // Notify everyone in the game that there is a winner.
+            // Notify everyone in the game that there is a winner because the opponent disconnected.
             for (Player player2 : getPlayers()) {
-                // TODO: Spectators should really receive a 'player x disconnected' message along
-                // with the winner.
-                player2.getProtocol().sendGameWon(opponentName);
+                player2.getProtocol().sendOpponentDisconnected(playerName);
+                player2.getProtocol().sendGameWon(opponent);
             }
 
             Main.INSTANCE.getRoomManager().endGame(this);

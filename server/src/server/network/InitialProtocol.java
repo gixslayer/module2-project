@@ -12,8 +12,8 @@ public final class InitialProtocol extends Protocol {
     private static final String CMD_ACCEPT = "accept";
     private static final String ERR_INVALID_USERNAME = "error 004";
     private static final String ERR_INVALID_CMD = "error 007";
-    private static final String ERR_INVALID_PARAMETER = "error 009";
-    private static final String ERR_SYNTAX = "error 010";
+    private static final String ERR_INVALID_PARAMETER = "error 008";
+    private static final String ERR_SYNTAX = "error 009";
 
     private final PlayerManager playerManager;
 
@@ -53,7 +53,7 @@ public final class InitialProtocol extends Protocol {
 
     private void handleJoin(String[] args) {
         if (args.length < 2) {
-            send(ERR_SYNTAX);
+            sendErr(ERR_SYNTAX, "Expected at least 2 parameters");
         } else {
             String requestedName = args[0];
             String group = args[1];
@@ -61,15 +61,15 @@ public final class InitialProtocol extends Protocol {
             System.arraycopy(args, 2, supportedExtension, 0, supportedExtension.length);
 
             if (!isNameValid(requestedName)) {
-                send(ERR_INVALID_USERNAME);
+                sendErr(ERR_INVALID_USERNAME, "player-name");
             } else if (!isGroupValid(group)) {
-                send(ERR_INVALID_PARAMETER);
+                sendErr(ERR_INVALID_PARAMETER, "group-number");
             } else if (!areExtensionsValid(supportedExtension)) {
-                send(ERR_INVALID_PARAMETER);
+                sendErr(ERR_INVALID_PARAMETER, "extension-list");
             } else if (!playerManager.completeSession(player, requestedName, group,
                     supportedExtension)) {
                 // If completeSession returns false it means that the requested name is taken.
-                send(ERR_INVALID_USERNAME);
+                sendErr(ERR_INVALID_USERNAME, "Name has already been taken");
             }
         }
     }
@@ -139,7 +139,7 @@ public final class InitialProtocol extends Protocol {
     }
 
     @Override
-    public void sendOpponentDisconnected() {
+    public void sendOpponentDisconnected(String name) {
         // TODO Auto-generated method stub
 
     }
@@ -157,9 +157,13 @@ public final class InitialProtocol extends Protocol {
     }
 
     @Override
-    public void sendChat(String playerName, String message) {
+    public void sendGlobalChat(String playerName, String message) {
         // TODO Auto-generated method stub
+    }
 
+    @Override
+    public void sendLocalChat(String playerName, String message) {
+        // TODO Auto-generated method stub
     }
 
     @Override

@@ -31,12 +31,11 @@ public abstract class Room {
     public synchronized void broadcastChat(Player source, String message) {
         String playerName = source.getName();
 
-        // TODO: Should include the name of the room.
-        Log.info(LogLevel.Verbose, "[Local chat] %s: %s", playerName, message);
+        Log.info(LogLevel.Verbose, "[Local chat@%s] %s: %s", roomName, playerName, message);
 
         for (Player player : players) {
             if (player != source) {
-                player.getProtocol().sendChat(playerName, message);
+                player.getProtocol().sendLocalChat(playerName, message);
             }
         }
     }

@@ -23,14 +23,14 @@ public final class DefaultProtocol extends Protocol {
     private static final String CMD_GLOBAL_CHAT = "chat_global";
     private static final String CMD_CHALLENGE = "challenge";
     private static final String CMD_CHALLENGE_RESPONSE = "challenge_response";
+    private static final String CMD_ERROR = "error";
     private static final String ERR_INVALID_MOVE = "error 002";
     private static final String ERR_PLAYER_DISCONNECTED = "error 003";
     private static final String ERR_CANNOT_CHALLENGE = "error 005";
     private static final String ERR_INVALID_CHAT = "error 006";
     private static final String ERR_INVALID_CMD = "error 007";
-    private static final String ERR_INVALID_CONTEXT = "error 008";
-    private static final String ERR_INVALID_PARAMETER = "error 009";
-    private static final String ERR_SYNTAX = "error 010";
+    private static final String ERR_INVALID_PARAMETER = "error 008";
+    private static final String ERR_SYNTAX = "error 009";
     private static final String STATE_INGAME = "game";
     private static final String STATE_INLOBBY = "lobby";
     private static final String STATE_INQUEUE = "lobby_ready";
@@ -64,12 +64,12 @@ public final class DefaultProtocol extends Protocol {
 
     @Override
     public void sendNotYourMove() {
-        send(ERR_INVALID_CONTEXT);
+        sendErr(ERR_INVALID_CMD, "Not your move");
     }
 
     @Override
     public void sendInvalidMove() {
-        send(ERR_INVALID_MOVE);
+        sendErr(ERR_INVALID_MOVE, "Move is invalid");
     }
 
     @Override
@@ -88,8 +88,8 @@ public final class DefaultProtocol extends Protocol {
     }
 
     @Override
-    public void sendOpponentDisconnected() {
-        send(ERR_PLAYER_DISCONNECTED);
+    public void sendOpponentDisconnected(String name) {
+        sendErr(ERR_PLAYER_DISCONNECTED, name);
     }
 
     @Override
@@ -138,12 +138,21 @@ public final class DefaultProtocol extends Protocol {
     }
 
     @Override
-    public void sendChat(String playerName, String message) {
+    public void sendGlobalChat(String playerName, String message) {
         if (!hasChatExt) {
             return;
         }
 
-        send("%s %s %s", CMD_CHAT, playerName, message);
+        send("%s %s [global]%s", CMD_CHAT, playerName, message);
+    }
+
+    @Override
+    public void sendLocalChat(String playerName, String message) {
+        if (!hasChatExt) {
+            return;
+        }
+
+        send("%s %s [local]%s", CMD_CHAT, playerName, message);
     }
 
     @Override
@@ -159,12 +168,12 @@ public final class DefaultProtocol extends Protocol {
 
     @Override
     public void sendCannotChallenge(String reason) {
-        send("%s %s", ERR_CANNOT_CHALLENGE, reason);
+        sendErr(ERR_CANNOT_CHALLENGE, reason);
     }
 
     @Override
     public void sendChallengeFailed(String reason) {
-        send("%s %s", ERR_INVALID_PARAMETER, reason);
+        sendErr(ERR_INVALID_PARAMETER, reason);
     }
 
     @Override
@@ -197,6 +206,10 @@ public final class DefaultProtocol extends Protocol {
                 handleChallengeResponse(args);
                 break;
 
+            case CMD_ERROR:
+                handleError(args, packet);
+                break;
+
             default:
                 send(ERR_INVALID_CMD);
                 break;
@@ -217,35 +230,28 @@ public final class DefaultProtocol extends Protocol {
         if (player.getState() == PlayerState.InLobby) {
             Main.INSTANCE.getMatchMaker().queuePlayer(player);
         } else {
-            send(ERR_INVALID_CONTEXT);
+            sendErr(ERR_INVALID_CMD, "You must be in the lobby state");
         }
     }
 
     private void handleDoMove(String[] args) {
-        if (player.getState() == PlayerState.InGame) {
-            if (args.length >= 1) {
-                String column = args[0];
-
-                if (isValidCol(column)) {
-                    GameRoom room = (GameRoom) player.getRoom();
-                    int col = StringUtils.parseInt(column);
-
-                    room.handleMove(player, col);
-                } else {
-                    send(ERR_INVALID_PARAMETER);
-                }
-            } else {
-                send(ERR_SYNTAX);
-            }
+        if (player.getState() != PlayerState.InGame) {
+            sendErr(ERR_INVALID_CMD, "You must be in the game state");
+        } else if (args.length < 1) {
+            sendErr(ERR_SYNTAX, "Expected at least 1 parameter");
+        } else if (!isValidCol(args[0])) {
+            sendErr(ERR_INVALID_PARAMETER, "col");
         } else {
-            send(ERR_INVALID_CONTEXT);
+            GameRoom room = (GameRoom) player.getRoom();
+            int column = StringUtils.parseInt(args[0]);
+
+            room.handleMove(player, column);
         }
     }
 
     private void handleLocalChat(String packet) {
-        // Eat the packet if the client indicated it does not support chat, but send it anyway.
         if (!hasChatExt) {
-            send(ERR_INVALID_CMD);
+            sendErr(ERR_INVALID_CMD, "Chat extension not specified during handshake");
             return;
         }
 
@@ -258,15 +264,14 @@ public final class DefaultProtocol extends Protocol {
                 send(ERR_INVALID_CHAT);
             }
         } else {
-            send(ERR_SYNTAX);
+            sendErr(ERR_SYNTAX, "Expected at least 1 parameter");
         }
 
     }
 
     private void handleGlobalChat(String packet) {
-        // Eat the packet if the client indicated it does not support chat, but send it anyway.
         if (!hasChatExt) {
-            send(ERR_INVALID_CMD);
+            sendErr(ERR_INVALID_CMD, "Chat extension not specified during handshake");
             return;
         }
 
@@ -279,63 +284,70 @@ public final class DefaultProtocol extends Protocol {
                 Log.info(LogLevel.Verbose, "[Global chat] %s: %s", playerName, message);
 
                 for (Player p : Main.INSTANCE.getPlayerManager().getAllBut(player)) {
-                    p.getProtocol().sendChat(playerName, message);
+                    p.getProtocol().sendGlobalChat(playerName, message);
                 }
             } else {
                 send(ERR_INVALID_CHAT);
             }
         } else {
-            send(ERR_SYNTAX);
+            sendErr(ERR_SYNTAX, "Expected at least 1 parameter");
         }
     }
 
     private void handleChallenge(String[] args) {
         if (!hasChallengeExt) {
-            send(ERR_INVALID_CMD);
+            send(ERR_INVALID_CMD, "Challenge extension not specified during handshake");
             return;
         }
 
-        if (player.getState() == PlayerState.InLobby) {
-            if (args.length >= 1) {
-                String playerName = args[0];
-
-                if (isValidName(playerName)) {
-                    Main.INSTANCE.getChallenger().challenge(player, playerName);
-                } else {
-                    send(ERR_INVALID_PARAMETER);
-                }
-            } else {
-                send(ERR_SYNTAX);
-            }
+        if (player.getState() != PlayerState.InLobby) {
+            sendErr(ERR_INVALID_CMD, "You must be in the lobby state");
+        } else if (args.length < 1) {
+            sendErr(ERR_SYNTAX, "Expected at least 1 parameter");
+        } else if (!isValidName(args[0])) {
+            sendErr(ERR_INVALID_PARAMETER, "player-name");
         } else {
-            send(ERR_INVALID_CONTEXT);
+            Main.INSTANCE.getChallenger().challenge(player, args[0]);
         }
     }
 
     private void handleChallengeResponse(String[] args) {
         if (!hasChallengeExt) {
-            send(ERR_INVALID_CMD);
+            send(ERR_INVALID_CMD, "Challenge extension not specified during handshake");
             return;
         }
 
-        if (player.getState() == PlayerState.InLobby) {
-            if (args.length >= 2) {
-                String playerName = args[0];
-                String answerString = args[1];
-
-                if (isValidName(playerName) && isValidBoolean(answerString)) {
-                    boolean answer = answerString.equals("yes");
-                    Challenger challenger = Main.INSTANCE.getChallenger();
-
-                    challenger.handleChallengeResponse(player, playerName, answer);
-                } else {
-                    send(ERR_INVALID_PARAMETER);
-                }
-            } else {
-                send(ERR_SYNTAX);
-            }
+        if (player.getState() != PlayerState.InLobby) {
+            sendErr(ERR_INVALID_CMD, "You must be in the lobby state");
+        } else if (args.length < 2) {
+            sendErr(ERR_SYNTAX, "Expected at least 2 parameters");
+        } else if (!isValidName(args[0])) {
+            sendErr(ERR_INVALID_PARAMETER, "player-name");
+        } else if (!isValidBoolean(args[1])) {
+            sendErr(ERR_INVALID_PARAMETER, "boolean-answer");
         } else {
-            send(ERR_INVALID_CONTEXT);
+            boolean answer = args[1].equals("yes");
+            Challenger challenger = Main.INSTANCE.getChallenger();
+
+            challenger.handleChallengeResponse(player, args[0], answer);
+        }
+    }
+
+    private void handleError(String[] args, String packet) {
+        if (args.length < 1) {
+            sendErr(ERR_SYNTAX, "Expected at least 1 parameter");
+        } else if (!isValidError(args[0])) {
+            sendErr(ERR_INVALID_PARAMETER, "error_code");
+        } else {
+            int minLength = CMD_ERROR.length() + 4; // delimiter(1) + error_code(3) == 4.
+            String message = packet.length() > minLength ? packet.substring(minLength + 1) : "";
+
+            // Assuming our server implementation is correct a client would only send an error if
+            // something went wrong on their side. Don't try to act as a hero and 'fix' the
+            // client's error as the information is -very- limited or completely implementation
+            // specific. Outputting this error is more like a debug feature than anything.
+            Log.warning(LogLevel.Minimal, "Client %s reported an error: %s (%s)", player.getName(),
+                    message, args[0]);
         }
     }
 
@@ -353,6 +365,10 @@ public final class DefaultProtocol extends Protocol {
 
     private boolean isValidBoolean(String bool) {
         return bool.matches("yes|no");
+    }
+
+    private boolean isValidError(String error) {
+        return error.matches("\\d{3}");
     }
 
     private boolean isExtensionSupported(String extension) {

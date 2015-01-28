@@ -28,13 +28,15 @@ public abstract class Protocol {
 
     public abstract void sendGameDraw();
 
-    public abstract void sendOpponentDisconnected();
+    public abstract void sendOpponentDisconnected(String name);
 
     public abstract void sendStateChange(String playerName, PlayerState state);
 
     public abstract void sendClientStates();
 
-    public abstract void sendChat(String playerName, String message);
+    public abstract void sendGlobalChat(String playerName, String message);
+
+    public abstract void sendLocalChat(String playerName, String message);
 
     public abstract void sendChallengeNotify(String playerName);
 
@@ -54,5 +56,9 @@ public abstract class Protocol {
 
     protected void send(String format, Object... args) {
         player.getClient().send(String.format(format, args));
+    }
+
+    protected void sendErr(String error, String message) {
+        player.getClient().send(String.format("%s %s", error, message));
     }
 }
