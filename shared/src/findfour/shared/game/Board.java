@@ -31,7 +31,7 @@ public class Board {
     }
 
     /**
-     * Returns the next free row of a column or ROWS - 1 if the row is full.
+     * Returns the next free row of a column or - 1 if the row is full.
      * @param column The index of the column to get the next free slot of
      */
     /*@ pure */
@@ -44,7 +44,7 @@ public class Board {
 
         //@ loop_invariant 0 <= row && row <= ROWS;
         for (int row = 0; row < ROWS; row++) {
-            if (getSlot(column, row) != Disc.None && getSlot(column, row) != null) {
+            if (getSlot(column, row) != Disc.None) {
                 return row - 1;
             }
         }
