@@ -16,8 +16,8 @@ public final class Challenger {
     private final PlayerManager playerManager;
     private final Map<String, List<String>> pendingChallenges;
 
-    public Challenger() {
-        this.playerManager = Main.INSTANCE.getPlayerManager();
+    public Challenger(PlayerManager argPlayerManager) {
+        this.playerManager = argPlayerManager;
         this.pendingChallenges = new HashMap<String, List<String>>();
     }
 

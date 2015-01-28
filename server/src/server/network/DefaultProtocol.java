@@ -11,6 +11,11 @@ import findfour.shared.logging.Log;
 import findfour.shared.logging.LogLevel;
 import findfour.shared.utils.StringUtils;
 
+/**
+ * The implementation of the default protocol specified within the work-group INF-3.
+ * @author ciske
+ *
+ */
 public final class DefaultProtocol extends Protocol {
     private static final String CMD_READY = "ready_for_game";
     private static final String CMD_DO_MOVE = "do_move";
@@ -43,6 +48,13 @@ public final class DefaultProtocol extends Protocol {
     private final boolean hasChallengeExt;
     private final StateCache stateCache;
 
+    /**
+     * Creates a new instance of the default protocol.
+     * @param player The player which owns this protocol instance
+     * @param extensions The extensions the player supports
+     */
+    //@ requires player != null;
+    //@ requires extensions != null;
     public DefaultProtocol(Player player, String[] extensions) {
         super(player);
 
@@ -53,46 +65,96 @@ public final class DefaultProtocol extends Protocol {
         this.stateCache = new StateCache();
     }
 
+    /**
+     * Send the startGame command to the client to signal a new game has been started.
+     * @param startingPlayer the name of the starting player
+     * @param otherPlayer the name of the other player
+     */
+    //@ requires startingPlayer != null;
+    //@ requires otherPlayer != null;
+    //@ requires startingPlayer != otherPlayer;
     @Override
     public void sendStartGame(String startingPlayer, String otherPlayer) {
         send("%s %s %s", CMD_START_GAME, startingPlayer, otherPlayer);
     }
 
+    /**
+     * Send the requestMove command to the client to signal which player has to make the next move.
+     * @param playerName the name of the player which has to make the next move
+     */
+    //@ requires playerName != null;
     @Override
     public void sendRequestMove(String playerName) {
         send("%s %s", CMD_REQUEST_MOVE, playerName);
     }
 
+    /**
+     * Send the notYourMove command to the client to signal the player he tried to perform a move
+     * when it wasn't his turn.
+     */
     @Override
     public void sendNotYourMove() {
         sendErr(ERR_INVALID_CMD, "Not your move");
     }
 
+    /**
+     * Send the invalidMove command to the client to signal the player his move wasn't valid.
+     */
     @Override
     public void sendInvalidMove() {
         sendErr(ERR_INVALID_MOVE, "Move is invalid");
     }
 
+    /**
+     * Send the doneMove command to the client to signal a player has performed a move.
+     * @param playerName The name of the player which just made a move
+     * @param column The column in which the player made his move
+     */
+    //@ requires playerName != null;
+    //@ requires column >= 0 && column <= 6;
     @Override
     public void sendDoneMove(String playerName, int column) {
         send("%s %s %s", CMD_DONE_MOVE, playerName, column);
     }
 
+    /**
+     * Send the gameWon command to the client to signal the game has been won by a player.
+     * @param winner The name of the winning player
+     */
+    //@ requires winner != null;
     @Override
     public void sendGameWon(String winner) {
         send("%s %s", CMD_GAME_END, winner);
     }
 
+    /**
+     * Send the gameDraw command to the client to signal the game has has ended in a draw.
+     */
     @Override
     public void sendGameDraw() {
         send(CMD_GAME_END);
     }
 
+    /**
+     * Send the opponentDisconnected command to the client to signal that one of the players in the
+     * current game has disconnected.
+     * @param name The name of the player that disconnected
+     */
+    //@ requires name != null;
     @Override
     public void sendOpponentDisconnected(String name) {
         sendErr(ERR_PLAYER_DISCONNECTED, name);
     }
 
+    /**
+     * Send the stateChange command to the client to signal that the state of another player has
+     * changed.
+     * @param playerName The name of the player that just had the state change
+     * @param state The new state of the player
+     */
+    //@ requires playerName != null;
+    //@ requires state != null && state != PlayerState.InitialConnect;
+    //@ ensures stateCache.differs(playerName, state) == false;
     @Override
     public void sendStateChange(String playerName, PlayerState state) {
         // Only send if the client supports the lobby extension.
@@ -119,6 +181,10 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Send all the stateChange commands to the client to build an initial list of the states and
+     * names of other clients.
+     */
     @Override
     public void sendClientStates() {
         if (!hasLobbyExt) {
@@ -138,6 +204,13 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Send a global chat message to the client.
+     * @param playerName The player who send the chat message
+     * @param message The content of the chat message
+     */
+    //@ requires playerName != null;
+    //@ requires message != null;
     @Override
     public void sendGlobalChat(String playerName, String message) {
         if (!hasChatExt) {
@@ -147,6 +220,13 @@ public final class DefaultProtocol extends Protocol {
         send("%s %s [global]%s", CMD_CHAT, playerName, message);
     }
 
+    /**
+     * Send a local chat message to the client.
+     * @param playerName The player who send the chat message
+     * @param message The content of the chat message
+     */
+    //@ requires playerName != null;
+    //@ requires message != null;
     @Override
     public void sendLocalChat(String playerName, String message) {
         if (!hasChatExt) {
@@ -156,26 +236,51 @@ public final class DefaultProtocol extends Protocol {
         send("%s %s [local]%s", CMD_CHAT, playerName, message);
     }
 
+    /**
+     * Send a notification to the client that another player has challenged him.
+     * @param playerName
+     */
+    //@ requires playerName != null && player.getName() != playerName;
+    //@ requires hasChallengeExt == true;
     @Override
     public void sendChallengeNotify(String playerName) {
         send("%s %s", CMD_CHALLENGE, playerName);
     }
 
+    /**
+     * Should never be called in this Protocol implementation.
+     */
     @Override
     public void sendAccept() {
         throw new IllegalInvokeException();
     }
 
+    /**
+     * Send a message to the client to notify him he cannot challenge the player he requested to
+     * challenge.
+     * @param reason The reason why the player could not be challenged
+     */
+    //@ requires reason != null;
     @Override
     public void sendCannotChallenge(String reason) {
         sendErr(ERR_CANNOT_CHALLENGE, reason);
     }
 
+    /**
+     * Send to the client to notify him his challenge response failed.
+     * @param reason The reason why the challenge response failed.
+     */
+    //@ requires reason != null;
     @Override
     public void sendChallengeFailed(String reason) {
         sendErr(ERR_INVALID_PARAMETER, reason);
     }
 
+    /**
+     * Handles the raw incoming data.
+     * @param packet The raw packet which has to be handled
+     */
+    //@ requires packet != null;
     @Override
     public void handlePacket(String packet) {
         String command = StringUtils.extractCommand(packet, DELIMITER);
@@ -216,16 +321,26 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Returns whether this protocol instance supports challenging.
+     */
     @Override
     public boolean supportsChallenging() {
         return hasChallengeExt;
     }
 
+    /**
+     * Returns the name of this protocol implementation.
+     */
     @Override
     public String getName() {
         return "default";
     }
 
+    /**
+     * Handles the ready command send by the client which signals he is ready for a matchmaking
+     * game.
+     */
     private void handleReady() {
         if (player.getState() == PlayerState.InLobby) {
             Main.INSTANCE.getMatchMaker().queuePlayer(player);
@@ -234,6 +349,11 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Handles the doMove command send by the client which signals he wants to perform a move.
+     * @param args The arguments of the command split by the delimiter
+     */
+    //@ requires args != null;
     private void handleDoMove(String[] args) {
         if (player.getState() != PlayerState.InGame) {
             sendErr(ERR_INVALID_CMD, "You must be in the game state");
@@ -249,6 +369,12 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Handles the localChat command send by the client which signals he wants to post a chat
+     * message in his current local chat.
+     * @param packet The raw packet as received by handlePacket
+     */
+    //@ requires packet != null;
     private void handleLocalChat(String packet) {
         if (!hasChatExt) {
             sendErr(ERR_INVALID_CMD, "Chat extension not specified during handshake");
@@ -269,6 +395,12 @@ public final class DefaultProtocol extends Protocol {
 
     }
 
+    /**
+     * Handles the globalChat command send by the client which signals he wants to post a chat
+     * message in the global chat.
+     * @param packet The raw packet as received by handlePacket
+     */
+    //@ requires packet != null;
     private void handleGlobalChat(String packet) {
         if (!hasChatExt) {
             sendErr(ERR_INVALID_CMD, "Chat extension not specified during handshake");
@@ -294,6 +426,12 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Handles the challenge command send by the client which signals he wants to challenge another
+     * player.
+     * @param args The arguments of the command split by the delimiter
+     */
+    //@ requires args != null;
     private void handleChallenge(String[] args) {
         if (!hasChallengeExt) {
             send(ERR_INVALID_CMD, "Challenge extension not specified during handshake");
@@ -311,6 +449,12 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Handles the challengeResponse command send by the client which signals he wants to respond to
+     * a challenge request.
+     * @param args The arguments of the command split by the delimiter.
+     */
+    //@ requires args != null;
     private void handleChallengeResponse(String[] args) {
         if (!hasChallengeExt) {
             send(ERR_INVALID_CMD, "Challenge extension not specified during handshake");
@@ -333,6 +477,14 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Handles the error command send by the client which signals he wants to inform the server he
+     * has encountered an error.
+     * @param args The arguments of the command split by the delimiter.
+     * @param packet The raw packet as received by handlePacket
+     */
+    //@ requires args != null;
+    //@ requires packet != null;
     private void handleError(String[] args, String packet) {
         if (args.length < 1) {
             sendErr(ERR_SYNTAX, "Expected at least 1 parameter");
@@ -351,26 +503,62 @@ public final class DefaultProtocol extends Protocol {
         }
     }
 
+    /**
+     * Checks if a given column string is in a valid format.
+     * @param col The column string
+     */
+    /*@ pure */
+    //@ requires col != null;
     private boolean isValidCol(String col) {
         return col.matches("[0-6]");
     }
 
+    /**
+     * Checks if a given message string is in a valid format.
+     * @param message The message string
+     */
+    /*@ pure */
+    //@ requires message != null;
     private boolean isValidMessage(String message) {
         return message.matches("[a-zA-Z0-9 ]*");
     }
 
+    /**
+     * Checks if a given name string is in a valid format.
+     * @param name The name string
+     */
+    /*@ pure */
+    //@ requires name != null;
     private boolean isValidName(String name) {
         return name.matches("\\w+");
     }
 
+    /**
+     * Checks if a given boolean string is in a valid format.
+     * @param bool The boolean string
+     */
+    /*@ pure */
+    //@ requires bool != null;
     private boolean isValidBoolean(String bool) {
         return bool.matches("yes|no");
     }
 
+    /**
+     * Checks if a given error code string is in a valid format.
+     * @param error The error code string
+     */
+    /*@ pure */
+    //@ requires error != null;
     private boolean isValidError(String error) {
         return error.matches("\\d{3}");
     }
 
+    /**
+     * Checks if a given extension is supported by this protocol instance.
+     * @param extension The name of the extension to check
+     */
+    /*@ pure */
+    //@ requires extension != null;
     private boolean isExtensionSupported(String extension) {
         for (String supportedExtension : supportedExtensions) {
             if (supportedExtension.equals(extension)) {

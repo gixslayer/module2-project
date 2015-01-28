@@ -97,6 +97,7 @@ public class TcpServer extends EventRaiser implements Runnable {
         }
     }
 
+    /*@ pure */
     public boolean isRunning() {
         return keepListening;
     }

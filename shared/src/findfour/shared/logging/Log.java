@@ -70,6 +70,7 @@ public class Log {
         return currentLevel;
     }
 
+    /*@ pure */
     public static boolean isDebugEnabled() {
         return debugEnabled;
     }

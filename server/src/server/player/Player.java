@@ -91,6 +91,7 @@ public final class Player {
         color = argColor;
     }
 
+    /*@ pure */
     public String getName() {
         return name;
     }

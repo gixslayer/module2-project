@@ -68,7 +68,7 @@ public class AI {
         currentState.syncTo(clientController.getBoard());
         Disc disc;
         Vector<State> result = new Vector<State>();
-        for (int i = 0; i < State.getColumns(); i++) {
+        for (int i = 0; i < Board.COLUMNS; i++) {
             State temp = new State(!state.isMyTurn());
             temp.syncTo(state);
             if (temp.isMyTurn()) {

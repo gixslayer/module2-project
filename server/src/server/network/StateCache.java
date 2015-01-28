@@ -12,6 +12,7 @@ final class StateCache {
         this.cache = new HashMap<String, PlayerState>();
     }
 
+    /*@ pure */
     boolean differs(String playerName, PlayerState state) {
         if (!cache.containsKey(playerName)) {
             return true;

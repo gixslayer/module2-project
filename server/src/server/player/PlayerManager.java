@@ -99,6 +99,7 @@ public final class PlayerManager {
         }
     }
 
+    /*@ pure */
     public boolean hasSession(TcpServer.Client client) {
         synchronized (syncRoot) {
             return clientToPlayerMapping.containsKey(client);
