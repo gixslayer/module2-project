@@ -1,11 +1,11 @@
 package client;
 
+import findfour.shared.game.Board;
+import findfour.shared.game.Disc;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
-
-import findfour.shared.game.Board;
-import findfour.shared.game.Disc;
 
 /**
  * Created by joran on 27-1-15.
@@ -22,6 +22,10 @@ public class AI {
         currentState = new State(true);
     }
 
+    public void setLookahead(int lookahead) {
+        this.lookahead = lookahead;
+    }
+
     public void doMove(Boolean myTurn) {
         currentState = new State(myTurn);
 
@@ -34,9 +38,8 @@ public class AI {
         clientController.tryMove(bestmoves.get(randomint).col, clientController.getClientName());
     }
 
-    public int getHint() {
+    public int getHint( ) {
         currentState = new State(true);
-
         createDecisionTree(currentState);
         calculateChanses(currentState);
 

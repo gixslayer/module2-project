@@ -6,17 +6,18 @@ import client.ClientController;
  * Created by joran on 21-1-15.
  */
 public class GuiController extends Thread {
+    //--------------------------------------------Fields----------------------------------------------------------------
     private static ClientController clientController;
     ConnectForm connectForm;
     ControlForm controlForm;
     MainForm mainForm;
-
+    //--------------------------------------------Constructor-----------------------------------------------------------
     public GuiController(ClientController argClientController) {
         clientController = argClientController;
         connectForm = new ConnectForm(argClientController, this);
         mainForm = new MainForm(clientController);
     }
-
+    //-------------------------------------------Methods----------------------------------------------------------------
     @Override
     public void run() {
         openConnectForm();

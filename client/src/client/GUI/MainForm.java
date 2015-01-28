@@ -1,25 +1,20 @@
 package client.GUI;
 
+import client.ClientController;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.text.BadLocationException;
-
-import client.ClientController;
-
 /**
  * Created by joran on 26-1-15.
  */
 public class MainForm extends Thread {
+    //--------------------------------------------Fields----------------------------------------------------------------
     JFrame frame;
     private ClientController clientController;
     private JPanel panel1;
@@ -27,7 +22,7 @@ public class MainForm extends Thread {
     private JTextArea textArea1;
     private JFormattedTextField formattedTextField1;
     private JButton readyButton;
-
+    //--------------------------------------------Constructor-----------------------------------------------------------
     public MainForm(ClientController argClientController) {
         textArea1.setEditable(false);
         this.clientController = argClientController;
@@ -49,6 +44,7 @@ public class MainForm extends Thread {
             }
         });
     }
+    //-------------------------------------------Methods----------------------------------------------------------------
 
     public void sendReady() {
         clientController.getConnection().getProtocol().sendReady();
@@ -107,7 +103,7 @@ public class MainForm extends Thread {
         if (winner == null) {
             textArea1.append(String.format("[System] The game ended in a draw! %n"));
         } else {
-            textArea1.append(String.format("[System] The winner is %s", winner));
+            textArea1.append(String.format("[System] The winner is %s %n", winner));
         }
     }
 

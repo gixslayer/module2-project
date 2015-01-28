@@ -1,32 +1,21 @@
 package client.GUI;
 
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import client.ClientController;
+import findfour.shared.game.Disc;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.text.BadLocationException;
-
-import client.ClientController;
-import findfour.shared.game.Disc;
-
 /**
  * Created by joran on 26-1-15.
  */
 public class ControlForm extends Thread {
+    //--------------------------------------------Fields----------------------------------------------------------------
     //Canvas fields
     public static final int ROWS = 6;
     public static final int COLS = 7;
@@ -55,8 +44,12 @@ public class ControlForm extends Thread {
     private JButton enableAIButton;
     private JButton disableAIButton;
     private JButton hintButton;
+    private JFormattedTextField formattedTextField2;
+    private JButton setDepthButton;
 
+    //--------------------------------------------Constructor-----------------------------------------------------------
     public ControlForm(GuiController argGuiController) {
+        formattedTextField2.setValue(6);
         disableAIButton.setEnabled(false);
         hintButton.setEnabled(false);
         this.guiController = argGuiController;
@@ -104,8 +97,15 @@ public class ControlForm extends Thread {
                 getHint();
             }
         });
-    }
 
+        setDepthButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setDepth();
+            }
+        });
+    }
+    //-------------------------------------------Methods----------------------------------------------------------------
     public void turnAiOn() {
         client.setAiOn(true);
         if (client.isMyTurn()) {
@@ -114,7 +114,9 @@ public class ControlForm extends Thread {
         enableAIButton.setEnabled(false);
         disableAIButton.setEnabled(true);
     }
-
+    public void setDepth(){
+        client.getAi().setLookahead((int)formattedTextField2.getValue());
+    }
     public void disableHintButton() {
         hintButton.setEnabled(false);
     }
@@ -149,6 +151,7 @@ public class ControlForm extends Thread {
     }
 
     public void close() {
+        turnAiOff();
         frame.setVisible(false);
         frame.dispose();
         try {

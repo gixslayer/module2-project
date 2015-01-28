@@ -1,11 +1,11 @@
 package client;
 
-import java.util.HashMap;
-
 import client.GUI.GuiController;
 import client.network.Connection;
 import findfour.shared.game.Board;
 import findfour.shared.game.Disc;
+
+import java.util.HashMap;
 
 /**
  * Created by joran on 21-1-15.

@@ -1,20 +1,16 @@
 package client.GUI;
 
+import client.ClientController;
+
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import client.ClientController;
 
 /**
  * Created by joran on 21-1-15.
  */
 public class ConnectForm extends Thread {
+    //--------------------------------------------Fields----------------------------------------------------------------
     private static final String INITIALIP = "127.0.0.1";
     private static final String INITIALNAME = "Name";
     private static final String INITIALGROUP = "19";
@@ -29,7 +25,7 @@ public class ConnectForm extends Thread {
     private JFormattedTextField group;
     private JFormattedTextField name;
     private JFrame frame;
-
+    //--------------------------------------------Constructor-----------------------------------------------------------
     public ConnectForm(ClientController c, GuiController argGuiController) {
         this.client = c;
         connectionStatus.setText("Not connected");
@@ -46,6 +42,7 @@ public class ConnectForm extends Thread {
         });
 
     }
+    //-------------------------------------------Methods----------------------------------------------------------------
 
     public void startClient() {
         client.newConnection();

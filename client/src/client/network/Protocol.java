@@ -1,11 +1,11 @@
 package client.network;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 import client.ClientController;
 import findfour.shared.network.TcpClient;
 import findfour.shared.utils.StringUtils;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Protocol {
     TcpClient client;
@@ -165,10 +165,10 @@ public class Protocol {
 
     public void handleMessage(String[] args) {
         //First check if local or global chat
-        if (args[0].equals("|global|")) {
+        if (args[0].equals("[global]")) {
             clientController.getGuiController().getMainForm()
                     .newMessage(Arrays.copyOfRange(args, 1, args.length));
-        } else if (args[0].equals("|local|")
+        } else if (args[0].equals("[local]")
                 && clientController.getGuiController().getControlForm() != null) {
             clientController.getGuiController().getControlForm()
                     .newMessage(Arrays.copyOfRange(args, 1, args.length));
