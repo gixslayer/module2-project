@@ -1,0 +1,13 @@
+---------------------------------------------------Client
+Build the project yourself or execute client.jar
+To run the client execute client.jar 
+-Join server by clicking conneckt after having filled in the correct hostname and port.
+-Click ready to set gamestate to ready
+-Wait for server to put you in game
+If ingame
+-Make a move by clicking in a column
+- Buttons enable or disable AI
+- Depth sets the amount of steps the AI is going to calculate.
+
+You can chat by typing in the lower of the two textfields  in both the game chat and the lobby chat
+
