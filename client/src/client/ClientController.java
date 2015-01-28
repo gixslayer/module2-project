@@ -82,6 +82,7 @@ public class ClientController extends Thread implements Observer {
                 System.out.println("Invalid playername");
             }
         }
+        guiController.getControlForm().repaint();
     }
 
     public void tryMove(int i, String player) {
@@ -95,6 +96,7 @@ public class ClientController extends Thread implements Observer {
                 guiController.getControlForm().setGameState("Opponents turn. Not yours");
             }
         }
+        guiController.getControlForm().repaint();
     }
 
     public void setMyTurnTrue() {
