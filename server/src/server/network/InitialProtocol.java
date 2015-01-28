@@ -167,4 +167,15 @@ public final class InitialProtocol extends Protocol {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void sendCannotChallenge(String reason) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendChallengeFailed(String reason) {
+        // TODO Auto-generated method stub
+
+    }
 }

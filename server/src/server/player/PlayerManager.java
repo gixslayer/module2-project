@@ -205,6 +205,10 @@ public final class PlayerManager {
         if (state == PlayerState.InQueue) {
             Main.INSTANCE.getMatchMaker().removeFromQueue(player);
         }
+
+        if (player.getProtocol().supportsChallenging()) {
+            Main.INSTANCE.getChallenger().handlePlayerDisconnect(player);
+        }
     }
 
     private Protocol getProtocol(Player player, String group, String[] extensions) {

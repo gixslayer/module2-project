@@ -40,6 +40,10 @@ public abstract class Protocol {
 
     public abstract void sendAccept();
 
+    public abstract void sendCannotChallenge(String reason);
+
+    public abstract void sendChallengeFailed(String reason);
+
     public abstract boolean supportsChallenging();
 
     public abstract String getName();

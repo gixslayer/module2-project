@@ -158,6 +158,16 @@ public final class DefaultProtocol extends Protocol {
     }
 
     @Override
+    public void sendCannotChallenge(String reason) {
+        send("%s %s", ERR_CANNOT_CHALLENGE, reason);
+    }
+
+    @Override
+    public void sendChallengeFailed(String reason) {
+        send("%s %s", ERR_INVALID_PARAMETER, reason);
+    }
+
+    @Override
     public void handlePacket(String packet) {
         String command = StringUtils.extractCommand(packet, DELIMITER);
         String[] args = StringUtils.extractArgs(packet, DELIMITER, false);
@@ -290,9 +300,7 @@ public final class DefaultProtocol extends Protocol {
                 String playerName = args[0];
 
                 if (isValidName(playerName)) {
-                    if (!Main.INSTANCE.getChallenger().challenge(player, playerName)) {
-                        send(ERR_CANNOT_CHALLENGE);
-                    }
+                    Main.INSTANCE.getChallenger().challenge(player, playerName);
                 } else {
                     send(ERR_INVALID_PARAMETER);
                 }
@@ -319,9 +327,7 @@ public final class DefaultProtocol extends Protocol {
                     boolean answer = answerString.equals("yes");
                     Challenger challenger = Main.INSTANCE.getChallenger();
 
-                    if (!challenger.handleChallengeResponse(player, playerName, answer)) {
-                        send(ERR_INVALID_PARAMETER);
-                    }
+                    challenger.handleChallengeResponse(player, playerName, answer);
                 } else {
                     send(ERR_INVALID_PARAMETER);
                 }
