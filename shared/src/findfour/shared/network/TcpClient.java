@@ -68,8 +68,14 @@ public class TcpClient extends EventRaiser implements Runnable {
             input = null;
             output = null;
             connected = false;
-
             dispatcher.raiseEvent(EVENT_DISCONNECTED);
+            try {
+                receiveThread.join();
+                receiveThread.notifyAll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -108,5 +114,9 @@ public class TcpClient extends EventRaiser implements Runnable {
                 disconnect();
             }
         }
+    }
+
+    public Thread getReceiveThread() {
+        return receiveThread;
     }
 }

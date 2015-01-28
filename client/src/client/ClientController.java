@@ -6,22 +6,23 @@ import findfour.shared.game.Board;
 import findfour.shared.game.Disc;
 
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by joran on 21-1-15.
  */
-public class ClientController extends Thread {
+public class ClientController extends Thread implements Observer {
     //-------------------------------Fields--------------------------------------------------------
-    public static final String INITIAL_NAME = "Name";
-    public static final String INITIAL_GROUP = "19";
+    private static final String INITIAL_NAME = "Name";
+    private static final String INITIAL_GROUP = "19";
     public static final String[] INITIAL_EXTENSIONS = new String[0];
     private boolean aiOn = false;
-    public boolean connected;
-    public HashMap<String, String> lobby = new HashMap<String, String>();
-    public GuiController guiController = new GuiController(this);
+    private boolean connected;
+    private HashMap<String, String> lobby = new HashMap<String, String>();
+    private GuiController guiController = new GuiController(this);
     private String clientName;
     private String group;
-    private String[] supportedExtensions;
     private Connection connection = new Connection(this);
     private boolean ready = false;
     private String opponent;
@@ -36,16 +37,15 @@ public class ClientController extends Thread {
     private AI ai = new AI(this);
 
     // ---------------------------------------Constructor -----------------------------------------
-    public ClientController(String argName, String argGroup, String[] argSupportedExtensions) {
+    public ClientController(String argName, String argGroup) {
         this.clientName = argName;
         this.group = argGroup;
-        this.supportedExtensions = argSupportedExtensions;
+
     }
 
     public ClientController() {
         this.clientName = INITIAL_NAME;
         this.group = INITIAL_GROUP;
-        this.supportedExtensions = INITIAL_EXTENSIONS;
     }
 
     //---------------------------------------Methods-----------------------------------------------
@@ -53,6 +53,7 @@ public class ClientController extends Thread {
     public void run() {
         this.resetBoard();
         guiController.start();
+        board.addObserver(this);
     }
     //---------------------------Manage lobby--------------------------
     public void addPlayerToLobby(String playername) {
@@ -80,7 +81,6 @@ public class ClientController extends Thread {
             } else {
                 System.out.println("Invalid playername");
             }
-            guiController.getControlForm().repaint();
         }
     }
 
@@ -229,4 +229,10 @@ public class ClientController extends Thread {
         this.connected = argConnected;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if ( o == this.board){
+            guiController.getControlForm().repaint();
+        }
+    }
 }

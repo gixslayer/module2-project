@@ -64,7 +64,7 @@ public class ConnectForm extends Thread {
             connectionStatus.setText("Connection failed");
         }
     }
-
+    // Closes this window
     public void stopFrame() {
         connectionStatus.setText("Connected");
         try {

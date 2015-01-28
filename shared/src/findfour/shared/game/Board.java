@@ -2,12 +2,14 @@ package findfour.shared.game;
 
 import findfour.shared.ArgumentOutOfRangeException;
 
+import java.util.Observable;
+
 /**
  * Represents a connect4 game board.
  * @author ciske
  *
  */
-public class Board {
+public class Board extends Observable{
     /**
      * The number of columns the game board has.
      */
@@ -124,14 +126,15 @@ public class Board {
     //@ requires disc != null && disc == Disc.Red || disc == Disc.Yellow;
     //@ requires isMoveValid(column, disc) == true;
     public void makeMove(int column, Disc disc) {
-        // TODO: add check, fixed the bug that broke it :0
+        // TODO: add check, fixed the bug that broke it
         //
         // before calling this method.
         //if (!isMoveValid(column, disc)) {
         //throw new ArgumentException("column", "invalid move");
         //}
-
+        setChanged();
         setSlot(column, getNextFreeSlot(column), disc);
+        notifyObservers();
     }
 
     /**

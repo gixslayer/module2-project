@@ -1,9 +1,9 @@
 package client.network;
 
-import javafx.beans.InvalidationListener;
 import client.ClientController;
 import findfour.shared.events.EventHandler;
 import findfour.shared.network.TcpClient;
+import javafx.beans.InvalidationListener;
 
 /**
  * Created by joran on 21-1-15.
@@ -110,12 +110,7 @@ public class Connection extends Thread {
     private void disconnected() {
         System.out.println("Disconnected");
         clientController.getGuiController().closeMainform();
-        clientController.getGuiController().openConnectForm();
-    }
-
-    @EventHandler(eventId = TcpClient.EVENT_CONNECTED)
-    private static void staticTest() {
-        System.out.println("Static event");
+        System.exit(1);
     }
 
     @EventHandler(eventId = TcpClient.EVENT_PACKET_RECEIVED)

@@ -117,10 +117,7 @@ public class Protocol {
         if (args.length < 2) {
             client.send(ERR_SYNTAX);
         } else {
-            for (Object a : args) {
-                System.out.println(a);
-                System.out.println(Objects.equals(a, clientController.getClientName()));
-            }
+
             if (Objects.equals(args[0], clientController.getClientName())) {
                 clientController.setOpponent(args[1]);
             } else if (Objects.equals(args[1], clientController.getClientName())) {
@@ -128,7 +125,6 @@ public class Protocol {
             }
             clientController.resetBoard();
             clientController.getGuiController().openControlForm();
-            System.out.println(clientController.getOpponent());
         }
     }
 

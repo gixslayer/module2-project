@@ -53,7 +53,7 @@ public class AI {
         return bestmoves.get(randomint).col;
     }
 
-    public ArrayList<State> getBestMove() {
+    ArrayList<State> getBestMove() {
         ArrayList<State> temp = new ArrayList<State>();
         for (State t : currentState.getNextStep()) {
             if (temp.size() < 1) {
@@ -68,7 +68,7 @@ public class AI {
         return temp;
     }
 
-    public void createDecisionTree(State state) {
+    void createDecisionTree(State state) {
         currentState.syncTo(clientController.getBoard());
         Disc disc;
         Vector<State> result = new Vector<State>();
@@ -94,11 +94,11 @@ public class AI {
         state.nextStep = result;
     }
 
-    public void createDecisionTree() {
+    void createDecisionTree() {
         createDecisionTree(currentState);
     }
-
-    public int calculateChance(State state) {
+    //Following functions calculate chance for a state tree
+    int calculateChance(State state) {
         int result = 0;
         if (state.hasWinner()) {
             if (state.getWinner() == Disc.Red) {
@@ -110,7 +110,7 @@ public class AI {
         return result;
     }
 
-    public int calculateChanses(State state) {
+    int calculateChanses(State state) {
         int result = 0;
         for (State s : state.getNextStep()) {
             state.v = calculateChance(s);

@@ -129,18 +129,6 @@ public class ControlForm extends Thread {
         disableAIButton.setEnabled(false);
     }
 
-    public void setDepth(){
-        client.getAi().setLookahead((int)formattedTextField2.getValue());
-    }
-
-    public void disableHintButton() {
-        hintButton.setEnabled(false);
-    }
-
-    public void enableHintButton() {
-        hintButton.setEnabled(true);
-    }
-
     public void getHint() {
         int col = client.getAi().getHint();
         cleanUpChat();
@@ -158,13 +146,6 @@ public class ControlForm extends Thread {
         }
     }
 
-    public void sendLocalMessage(String m) {
-        client.sendLocalMessage(m);
-    }
-
-    public void setGameState(String arg) {
-        gameState.setText(arg);
-    }
 
     public void repaint() {
         canvas.repaint();
@@ -174,6 +155,10 @@ public class ControlForm extends Thread {
     public void newMessage(String arg) {
         cleanUpChat();
         textArea1.append(String.format("[Me] %s %n", arg));
+    }
+
+    public void sendLocalMessage(String m) {
+        client.sendLocalMessage(m);
     }
 
     public void newMessage(String[] args) {
@@ -203,10 +188,21 @@ public class ControlForm extends Thread {
     }
     //-------------Getters and Setters---------------------------
 
+    public void setGameState(String arg) {
+        gameState.setText(arg);
+    }
 
+    public void setDepth(){
+        client.getAi().setLookahead((int)formattedTextField2.getValue());
+    }
 
+    public void disableHintButton() {
+        hintButton.setEnabled(false);
+    }
 
-
+    public void enableHintButton() {
+        hintButton.setEnabled(true);
+    }
 
 
 
