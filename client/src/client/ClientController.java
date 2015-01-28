@@ -1,11 +1,11 @@
 package client;
 
+import java.util.HashMap;
+
 import client.GUI.GuiController;
 import client.network.Connection;
 import findfour.shared.game.Board;
 import findfour.shared.game.Disc;
-
-import java.util.HashMap;
 
 /**
  * Created by joran on 21-1-15.
@@ -17,7 +17,7 @@ public class ClientController extends Thread {
     public static final String[] INITIAL_EXTENSIONS = new String[0];
     private boolean aiOn = false;
     public boolean connected;
-    public HashMap<String, String> lobby = new HashMap<String,String>();
+    public HashMap<String, String> lobby = new HashMap<String, String>();
     public GuiController guiController = new GuiController(this);
     private String clientName;
     private String group;
@@ -59,36 +59,40 @@ public class ClientController extends Thread {
         return connected;
     }
 
-    public void setConnected(boolean connected) {
-        this.connected = connected;
+    public void setConnected(boolean argConnected) {
+        this.connected = argConnected;
     }
 
-    public void addPlayerToLobby(String playername){
+    public void addPlayerToLobby(String playername) {
         lobby.put(playername, null);
         guiController.getMainForm().updateLobby();
 
     }
-    public void addPlayerToLobby(String playername, String state){
+
+    public void addPlayerToLobby(String playername, String state) {
         lobby.put(playername, state);
         guiController.getMainForm().updateLobby();
     }
-    public void removePlayerFromLobby(String playername){
+
+    public void removePlayerFromLobby(String playername) {
         lobby.remove(playername);
         guiController.getMainForm().updateLobby();
     }
+
     public void doMove(int i, String player) {
-        synchronized (board){
+        synchronized (board) {
             if (player.equals(clientName)) {
                 board.makeMove(i, Disc.Red);
             } else if (player.equals(opponent)) {
-               board.makeMove(i, Disc.Yellow);
+                board.makeMove(i, Disc.Yellow);
             } else {
                 System.out.println("Invalid playername");
             }
             guiController.getControlForm().repaint();
         }
     }
-    public void tryMove(int i, String player){
+
+    public void tryMove(int i, String player) {
         synchronized (board) {
             if (myTurn) {
                 connection.getProtocol().sendDoMove(String.valueOf(i));
@@ -100,16 +104,17 @@ public class ClientController extends Thread {
             }
         }
     }
-    public void setMyTurnTrue(){
+
+    public void setMyTurnTrue() {
         myTurn = true;
         guiController.getControlForm().enableHintButton();
-        if (aiOn){
+        if (aiOn) {
             ai.doMove(myTurn);
         }
         guiController.getControlForm().setGameState("Your turn.");
     }
 
-    public void endGame(String winner){
+    public void endGame(String winner) {
         setMyTurn(false);
         setOpponent(null);
         resetBoard();
@@ -117,11 +122,14 @@ public class ClientController extends Thread {
         guiController.sendWinnerMessage(winner);
         guiController.getMainForm().switchReadyButton();
     }
-    public void sendGlobalMessage(String s){
+
+    public void sendGlobalMessage(String s) {
         connection.getProtocol().sendGlobalChat(s);
     }
 
-    public void sendLocalMessage(String s){ connection.getProtocol().sendLocalChat(s);}
+    public void sendLocalMessage(String s) {
+        connection.getProtocol().sendLocalChat(s);
+    }
 
     public GuiController getGuiController() {
         return guiController;
@@ -134,7 +142,8 @@ public class ClientController extends Thread {
             System.out.println("Not accepted by server");
         }
     }
-    public void sendMessageChatNotEnabeled(){
+
+    public void sendMessageChatNotEnabeled() {
         guiController.sendMessageChatNotEnabeled();
     }
 
@@ -143,9 +152,11 @@ public class ClientController extends Thread {
         return myTurn;
     }
 
-    public void setAiOn (Boolean b){ this.aiOn = b;}
+    public void setAiOn(Boolean b) {
+        this.aiOn = b;
+    }
 
-    public void newConnection(){
+    public void newConnection() {
         connection = new Connection(this);
     }
 
@@ -170,18 +181,20 @@ public class ClientController extends Thread {
         return connection;
     }
 
-    public void setConnection(Connection c){ this.connection = c; }
+    public void setConnection(Connection c) {
+        this.connection = c;
+    }
 
     public void setMyTurn(boolean argMyTurn) {
         this.myTurn = argMyTurn;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
+    public void setClientName(String argClientName) {
+        this.clientName = argClientName;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGroup(String argGroup) {
+        this.group = argGroup;
     }
 
     public String getGroup() {
@@ -212,8 +225,8 @@ public class ClientController extends Thread {
         return lobby;
     }
 
-    public void setLobby(HashMap<String, String> lobby) {
-        this.lobby = lobby;
+    public void setLobby(HashMap<String, String> argLobby) {
+        this.lobby = argLobby;
     }
 
 }

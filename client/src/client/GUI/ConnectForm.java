@@ -1,10 +1,15 @@
 package client.GUI;
 
-import client.ClientController;
-
-import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import client.ClientController;
 
 /**
  * Created by joran on 21-1-15.
@@ -51,20 +56,19 @@ public class ConnectForm extends Thread {
         client.setClientName((String) name.getValue());
         client.setGroup((String) group.getValue());
 
-
         client.getConnection().start();
         connectionStatus.setText("Connecting...");
-        try{
+        try {
             sleep(200);
-        }catch(InterruptedException e){
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (!client.isConnected()){
+        if (!client.isConnected()) {
             connectionStatus.setText("Connection failed");
         }
     }
 
-    public void stopFrame(){
+    public void stopFrame() {
         connectionStatus.setText("Connected");
         try {
             sleep(150);
@@ -82,7 +86,7 @@ public class ConnectForm extends Thread {
     }
 
     @Override
-    public  void run() {
+    public void run() {
         frame = new JFrame("ConnectForm");
         frame.setContentPane(this.connect);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

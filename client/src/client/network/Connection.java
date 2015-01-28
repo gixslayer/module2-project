@@ -1,10 +1,9 @@
 package client.network;
 
+import javafx.beans.InvalidationListener;
 import client.ClientController;
 import findfour.shared.events.EventHandler;
 import findfour.shared.network.TcpClient;
-import javafx.beans.InvalidationListener;
-
 
 /**
  * Created by joran on 21-1-15.
@@ -39,11 +38,11 @@ public class Connection extends Thread {
         tcpclient.registerEventHandlers(this);
         tcpclient.registerStaticEventHandlers(ClientController.class);
         tcpclient.connect(servername, serverport, 1000);
-        if (tcpclient.isConnected()){
+        if (tcpclient.isConnected()) {
             clientController.setConnected(true);
             clientController.getGuiController().closeConnectForm();
             protocol.sendJoin(clientController.getClientName(), clientController.getGroup());
-        }else{
+        } else {
             try {
                 clientController.join();
             } catch (InterruptedException e) {
@@ -61,13 +60,12 @@ public class Connection extends Thread {
 
     //-----------------Getters and Setters---------------------------------
 
-
     public boolean isChatEnabeled() {
         return chatEnabeled;
     }
 
-    public void setChatEnabeled(boolean chatEnabeled) {
-        this.chatEnabeled = chatEnabeled;
+    public void setChatEnabeled(boolean argChatEnabeled) {
+        this.chatEnabeled = argChatEnabeled;
     }
 
     public ClientController getClient() {

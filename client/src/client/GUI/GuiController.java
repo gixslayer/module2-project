@@ -25,34 +25,41 @@ public class GuiController extends Thread {
     public void openMainForm() {
         mainForm.start();
     }
-    public void closeMainform(){mainForm.close();}
-    public void openConnectForm(){
+
+    public void closeMainform() {
+        mainForm.close();
+    }
+
+    public void openConnectForm() {
         connectForm.start();
     }
 
-    public void closeConnectForm(){
+    public void closeConnectForm() {
         connectForm.stopFrame();
         openMainForm();
     }
 
-    public void openControlForm(){
+    public void openControlForm() {
         controlForm = new ControlForm(this);
         controlForm.start();
     }
-    public void closeControlForm(){
+
+    public void closeControlForm() {
         controlForm.close();
     }
-    public void sendWinnerMessage(String winner){
+
+    public void sendWinnerMessage(String winner) {
         mainForm.winnerMessage(winner);
 
     }
+
     public ConnectForm getConnectForm() {
         return connectForm;
     }
 
-    public void sendMessageChatNotEnabeled(){
+    public void sendMessageChatNotEnabeled() {
         mainForm.sendMessageChatNotEnabeled();
-        if (controlForm != null){
+        if (controlForm != null) {
             controlForm.sendMessageChatNotEnabeled();
         }
     }

@@ -1,20 +1,32 @@
 package client.GUI;
 
-import client.ClientController;
-import findfour.shared.game.Disc;
-
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
+
+import client.ClientController;
+import findfour.shared.game.Disc;
+
 /**
  * Created by joran on 26-1-15.
  */
-public class ControlForm extends Thread{
+public class ControlForm extends Thread {
     //Canvas fields
     public static final int ROWS = 6;
     public static final int COLS = 7;
@@ -32,11 +44,10 @@ public class ControlForm extends Thread{
     private DrawBoard canvas; // Drawing canvas (JPanel) for the game board
     private JLabel statusBar; // Status Bar
 
-
-//Form fields
+    //Form fields
     JFrame frame;
-    private JPanel MainPanel;
-    private JPanel Panel;
+    private JPanel mainPanel;
+    private JPanel panel;
     private JLabel gameState;
 
     private JFormattedTextField formattedTextField1;
@@ -45,12 +56,11 @@ public class ControlForm extends Thread{
     private JButton disableAIButton;
     private JButton hintButton;
 
-
-    public ControlForm(GuiController guiController) {
+    public ControlForm(GuiController argGuiController) {
         disableAIButton.setEnabled(false);
         hintButton.setEnabled(false);
-        this.guiController = guiController;
-        this.client = guiController.getClientController();
+        this.guiController = argGuiController;
+        this.client = GuiController.getClientController();
         setGameState("Not your turn;");
         canvas = new DrawBoard();
         canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -65,7 +75,7 @@ public class ControlForm extends Thread{
         formattedTextField1.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (e.getKeyChar() == KeyEvent.VK_ENTER){
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     sendLocalMessage(formattedTextField1.getText());
                     newMessage(formattedTextField1.getText());
                     formattedTextField1.setText("");
@@ -73,7 +83,7 @@ public class ControlForm extends Thread{
             }
         });
 
-        Container cp = Panel;
+        Container cp = panel;
         cp.setLayout(new BorderLayout());
         cp.add(canvas, BorderLayout.CENTER);
         enableAIButton.addMouseListener(new MouseAdapter() {
@@ -95,42 +105,50 @@ public class ControlForm extends Thread{
             }
         });
     }
-    public void turnAiOn(){
+
+    public void turnAiOn() {
         client.setAiOn(true);
-        if (client.isMyTurn()){
+        if (client.isMyTurn()) {
             client.getAi().doMove(true);
         }
         enableAIButton.setEnabled(false);
         disableAIButton.setEnabled(true);
     }
-    public void disableHintButton(){
+
+    public void disableHintButton() {
         hintButton.setEnabled(false);
     }
-    public void enableHintButton(){
+
+    public void enableHintButton() {
         hintButton.setEnabled(true);
     }
-    public void turnAiOff(){
+
+    public void turnAiOff() {
         client.setAiOn(false);
         enableAIButton.setEnabled(true);
         disableAIButton.setEnabled(false);
     }
-    public void getHint(){
+
+    public void getHint() {
         int col = client.getAi().getHint();
         cleanUpChat();
-        textArea1.append(String.format("[AI] You could go for: %s %n",col));
+        textArea1.append(String.format("[AI] You could go for: %s %n", col));
     }
-    public void sendMessageChatNotEnabeled(){
-        textArea1.append(String.format("[System] I'm sorry, but Chatting is not enabeled on this server. %n"));
+
+    public void sendMessageChatNotEnabeled() {
+        textArea1.append(String
+                .format("[System] I'm sorry, but Chatting is not enabeled on this server. %n"));
     }
 
     public void run() {
         frame = new JFrame("ControlForm");
-        frame.setContentPane(this.MainPanel);
+        frame.setContentPane(this.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
-    public void close(){
+
+    public void close() {
         frame.setVisible(false);
         frame.dispose();
         try {
@@ -139,31 +157,35 @@ public class ControlForm extends Thread{
             e.printStackTrace();
         }
     }
-    public void sendLocalMessage(String m){
+
+    public void sendLocalMessage(String m) {
         client.sendLocalMessage(m);
     }
-    public void setGameState(String arg){
-    gameState.setText(arg);
-    }
-    public void repaint(){
-        canvas.repaint();
-    }
-    public void newMessage(String arg){
-        cleanUpChat();
-        textArea1.append(String.format("[Me] %s %n",arg));
+
+    public void setGameState(String arg) {
+        gameState.setText(arg);
     }
 
-    public void newMessage(String[] args){
+    public void repaint() {
+        canvas.repaint();
+    }
+
+    public void newMessage(String arg) {
         cleanUpChat();
-        textArea1.append(String.format("[%s]",args[0]));
-        for (int i =1; i < args.length ; i ++){
+        textArea1.append(String.format("[Me] %s %n", arg));
+    }
+
+    public void newMessage(String[] args) {
+        cleanUpChat();
+        textArea1.append(String.format("[%s]", args[0]));
+        for (int i = 1; i < args.length; i++) {
             textArea1.append(String.format(" %s", args[i]));
         }
         textArea1.append(String.format("%n"));
     }
 
-    public void cleanUpChat(){
-        if(textArea1.getLineCount()>(textArea1.getSize().getHeight()/15)){
+    public void cleanUpChat() {
+        if (textArea1.getLineCount() > (textArea1.getSize().getHeight() / 15)) {
             int end = 0;
             try {
                 end = textArea1.getLineEndOffset(0);
@@ -174,6 +196,7 @@ public class ControlForm extends Thread{
         }
     }
 
+    @SuppressWarnings("serial")
     class DrawBoard extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
