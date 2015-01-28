@@ -1,6 +1,7 @@
 package server.network;
 
 import server.Constants;
+import server.IllegalInvokeException;
 import server.Main;
 import server.player.Player;
 import server.player.PlayerManager;
@@ -96,90 +97,79 @@ public final class InitialProtocol extends Protocol {
         return extension.matches("[a-zA-Z][a-zA-Z_]*");
     }
 
+    //----- Unused protocol implementations -----    
     @Override
     public void sendStartGame(String startingPlayer, String otherPlayer) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendRequestMove(String playerName) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendNotYourMove() {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendInvalidMove() {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendDoneMove(String playerName, int column) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendGameWon(String winner) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendGameDraw() {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendOpponentDisconnected(String name) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendStateChange(String playerName, PlayerState state) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendClientStates() {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendGlobalChat(String playerName, String message) {
-        // TODO Auto-generated method stub
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendLocalChat(String playerName, String message) {
-        // TODO Auto-generated method stub
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendChallengeNotify(String playerName) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendCannotChallenge(String reason) {
-        // TODO Auto-generated method stub
+        throw new IllegalInvokeException();
     }
 
     @Override
     public void sendChallengeFailed(String reason) {
-        // TODO Auto-generated method stub
-
+        throw new IllegalInvokeException();
     }
 }

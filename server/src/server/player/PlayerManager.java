@@ -118,7 +118,8 @@ public final class PlayerManager {
 
         synchronized (syncRoot) {
             if (!nameToPlayerMapping.containsKey(name)) {
-                throw new NoSuchPlayerException("Could not find a player with the name: " + name);
+                throw new ArgumentException("name",
+                        "Could not find a player with the specified name");
             }
 
             return nameToPlayerMapping.get(name);
@@ -132,7 +133,7 @@ public final class PlayerManager {
 
         synchronized (syncRoot) {
             if (!clientToPlayerMapping.containsKey(client)) {
-                throw new NoSuchPlayerException(
+                throw new ArgumentException("client",
                         "Could not find a player mapped to the specified client");
             }
 
@@ -213,7 +214,7 @@ public final class PlayerManager {
 
     private Protocol getProtocol(Player player, String group, String[] extensions) {
         //if (group.equals(Constants.GROUP)) {
-        // TODO: Return our custom protocol.
+        // NOTE: Return our custom protocol here if we ever decide to implement one.
         //}
 
         return new DefaultProtocol(player, extensions);

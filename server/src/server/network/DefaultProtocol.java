@@ -1,6 +1,7 @@
 package server.network;
 
 import server.Constants;
+import server.IllegalInvokeException;
 import server.Main;
 import server.matchmaking.Challenger;
 import server.player.Player;
@@ -158,12 +159,11 @@ public final class DefaultProtocol extends Protocol {
     @Override
     public void sendChallengeNotify(String playerName) {
         send("%s %s", CMD_CHALLENGE, playerName);
-
     }
 
     @Override
     public void sendAccept() {
-
+        throw new IllegalInvokeException();
     }
 
     @Override
