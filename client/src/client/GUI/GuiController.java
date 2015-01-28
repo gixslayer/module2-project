@@ -23,6 +23,7 @@ public class GuiController extends Thread {
         openConnectForm();
     }
 
+    //--------------------Open and close forms-------------------------
     public void openMainForm() {
         mainForm.start();
     }
@@ -49,13 +50,10 @@ public class GuiController extends Thread {
         controlForm.close();
     }
 
+    //------------------SendMessages--------------------------------------
     public void sendWinnerMessage(String winner) {
         mainForm.winnerMessage(winner);
 
-    }
-
-    public ConnectForm getConnectForm() {
-        return connectForm;
     }
 
     public void sendMessageChatNotEnabeled() {
@@ -65,12 +63,18 @@ public class GuiController extends Thread {
         }
     }
 
+    //-------------------GettersAndSetters-----------------------------------
+
     public static ClientController getClientController() {
         return clientController;
     }
 
     public ControlForm getControlForm() {
         return controlForm;
+    }
+
+    public ConnectForm getConnectForm() {
+        return connectForm;
     }
 
     public MainForm getMainForm() {

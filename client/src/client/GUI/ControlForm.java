@@ -106,6 +106,14 @@ public class ControlForm extends Thread {
         });
     }
     //-------------------------------------------Methods----------------------------------------------------------------
+    public void run() {
+        frame = new JFrame("ControlForm");
+        frame.setContentPane(this.mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
     public void turnAiOn() {
         client.setAiOn(true);
         if (client.isMyTurn()) {
@@ -114,9 +122,17 @@ public class ControlForm extends Thread {
         enableAIButton.setEnabled(false);
         disableAIButton.setEnabled(true);
     }
+
+    public void turnAiOff() {
+        client.setAiOn(false);
+        enableAIButton.setEnabled(true);
+        disableAIButton.setEnabled(false);
+    }
+
     public void setDepth(){
         client.getAi().setLookahead((int)formattedTextField2.getValue());
     }
+
     public void disableHintButton() {
         hintButton.setEnabled(false);
     }
@@ -125,29 +141,10 @@ public class ControlForm extends Thread {
         hintButton.setEnabled(true);
     }
 
-    public void turnAiOff() {
-        client.setAiOn(false);
-        enableAIButton.setEnabled(true);
-        disableAIButton.setEnabled(false);
-    }
-
     public void getHint() {
         int col = client.getAi().getHint();
         cleanUpChat();
         textArea1.append(String.format("[AI] You could go for: %s %n", col));
-    }
-
-    public void sendMessageChatNotEnabeled() {
-        textArea1.append(String
-                .format("[System] I'm sorry, but Chatting is not enabeled on this server. %n"));
-    }
-
-    public void run() {
-        frame = new JFrame("ControlForm");
-        frame.setContentPane(this.mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
     }
 
     public void close() {
@@ -173,6 +170,7 @@ public class ControlForm extends Thread {
         canvas.repaint();
     }
 
+    //-------------MessageHandling
     public void newMessage(String arg) {
         cleanUpChat();
         textArea1.append(String.format("[Me] %s %n", arg));
@@ -187,6 +185,11 @@ public class ControlForm extends Thread {
         textArea1.append(String.format("%n"));
     }
 
+    public void sendMessageChatNotEnabeled() {
+        textArea1.append(String
+                .format("[System] I'm sorry, but Chatting is not enabeled on this server. %n"));
+    }
+
     public void cleanUpChat() {
         if (textArea1.getLineCount() > (textArea1.getSize().getHeight() / 15)) {
             int end = 0;
@@ -198,6 +201,15 @@ public class ControlForm extends Thread {
             textArea1.replaceRange("", 0, end);
         }
     }
+    //-------------Getters and Setters---------------------------
+
+
+
+
+
+
+
+
 
     @SuppressWarnings("serial")
     class DrawBoard extends JPanel {

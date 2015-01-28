@@ -1,16 +1,12 @@
 package findfour.shared.network;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import findfour.shared.events.EventRaiser;
+
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
-
-import findfour.shared.events.EventRaiser;
 
 public class TcpClient extends EventRaiser implements Runnable {
     public static final int EVENT_CONNECTED = 0;

@@ -11,17 +11,18 @@ import java.util.Vector;
  * Created by joran on 27-1-15.
  */
 public class AI {
+    //----------------------------------Fields--------------------------------------------------------------------------
     private ClientController clientController;
     private State currentState;
     private int lookahead;
 
+    //----------------------------------Constructor---------------------------------------------------------------------
     public AI(ClientController c) {
         this.clientController = c;
         this.lookahead = 6;
-        //TODO mak static
         currentState = new State(true);
     }
-
+    //----------------------------------Methods-------------------------------------------------------------------------
     public void setLookahead(int lookahead) {
         this.lookahead = lookahead;
     }
@@ -103,7 +104,7 @@ public class AI {
             if (state.getWinner() == Disc.Red) {
                 return 110;
             } else {
-                return 100;
+                return -100;
             }
         }
         return result;
@@ -142,11 +143,6 @@ public class AI {
 
         public Vector<State> getNextStep() {
             return nextStep;
-        }
-
-        @SuppressWarnings("unused")
-        public void setChance(int chance) {
-            v = chance;
         }
 
         public int getV() {

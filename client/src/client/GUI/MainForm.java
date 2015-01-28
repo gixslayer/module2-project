@@ -52,15 +52,6 @@ public class MainForm extends Thread {
 
     }
 
-    public void sendGlobalMessage(String m) {
-        clientController.sendGlobalMessage(m);
-    }
-
-    public void sendMessageChatNotEnabeled() {
-        textArea1.append(String
-                .format("[System] I'm sorry, but Chatting is not enabeled on this server. %n"));
-    }
-
     public void run() {
         frame = new JFrame("MainForm");
         frame.setContentPane(this.panel1);
@@ -88,6 +79,21 @@ public class MainForm extends Thread {
             }
         }
         list1.setListData(result);
+    }
+
+    public void switchReadyButton() {
+        readyButton.setEnabled(!readyButton.isEnabled());
+    }
+
+    //---------------Handle Messages-------------------------------------------
+
+    public void sendGlobalMessage(String m) {
+        clientController.sendGlobalMessage(m);
+    }
+
+    public void sendMessageChatNotEnabeled() {
+        textArea1.append(String
+                .format("[System] I'm sorry, but Chatting is not enabeled on this server. %n"));
     }
 
     public void winnerMessage(String winner) {
@@ -133,7 +139,5 @@ public class MainForm extends Thread {
         }
     }
 
-    public void switchReadyButton() {
-        readyButton.setEnabled(!readyButton.isEnabled());
-    }
+
 }

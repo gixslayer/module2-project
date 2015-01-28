@@ -4,10 +4,10 @@ import client.ClientController;
 import findfour.shared.network.TcpClient;
 import findfour.shared.utils.StringUtils;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Protocol {
+    //----------------------------------Fields--------------------------------------------------------------------------
     TcpClient client;
     ClientController clientController;
     private static final String EXTENSIONS = "Chat Lobby";
@@ -30,11 +30,12 @@ public class Protocol {
     private static final String CMD_GAME_END = "game_end";
     private static final Character DELIMITER = ' ';
 
+    //----------------------------------Constructor---------------------------------------------------------------------
     public Protocol(TcpClient c, ClientController argClient) {
         this.client = c;
         this.clientController = argClient;
     }
-
+    //----------------------------------Methods-------------------------------------------------------------------------
     //Send
     public void sendJoin(String name, String group) {
         client.send(String.format("%s %s %s %s", CMD_JOIN, name, group, EXTENSIONS));
@@ -153,7 +154,6 @@ public class Protocol {
         }
     }
 
-    //TODO Implement support for error codes
     public void handleError(String[] args) {
         if (args.length == 1) {
             System.out.println(String.format("An error has occurred errorcode %s.", args[0]));
@@ -164,25 +164,12 @@ public class Protocol {
     }
 
     public void handleMessage(String[] args) {
-        //First check if local or global chat
-        if (args[0].equals("[global]")) {
-            clientController.getGuiController().getMainForm()
-                    .newMessage(Arrays.copyOfRange(args, 1, args.length));
-        } else if (args[0].equals("[local]")
-                && clientController.getGuiController().getControlForm() != null) {
-            clientController.getGuiController().getControlForm()
-                    .newMessage(Arrays.copyOfRange(args, 1, args.length));
-        } else {
-            //If server doesn't say print to both
-            clientController.getGuiController().getMainForm().newMessage(args);
-            if (clientController.getGuiController().getControlForm() != null) {
-                clientController.getGuiController().getControlForm()
-                        .newMessage(Arrays.copyOfRange(args, 1, args.length));
-            }
+        clientController.getGuiController().getMainForm().newMessage(args);
+        if (clientController.getGuiController().getControlForm() != null) {
+            clientController.getGuiController().getControlForm().newMessage(args);
         }
     }
 
-    //TODO check for valid input
     public void handleStateChange(String[] args) {
         switch (args[1]) {
             case "lobby":

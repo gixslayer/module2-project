@@ -54,15 +54,7 @@ public class ClientController extends Thread {
         this.resetBoard();
         guiController.start();
     }
-
-    public boolean isConnected() {
-        return connected;
-    }
-
-    public void setConnected(boolean argConnected) {
-        this.connected = argConnected;
-    }
-
+    //---------------------------Manage lobby--------------------------
     public void addPlayerToLobby(String playername) {
         lobby.put(playername, null);
         guiController.getMainForm().updateLobby();
@@ -78,7 +70,7 @@ public class ClientController extends Thread {
         lobby.remove(playername);
         guiController.getMainForm().updateLobby();
     }
-
+    //---------------------------Manage moves--------------------------
     public void doMove(int i, String player) {
         synchronized (board) {
             if (player.equals(clientName)) {
@@ -113,7 +105,7 @@ public class ClientController extends Thread {
         }
         guiController.getControlForm().setGameState("Your turn.");
     }
-
+    //----------------------Manage end game-----------------------------
     public void endGame(String winner) {
         setMyTurn(false);
         setOpponent(null);
@@ -123,28 +115,12 @@ public class ClientController extends Thread {
         guiController.getMainForm().switchReadyButton();
     }
 
-    public void sendGlobalMessage(String s) {
-        connection.getProtocol().sendGlobalChat(s);
-    }
-
-    public void sendLocalMessage(String s) {
-        connection.getProtocol().sendLocalChat(s);
-    }
-
-    public GuiController getGuiController() {
-        return guiController;
-    }
-
     public void tellReady() {
         if (ready) {
             connection.getProtocol().sendReady();
         } else {
             System.out.println("Not accepted by server");
         }
-    }
-
-    public void sendMessageChatNotEnabeled() {
-        guiController.sendMessageChatNotEnabeled();
     }
 
     //-------------------------------Small functions-----------------------------------------------
@@ -174,6 +150,18 @@ public class ClientController extends Thread {
 
     public void stopConnection() {
         connection.getTcpclient().disconnect();
+    }
+
+    public void sendGlobalMessage(String s) {
+        connection.getProtocol().sendGlobalChat(s);
+    }
+
+    public void sendLocalMessage(String s) {
+        connection.getProtocol().sendLocalChat(s);
+    }
+
+    public void sendMessageChatNotEnabeled() {
+        guiController.sendMessageChatNotEnabeled();
     }
 
     //------------------GettersAndSetters--------------------------------------------
@@ -227,6 +215,18 @@ public class ClientController extends Thread {
 
     public void setLobby(HashMap<String, String> argLobby) {
         this.lobby = argLobby;
+    }
+
+    public GuiController getGuiController() {
+        return guiController;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean argConnected) {
+        this.connected = argConnected;
     }
 
 }
