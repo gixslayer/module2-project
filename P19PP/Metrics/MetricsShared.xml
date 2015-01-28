@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Metrics scope="shared" type="Project" date="2015-01-28" xmlns="http://metrics.sourceforge.net/2003/Metrics-First-Flat">
+   <Metric id = "NORM" description ="Number of Overridden Methods">
+      <Values per = "type" total = "0" avg = "0" stddev = "0" max = "0">
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="0"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "NOF" description ="Number of Attributes">
+      <Values per = "type" total = "32" avg = "1.524" stddev = "1.789" max = "6">
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="6"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="5"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="2"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="0"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "NSC" description ="Number of Children">
+      <Values per = "type" total = "5" avg = "0.238" stddev = "0.75" max = "3">
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="2"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="0"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "NOC" description ="Number of Classes">
+      <Values per = "packageFragment" total = "21" avg = "2.625" stddev = "1.409" max = "6">
+         <Value name="findfour.shared.events" package ="findfour.shared.events" value ="6"/>
+         <Value name="findfour.shared" package ="findfour.shared" value ="3"/>
+         <Value name="findfour.shared.network" package ="findfour.shared.network" value ="3"/>
+         <Value name="findfour.shared.game" package ="findfour.shared.game" value ="2"/>
+         <Value name="findfour.shared.logging" package ="findfour.shared.logging" value ="2"/>
+         <Value name="findfour.shared.utils" package ="findfour.shared.utils" value ="2"/>
+         <Value name="tests.game" package ="tests.game" value ="2"/>
+         <Value name="tests.utils" package ="tests.utils" value ="1"/>
+      </Values>
+   </Metric>
+   <Metric id = "MLOC" description ="Method Lines of Code">
+      <Values per = "method" total = "670" avg = "5.154" stddev = "5.372" max = "29">
+         <Value name="extractArgs" source ="StringUtils.java" package ="findfour.shared.utils" value ="29"/>
+         <Value name="getWrapperClass" source ="ClassUtils.java" package ="findfour.shared.events" value ="20"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="20"/>
+         <Value name="setUp" source ="BoardTests.java" package ="tests.game" value ="20"/>
+         <Value name="validateMethod" source ="EventDispatcher.java" package ="findfour.shared.events" value ="18"/>
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="16"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="16"/>
+         <Value name="disconnect" source ="TcpClient.java" package ="findfour.shared.network" value ="16"/>
+         <Value name="stop" source ="TcpServer.java" package ="findfour.shared.network" value ="16"/>
+         <Value name="validateArgs" source ="Event.java" package ="findfour.shared.events" value ="15"/>
+         <Value name="connect" source ="TcpClient.java" package ="findfour.shared.network" value ="15"/>
+         <Value name="hasHorizontalWin" source ="Board.java" package ="findfour.shared.game" value ="14"/>
+         <Value name="hasVerticalWin" source ="Board.java" package ="findfour.shared.game" value ="14"/>
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="13"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="13"/>
+         <Value name="run" source ="TcpClient.java" package ="findfour.shared.network" value ="13"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="13"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="13"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="11"/>
+         <Value name="disconnect" source ="TcpServer.java" package ="findfour.shared.network" value ="11"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="10"/>
+         <Value name="getNextFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="9"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="9"/>
+         <Value name="start" source ="TcpServer.java" package ="findfour.shared.network" value ="9"/>
+         <Value name="testGetWinner" source ="GameStateTests.java" package ="tests.game" value ="9"/>
+         <Value name="testIsGameOver" source ="GameStateTests.java" package ="tests.game" value ="9"/>
+         <Value name="getInvokeArguments" source ="MethodReference.java" package ="findfour.shared.events" value ="8"/>
+         <Value name="isMoveValid" source ="Board.java" package ="findfour.shared.game" value ="8"/>
+         <Value name="send" source ="TcpClient.java" package ="findfour.shared.network" value ="8"/>
+         <Value name="send" source ="TcpServer.java" package ="findfour.shared.network" value ="8"/>
+         <Value name="testIsFull" source ="BoardTests.java" package ="tests.game" value ="8"/>
+         <Value name="registerEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="7"/>
+         <Value name="invoke" source ="MethodReference.java" package ="findfour.shared.events" value ="7"/>
+         <Value name="getSlot" source ="Board.java" package ="findfour.shared.game" value ="7"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="7"/>
+         <Value name="tryParseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="7"/>
+         <Value name="isFull" source ="Board.java" package ="findfour.shared.game" value ="6"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="6"/>
+         <Value name="registerClient" source ="TcpServer.java" package ="findfour.shared.network" value ="6"/>
+         <Value name="stringContains" source ="StringUtils.java" package ="findfour.shared.utils" value ="6"/>
+         <Value name="testIsMoveValid" source ="BoardTests.java" package ="tests.game" value ="6"/>
+         <Value name="testSetSlot" source ="BoardTests.java" package ="tests.game" value ="6"/>
+         <Value name="testSyncTo" source ="BoardTests.java" package ="tests.game" value ="6"/>
+         <Value name="testExtractArgs" source ="StringUtilsTests.java" package ="tests.utils" value ="6"/>
+         <Value name="makeMove" source ="GameState.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="5"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="5"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="5"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="5"/>
+         <Value name="extractCommand" source ="StringUtils.java" package ="findfour.shared.utils" value ="5"/>
+         <Value name="parseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="5"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="4"/>
+         <Value name="invokeHandlers" source ="Event.java" package ="findfour.shared.events" value ="4"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="4"/>
+         <Value name="registerStaticEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="4"/>
+         <Value name="getWinner" source ="Board.java" package ="findfour.shared.game" value ="4"/>
+         <Value name="clientDisconnected" source ="TcpServer.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="testGetSlot" source ="BoardTests.java" package ="tests.game" value ="4"/>
+         <Value name="testMakeMove" source ="BoardTests.java" package ="tests.game" value ="4"/>
+         <Value name="testExtractCommand" source ="StringUtilsTests.java" package ="tests.utils" value ="4"/>
+         <Value name="testParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="4"/>
+         <Value name="testTryParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="4"/>
+         <Value name="clear" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="makeMove" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="setSlot" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="syncTo" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="unregisterListener" source ="Log.java" package ="findfour.shared.logging" value ="3"/>
+         <Value name="testBoard" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="testGetNextFreeSlot" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="testGetWinner" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="testHasWinner" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="setUp" source ="GameStateTests.java" package ="tests.game" value ="3"/>
+         <Value name="addHandler" source ="Event.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="hasFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="reset" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="syncTo" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="getHostAddress" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="testGetCurrentTurn" source ="GameStateTests.java" package ="tests.game" value ="2"/>
+         <Value name="testReset" source ="GameStateTests.java" package ="tests.game" value ="2"/>
+         <Value name="testSyncTo" source ="GameStateTests.java" package ="tests.game" value ="2"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="getArgTypes" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="getId" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerStaticEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="hasDiagonalWin" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasWinner" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isGameOver" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isWinner" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getBoard" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getCurrentTurn" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getWinner" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isGameOver" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isMoveValid" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="swapTurns" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="debug" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="error" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="info" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="warning" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="getLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="isDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="registerListener" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="getReceiveThread" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="isConnected" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="startReceiving" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientPacketReceived" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientSendFailed" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="isRunning" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="get" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="set" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="1"/>
+         <Value name="testGetBoard" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "NOM" description ="Number of Methods">
+      <Values per = "type" total = "110" avg = "5.238" stddev = "4.83" max = "21">
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="21"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="11"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="10"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="9"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="8"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="7"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="7"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="7"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="6"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="4"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="4"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="4"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="2"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "NBD" description ="Nested Block Depth" max ="5" hint ="use Extract-method to split the method up">
+      <Values per = "method" avg = "1.562" stddev = "0.903" max = "5">
+         <Value name="hasHorizontalWin" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="hasVerticalWin" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="4"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="4"/>
+         <Value name="run" source ="TcpClient.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="validateArgs" source ="Event.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="validateMethod" source ="EventDispatcher.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="getNextFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="isFull" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="disconnect" source ="TcpClient.java" package ="findfour.shared.network" value ="3"/>
+         <Value name="extractArgs" source ="StringUtils.java" package ="findfour.shared.utils" value ="3"/>
+         <Value name="testIsFull" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="testSyncTo" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="getWrapperClass" source ="ClassUtils.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="registerEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="registerStaticEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="getInvokeArguments" source ="MethodReference.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="invoke" source ="MethodReference.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="clear" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="getSlot" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="getWinner" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="isMoveValid" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="syncTo" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="makeMove" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="unregisterListener" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="connect" source ="TcpClient.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="send" source ="TcpClient.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="disconnect" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="send" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="clientDisconnected" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="registerClient" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="start" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="stop" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="extractCommand" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="parseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="tryParseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="addHandler" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="getArgTypes" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="getId" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="invokeHandlers" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerStaticEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasDiagonalWin" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasWinner" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isGameOver" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isWinner" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="makeMove" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="setSlot" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getBoard" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getCurrentTurn" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getWinner" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isGameOver" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isMoveValid" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="reset" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="swapTurns" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="syncTo" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="debug" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="error" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="info" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="warning" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="getLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="isDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="registerListener" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="getReceiveThread" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="isConnected" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="getHostAddress" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="startReceiving" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientPacketReceived" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientSendFailed" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="isRunning" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="get" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="set" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="stringContains" source ="StringUtils.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="1"/>
+         <Value name="setUp" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testBoard" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetNextFreeSlot" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetSlot" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetWinner" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testHasWinner" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testIsMoveValid" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testMakeMove" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testSetSlot" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="setUp" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetBoard" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetCurrentTurn" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetWinner" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testIsGameOver" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testReset" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testSyncTo" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testExtractArgs" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+         <Value name="testExtractCommand" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+         <Value name="testParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+         <Value name="testTryParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+      </Values>
+   </Metric>
+   <Metric id = "DIT" description ="Depth of Inheritance Tree">
+      <Values per = "type" avg = "1.857" stddev = "1.355" max = "5">
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="5"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="5"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="4"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="4"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+      </Values>
+   </Metric>
+   <Metric id = "NOP" description ="Number of Packages">
+      <Value value="8"/>
+   </Metric>
+   <Metric id = "CA" description ="Afferent Coupling">
+      <Values per = "packageFragment" avg = "4.625" stddev = "3.16" max = "10">
+         <Value name="findfour.shared.logging" package ="findfour.shared.logging" value ="10"/>
+         <Value name="findfour.shared.game" package ="findfour.shared.game" value ="7"/>
+         <Value name="findfour.shared.utils" package ="findfour.shared.utils" value ="6"/>
+         <Value name="findfour.shared" package ="findfour.shared" value ="5"/>
+         <Value name="findfour.shared.network" package ="findfour.shared.network" value ="5"/>
+         <Value name="findfour.shared.events" package ="findfour.shared.events" value ="4"/>
+         <Value name="tests.game" package ="tests.game" value ="0"/>
+         <Value name="tests.utils" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "NOI" description ="Number of Interfaces">
+      <Values per = "packageFragment" total = "1" avg = "0.125" stddev = "0.331" max = "1">
+         <Value name="findfour.shared.logging" package ="findfour.shared.logging" value ="1"/>
+         <Value name="findfour.shared" package ="findfour.shared" value ="0"/>
+         <Value name="findfour.shared.events" package ="findfour.shared.events" value ="0"/>
+         <Value name="findfour.shared.game" package ="findfour.shared.game" value ="0"/>
+         <Value name="findfour.shared.network" package ="findfour.shared.network" value ="0"/>
+         <Value name="findfour.shared.utils" package ="findfour.shared.utils" value ="0"/>
+         <Value name="tests.game" package ="tests.game" value ="0"/>
+         <Value name="tests.utils" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "VG" description ="McCabe Cyclomatic Complexity" max ="10" hint ="use Extract-method to split the method up">
+      <Values per = "method" avg = "1.777" stddev = "1.366" max = "9">
+         <Value name="getWrapperClass" source ="ClassUtils.java" package ="findfour.shared.events" value ="9"/>
+         <Value name="validateArgs" source ="Event.java" package ="findfour.shared.events" value ="5"/>
+         <Value name="validateMethod" source ="EventDispatcher.java" package ="findfour.shared.events" value ="5"/>
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="getNextFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="getSlot" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="hasHorizontalWin" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="hasVerticalWin" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="isMoveValid" source ="Board.java" package ="findfour.shared.game" value ="5"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="4"/>
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="4"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="4"/>
+         <Value name="run" source ="TcpClient.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="4"/>
+         <Value name="registerEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="getWinner" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="isFull" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="connect" source ="TcpClient.java" package ="findfour.shared.network" value ="3"/>
+         <Value name="disconnect" source ="TcpClient.java" package ="findfour.shared.network" value ="3"/>
+         <Value name="disconnect" source ="TcpServer.java" package ="findfour.shared.network" value ="3"/>
+         <Value name="stop" source ="TcpServer.java" package ="findfour.shared.network" value ="3"/>
+         <Value name="extractArgs" source ="StringUtils.java" package ="findfour.shared.utils" value ="3"/>
+         <Value name="testIsFull" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="testSyncTo" source ="BoardTests.java" package ="tests.game" value ="3"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="registerStaticEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="getInvokeArguments" source ="MethodReference.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="invoke" source ="MethodReference.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="clear" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="syncTo" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="makeMove" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="unregisterListener" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="send" source ="TcpClient.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="send" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="start" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="extractCommand" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="parseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="tryParseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="addHandler" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="getArgTypes" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="getId" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="invokeHandlers" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerStaticEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasDiagonalWin" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasWinner" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isGameOver" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isWinner" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="makeMove" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="setSlot" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getBoard" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getCurrentTurn" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getWinner" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isGameOver" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isMoveValid" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="reset" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="swapTurns" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="syncTo" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="debug" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="error" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="info" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="warning" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="getLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="isDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="registerListener" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="getReceiveThread" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="isConnected" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="getHostAddress" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="startReceiving" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientDisconnected" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientPacketReceived" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientSendFailed" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="isRunning" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="registerClient" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="get" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="set" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="stringContains" source ="StringUtils.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="1"/>
+         <Value name="setUp" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testBoard" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetNextFreeSlot" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetSlot" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetWinner" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testHasWinner" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testIsMoveValid" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testMakeMove" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="testSetSlot" source ="BoardTests.java" package ="tests.game" value ="1"/>
+         <Value name="setUp" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetBoard" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetCurrentTurn" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testGetWinner" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testIsGameOver" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testReset" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testSyncTo" source ="GameStateTests.java" package ="tests.game" value ="1"/>
+         <Value name="testExtractArgs" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+         <Value name="testExtractCommand" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+         <Value name="testParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+         <Value name="testTryParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="1"/>
+      </Values>
+   </Metric>
+   <Metric id = "TLOC" description ="Total Lines of Code">
+      <Value value="1175"/>
+   </Metric>
+   <Metric id = "RMI" description ="Instability">
+      <Values per = "packageFragment" avg = "0.356" stddev = "0.383" max = "1">
+         <Value name="tests.game" package ="tests.game" value ="1"/>
+         <Value name="tests.utils" package ="tests.utils" value ="1"/>
+         <Value name="findfour.shared.network" package ="findfour.shared.network" value ="0.286"/>
+         <Value name="findfour.shared.game" package ="findfour.shared.game" value ="0.222"/>
+         <Value name="findfour.shared.events" package ="findfour.shared.events" value ="0.2"/>
+         <Value name="findfour.shared.utils" package ="findfour.shared.utils" value ="0.143"/>
+         <Value name="findfour.shared" package ="findfour.shared" value ="0"/>
+         <Value name="findfour.shared.logging" package ="findfour.shared.logging" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "PAR" description ="Number of Parameters" max ="5" hint ="Move invoked method or pass an object">
+      <Values per = "method" avg = "0.892" stddev = "0.947" max = "3">
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="setSlot" source ="Board.java" package ="findfour.shared.game" value ="3"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="3"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="3"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="3"/>
+         <Value name="connect" source ="TcpClient.java" package ="findfour.shared.network" value ="3"/>
+         <Value name="extractArgs" source ="StringUtils.java" package ="findfour.shared.utils" value ="3"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="3"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="3"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="registerEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="validateMethod" source ="EventDispatcher.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="getSlot" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="isMoveValid" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="makeMove" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="isMoveValid" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="makeMove" source ="GameState.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="error" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="info" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="warning" source ="Log.java" package ="findfour.shared.logging" value ="2"/>
+         <Value name="clientPacketReceived" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="clientSendFailed" source ="TcpServer.java" package ="findfour.shared.network" value ="2"/>
+         <Value name="extractCommand" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="stringContains" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="tryParseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="2"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="2"/>
+         <Value name="getWrapperClass" source ="ClassUtils.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="addHandler" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="invokeHandlers" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="validateArgs" source ="Event.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="raiseEvent" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerStaticEventHandlers" source ="EventDispatcher.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="registerStaticEventHandlers" source ="EventRaiser.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="getInvokeArguments" source ="MethodReference.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="invoke" source ="MethodReference.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="checkDiagonalLeftToRight" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="checkDiagonalRightToLeft" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="getNextFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasDiagonalWin" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasFreeSlot" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasHorizontalWin" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="hasVerticalWin" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="isWinner" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="syncTo" source ="Board.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="syncTo" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="debug" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="error" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="info" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="warning" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="debug" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="registerListener" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="setLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="unregisterListener" source ="Log.java" package ="findfour.shared.logging" value ="1"/>
+         <Value name="send" source ="TcpClient.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="send" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="clientDisconnected" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="registerClient" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="start" source ="TcpServer.java" package ="findfour.shared.network" value ="1"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="set" source ="Reference.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="parseInt" source ="StringUtils.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="1"/>
+         <Value name="getArgTypes" source ="Event.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="getId" source ="Event.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="clear" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="getWinner" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="hasWinner" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="isFull" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="isGameOver" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="getBoard" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="getCurrentTurn" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="getWinner" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="isGameOver" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="reset" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="swapTurns" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="getLogLevel" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="isDebugEnabled" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="disconnect" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="getReceiveThread" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="isConnected" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="run" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="disconnect" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="getHostAddress" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="startReceiving" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="isRunning" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="run" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="stop" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="get" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="setUp" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testBoard" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testGetNextFreeSlot" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testGetSlot" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testGetWinner" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testHasWinner" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testIsFull" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testIsMoveValid" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testMakeMove" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testSetSlot" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="testSyncTo" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="setUp" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="testGetBoard" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="testGetCurrentTurn" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="testGetWinner" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="testIsGameOver" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="testReset" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="testSyncTo" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="testExtractArgs" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+         <Value name="testExtractCommand" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+         <Value name="testParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+         <Value name="testTryParseInt" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "LCOM" description ="Lack of Cohesion of Methods">
+      <Values per = "type" avg = "0.177" stddev = "0.269" max = "0.694">
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="0.694"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="0.667"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="0.633"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="0.625"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="0.5"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="0.444"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="0.083"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="0.067"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="0"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "CE" description ="Efferent Coupling">
+      <Values per = "packageFragment" avg = "1.125" stddev = "0.781" max = "2">
+         <Value name="findfour.shared.game" package ="findfour.shared.game" value ="2"/>
+         <Value name="findfour.shared.network" package ="findfour.shared.network" value ="2"/>
+         <Value name="tests.game" package ="tests.game" value ="2"/>
+         <Value name="findfour.shared.events" package ="findfour.shared.events" value ="1"/>
+         <Value name="findfour.shared.utils" package ="findfour.shared.utils" value ="1"/>
+         <Value name="tests.utils" package ="tests.utils" value ="1"/>
+         <Value name="findfour.shared" package ="findfour.shared" value ="0"/>
+         <Value name="findfour.shared.logging" package ="findfour.shared.logging" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "NSM" description ="Number of Static Methods">
+      <Values per = "type" total = "20" avg = "0.952" stddev = "3.109" max = "14">
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="14"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="5"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="0"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "RMD" description ="Normalized Distance">
+      <Values per = "packageFragment" avg = "0.577" stddev = "0.356" max = "1">
+         <Value name="findfour.shared" package ="findfour.shared" value ="1"/>
+         <Value name="findfour.shared.utils" package ="findfour.shared.utils" value ="0.857"/>
+         <Value name="findfour.shared.game" package ="findfour.shared.game" value ="0.778"/>
+         <Value name="findfour.shared.logging" package ="findfour.shared.logging" value ="0.75"/>
+         <Value name="findfour.shared.network" package ="findfour.shared.network" value ="0.714"/>
+         <Value name="findfour.shared.events" package ="findfour.shared.events" value ="0.514"/>
+         <Value name="tests.game" package ="tests.game" value ="0"/>
+         <Value name="tests.utils" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "RMA" description ="Abstractness">
+      <Values per = "packageFragment" avg = "0.067" stddev = "0.116" max = "0.286">
+         <Value name="findfour.shared.events" package ="findfour.shared.events" value ="0.286"/>
+         <Value name="findfour.shared.logging" package ="findfour.shared.logging" value ="0.25"/>
+         <Value name="findfour.shared" package ="findfour.shared" value ="0"/>
+         <Value name="findfour.shared.game" package ="findfour.shared.game" value ="0"/>
+         <Value name="findfour.shared.network" package ="findfour.shared.network" value ="0"/>
+         <Value name="findfour.shared.utils" package ="findfour.shared.utils" value ="0"/>
+         <Value name="tests.game" package ="tests.game" value ="0"/>
+         <Value name="tests.utils" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "SIX" description ="Specialization Index">
+      <Values per = "type" avg = "0" stddev = "0" max = "0">
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="0"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="0"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="0"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="0"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   <Metric id = "WMC" description ="Weighted methods per Class">
+      <Values per = "type" total = "231" avg = "11" stddev = "12.528" max = "61">
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="61"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="19"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="19"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="15"/>
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="15"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="15"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="12"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="11"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="11"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="10"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="9"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="7"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="6"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="4"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="4"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="4"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="3"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="2"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="2"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="1"/>
+      </Values>
+   </Metric>
+   <Metric id = "NSF" description ="Number of Static Attributes">
+      <Values per = "type" total = "26" avg = "1.238" stddev = "1.823" max = "7">
+         <Value name="TcpServer" source ="TcpServer.java" package ="findfour.shared.network" value ="7"/>
+         <Value name="TcpClient" source ="TcpClient.java" package ="findfour.shared.network" value ="5"/>
+         <Value name="Log" source ="Log.java" package ="findfour.shared.logging" value ="3"/>
+         <Value name="Client" source ="TcpServer.java" package ="findfour.shared.network" value ="3"/>
+         <Value name="Board" source ="Board.java" package ="findfour.shared.game" value ="2"/>
+         <Value name="InvalidEventHandlerException" source ="InvalidEventHandlerException.java" package ="findfour.shared.events" value ="1"/>
+         <Value name="GameState" source ="GameState.java" package ="findfour.shared.game" value ="1"/>
+         <Value name="StringUtils" source ="StringUtils.java" package ="findfour.shared.utils" value ="1"/>
+         <Value name="ArgumentException" source ="ArgumentException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentNullException" source ="ArgumentNullException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ArgumentOutOfRangeException" source ="ArgumentOutOfRangeException.java" package ="findfour.shared" value ="1"/>
+         <Value name="ClassUtils" source ="ClassUtils.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="Event" source ="Event.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventDispatcher" source ="EventDispatcher.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="EventRaiser" source ="EventRaiser.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="MethodReference" source ="MethodReference.java" package ="findfour.shared.events" value ="0"/>
+         <Value name="ConsoleListener" source ="ConsoleListener.java" package ="findfour.shared.logging" value ="0"/>
+         <Value name="Reference" source ="Reference.java" package ="findfour.shared.utils" value ="0"/>
+         <Value name="BoardTests" source ="BoardTests.java" package ="tests.game" value ="0"/>
+         <Value name="GameStateTests" source ="GameStateTests.java" package ="tests.game" value ="0"/>
+         <Value name="StringUtilsTests" source ="StringUtilsTests.java" package ="tests.utils" value ="0"/>
+      </Values>
+   </Metric>
+   </Metrics>
